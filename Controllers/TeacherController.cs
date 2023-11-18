@@ -2,14 +2,13 @@
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
-    public class AdminController : Controller
+    public class TeacherController : Controller
     {
         public IActionResult Index()
         {
-            ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
             return View();
         }
-        public IActionResult AdminClass()
+        public IActionResult TeacherClass()
         {
             return View();
         }

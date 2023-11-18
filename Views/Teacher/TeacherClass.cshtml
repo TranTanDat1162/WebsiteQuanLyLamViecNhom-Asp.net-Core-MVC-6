@@ -1,0 +1,1010 @@
+﻿@{
+    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
+}
+<div class="wrapper">
+    <div class="iq-sidebar  sidebar-default ">
+        <div class="iq-sidebar-logo d-flex align-items-center">
+            <a href="/Teacher" class="header-logo">
+                <img src="https://templates.iqonic.design/product/lite/webkit/html/assets/images/logo.svg" alt="logo">
+                <h3 class="logo-title light-logo">Teacher</h3>
+            </a>
+            <div class="iq-menu-bt-sidebar ml-0">
+                <i class="las la-bars wrapper-menu"></i>
+            </div>
+        </div>
+        <div class="data-scrollbar" data-scroll="1" data-scrollbar="true" tabindex="-1" style="overflow: hidden; outline: none;"><div class="scroll-content">
+            <nav class="iq-sidebar-menu">
+                <ul id="iq-sidebar-toggle" class="iq-menu">
+                    <li class="active">
+                        <a href="/Admin" class="svg-icon">
+                            <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            <span class="ml-4">Trang chủ</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="page-project.html" class="svg-icon">
+                            <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <span class="ml-4">Lớp</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="page-employee.html" class="svg-icon">
+                            <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span class="ml-4">Giảng viên</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="pt-5 pb-2"></div>
+        </div><div class="scrollbar-track scrollbar-track-x" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-x" style="width: 260px; transform: translate3d(0px, 0px, 0px);"></div></div><div class="scrollbar-track scrollbar-track-y" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-y" style="height: 610px; transform: translate3d(0px, 0px, 0px);"></div></div></div>
+    </div>      
+    <div class="iq-top-navbar">
+        <div class="iq-navbar-custom">
+            <nav class="navbar navbar-expand-lg navbar-light p-0">
+                <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
+                    <i class="ri-menu-line wrapper-menu"></i>
+                    <a href="/Teacher" class="header-logo">
+                        <h4 class="logo-title text-uppercase">Teacher</h4>
+                    </a>
+                </div>
+                <div class="navbar-breadcrumb">
+                    <h5>Dashboard</h5>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
+                        <i class="ri-menu-3-line"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ml-auto navbar-list align-items-center">
+                            <li>
+                                <div class="iq-search-bar device-search">
+                                    <form action="#" class="searchbox">
+                                        <a class="search-link" href="#"><i class="ri-search-line"></i></a>
+                                        <input type="text" class="text search-input" placeholder="Search here...">
+                                    </form>
+                                </div>
+                            </li>
+                            <li class="nav-item nav-icon search-content">
+                                <a href="#" class="search-toggle rounded" id="dropdownSearch" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="ri-search-line"></i>
+                                </a>
+                                <div class="iq-search-bar iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownSearch">
+                                    <form action="#" class="searchbox p-2">
+                                        <div class="form-group mb-0 position-relative">
+                                            <input type="text" class="text search-input font-size-12" placeholder="type here to search...">
+                                            <a href="#" class="search-link"><i class="las la-search"></i></a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                            <li class="nav-item nav-icon nav-item-icon dropdown">
+                                <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                        </path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                    <span class="bg-primary"></span>
+                                </a>
+                                <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                    <div class="card shadow-none m-0">
+                                        <div class="card-body p-0 ">
+                                            <div class="cust-title p-3">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h5 class="mb-0">All Messages</h5>
+                                                    <a class="badge badge-primary badge-card" href="#">3</a>
+                                                </div>
+                                            </div>
+                                            <div class="px-3 pt-0 pb-0 sub-card">
+                                                <a href="#" class="iq-sub-card">
+                                                    <div class="media align-items-center cust-card py-3 border-bottom">
+                                                        <div class="">
+                                                            <img class="avatar-50 rounded-small" src="/assets/images/user/01.jpg" alt="01">
+                                                        </div>
+                                                        <div class="media-body ml-3">
+                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                <h6 class="mb-0">Emma Watson</h6>
+                                                                <small class="text-dark"><b>12 : 47 pm</b></small>
+                                                            </div>
+                                                            <small class="mb-0">Lorem ipsum dolor sit amet</small>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="#" class="iq-sub-card">
+                                                    <div class="media align-items-center cust-card py-3 border-bottom">
+                                                        <div class="">
+                                                            <img class="avatar-50 rounded-small" src="/assets/images/user/02.jpg" alt="02">
+                                                        </div>
+                                                        <div class="media-body ml-3">
+                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                <h6 class="mb-0">Ashlynn Franci</h6>
+                                                                <small class="text-dark"><b>11 : 30 pm</b></small>
+                                                            </div>
+                                                            <small class="mb-0">Lorem ipsum dolor sit amet</small>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="#" class="iq-sub-card">
+                                                    <div class="media align-items-center cust-card py-3">
+                                                        <div class="">
+                                                            <img class="avatar-50 rounded-small" src="/assets/images/user/03.jpg" alt="03">
+                                                        </div>
+                                                        <div class="media-body ml-3">
+                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                <h6 class="mb-0">Kianna Carder</h6>
+                                                                <small class="text-dark"><b>11 : 21 pm</b></small>
+                                                            </div>
+                                                            <small class="mb-0">Lorem ipsum dolor sit amet</small>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <a class="right-ic btn btn-primary btn-block position-relative p-2" href="#" role="button">
+                                                View All
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="nav-item nav-icon nav-item-icon dropdown">
+                                <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
+                                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                    </svg>
+                                    <span class="bg-primary "></span>
+                                </a>
+                                <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div class="card shadow-none m-0">
+                                        <div class="card-body p-0 ">
+                                            <div class="cust-title p-3">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h5 class="mb-0">Notifications</h5>
+                                                    <a class="badge badge-primary badge-card" href="#">3</a>
+                                                </div>
+                                            </div>
+                                            <div class="px-3 pt-0 pb-0 sub-card">
+                                                <a href="#" class="iq-sub-card">
+                                                    <div class="media align-items-center cust-card py-3 border-bottom">
+                                                        <div class="">
+                                                            <img class="avatar-50 rounded-small" src="/assets/images/user/01.jpg" alt="01">
+                                                        </div>
+                                                        <div class="media-body ml-3">
+                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                <h6 class="mb-0">Emma Watson</h6>
+                                                                <small class="text-dark"><b>12 : 47 pm</b></small>
+                                                            </div>
+                                                            <small class="mb-0">Lorem ipsum dolor sit amet</small>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="#" class="iq-sub-card">
+                                                    <div class="media align-items-center cust-card py-3 border-bottom">
+                                                        <div class="">
+                                                            <img class="avatar-50 rounded-small" src="/assets/images/user/02.jpg" alt="02">
+                                                        </div>
+                                                        <div class="media-body ml-3">
+                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                <h6 class="mb-0">Ashlynn Franci</h6>
+                                                                <small class="text-dark"><b>11 : 30 pm</b></small>
+                                                            </div>
+                                                            <small class="mb-0">Lorem ipsum dolor sit amet</small>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="#" class="iq-sub-card">
+                                                    <div class="media align-items-center cust-card py-3">
+                                                        <div class="">
+                                                            <img class="avatar-50 rounded-small" src="/assets/images/user/03.jpg" alt="03">
+                                                        </div>
+                                                        <div class="media-body ml-3">
+                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                <h6 class="mb-0">Kianna Carder</h6>
+                                                                <small class="text-dark"><b>11 : 21 pm</b></small>
+                                                            </div>
+                                                            <small class="mb-0">Lorem ipsum dolor sit amet</small>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <a class="right-ic btn btn-primary btn-block position-relative p-2" href="#" role="button">
+                                                View All
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="nav-item nav-icon dropdown caption-content">
+                                <a href="#" class="search-toggle dropdown-toggle  d-flex align-items-center" id="dropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="/assets/images/user/1.jpg" class="img-fluid rounded-circle" alt="user">
+                                    <div class="caption ml-3">
+                                        <h6 class="mb-0 line-height">Savannah Nguyen<i class="las la-angle-down ml-2"></i></h6>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right border-none" aria-labelledby="dropdownMenuButton">
+                                    <li class="dropdown-item d-flex svg-icon">
+                                        <svg class="svg-icon mr-0 text-primary" id="h-01-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <a href="https://templates.iqonic.design/product/lite/webkit/html/app/user-profile.html">My Profile</a>
+                                    </li>
+                                    <li class="dropdown-item d-flex svg-icon">
+                                        <svg class="svg-icon mr-0 text-primary" id="h-02-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                        <a href="https://templates.iqonic.design/product/lite/webkit/html/app/user-profile-edit.html">Edit Profile</a>
+                                    </li>
+                                    <li class="dropdown-item d-flex svg-icon">
+                                        <svg class="svg-icon mr-0 text-primary" id="h-03-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        <a href="https://templates.iqonic.design/product/lite/webkit/html/app/user-account-setting.html">Account Settings</a>
+                                    </li>
+                                    <li class="dropdown-item d-flex svg-icon">
+                                        <svg class="svg-icon mr-0 text-primary" id="h-04-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                        </svg>
+                                        <a href="https://templates.iqonic.design/product/lite/webkit/html/app/user-privacy-setting.html">Privacy Settings</a>
+                                    </li>
+                                    <li class="dropdown-item  d-flex svg-icon border-top">
+                                        <svg class="svg-icon mr-0 text-primary" id="h-05-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                        </svg>
+                                        <a href="auth-sign-in.html">Logout</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="content-page">
+        <div class="container-fluid" style="padding-top:50px">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
+                                    <h5>Desk</h5>
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                        <div class="dropdown status-dropdown mr-3">
+                                            <div class="dropdown-toggle" id="dropdownMenuButton03" data-toggle="dropdown" aria-expanded="false">
+                                                <div class="btn bg-body"><span class="h6">HK1 (2023-2024)</span><i class="ri-arrow-down-s-line ml-2 mr-0"></i></div>
+                                            </div>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton03" style="">
+                                                <a class="dropdown-item" href="#">HK2 (2023-2024)</a>
+                                                <a class="dropdown-item" href="#">HK3 (2023-2024)</a>
+                                                <a class="dropdown-item" href="#">HK1 (2024-2025)</a>
+                                            </div>
+                                        </div>
+                                        <div class="list-grid-toggle d-flex align-items-center mr-3">
+                                            <div data-toggle-extra="tab" data-target-extra="#grid" class="active">
+                                                <div class="grid-icon mr-3">
+                                                    <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <rect x="3" y="3" width="7" height="7"></rect>
+                                                        <rect x="14" y="3" width="7" height="7"></rect>
+                                                        <rect x="14" y="14" width="7" height="7"></rect>
+                                                        <rect x="3" y="14" width="7" height="7"></rect>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div data-toggle-extra="tab" data-target-extra="#list">
+                                                <div class="grid-icon">
+                                                    <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <line x1="21" y1="10" x2="3" y2="10"></line>
+                                                        <line x1="21" y1="6" x2="3" y2="6"></line>
+                                                        <line x1="21" y1="14" x2="3" y2="14"></line>
+                                                        <line x1="21" y1="18" x2="3" y2="18"></line>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pl-3 btn-new border-left">
+                                            <a href="#" class="btn btn-primary" data-target="#new-project-modal" data-toggle="modal">New Project</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="card-transparent mb-0 desk-info">
+                            <div class="card-body p-0">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h5>Active Class (5)</h5>
+                                                    <div class="dropdown">
+                                                        <span class="dropdown-toggle py-2" id="dropdownMenuButton04" data-toggle="dropdown">
+                                                            <i class="ri-more-fill"></i>
+                                                        </span>
+                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton04">
+                                                            <a class="dropdown-item" href="#"><i class="ri-file-copy-2-line mr-2"></i>Duplicate</a>
+                                                            <a class="dropdown-item" href="#"><i class="ri-edit-2-line mr-2"></i>Rename</a>
+                                                            <a class="dropdown-item" href="#"><i class="ri-delete-bin-5-line mr-2"></i>Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="mb-3">Hotel Management App UI Kit</h5>
+                                                <p class="mb-3"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                                <div class="iq-progress-bar bg-secondary-light mb-4">
+                                                    <span class="bg-secondary iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s; width: 65%;"></span>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="iq-media-group">
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/02.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/03.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/04.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="btn bg-secondary-light">Design</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="mb-3">General Improvement in Landing pages</h5>
+                                                <p class="mb-3"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                                <div class="iq-progress-bar bg-info-light mb-4">
+                                                    <span class="bg-info iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s; width: 65%;"></span>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="iq-media-group">
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/05.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/06.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/07.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/08.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="btn bg-info-light">Testing</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="mb-3">Product list view changes</h5>
+                                                <p class="mb-3"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                                <div class="iq-progress-bar bg-success-light mb-4">
+                                                    <span class="bg-success iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s; width: 65%;"></span>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="iq-media-group">
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/03.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/04.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/05.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/06.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="btn bg-success-light">SEO</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="mb-3">Add Multiple theme options</h5>
+                                                <p class="mb-3"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                                <div class="iq-progress-bar bg-warning-light mb-4">
+                                                    <span class="bg-warning iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s; width: 65%;"></span>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="iq-media-group">
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/02.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/03.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/04.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="btn bg-warning-light">Development</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card-transparent mb-0 desk-info">
+                            <div class="card-body p-0">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h5>Compeleted ( 05 )</h5>
+                                                    <div class="dropdown">
+                                                        <span class="dropdown-toggle py-2" id="dropdownMenuButton06" data-toggle="dropdown">
+                                                            <i class="ri-more-fill"></i>
+                                                        </span>
+                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton06">
+                                                            <a class="dropdown-item" href="#"><i class="ri-file-copy-2-line mr-2"></i>Duplicate</a>
+                                                            <a class="dropdown-item" href="#"><i class="ri-edit-2-line mr-2"></i>Rename</a>
+                                                            <a class="dropdown-item" href="#"><i class="ri-delete-bin-5-line mr-2"></i>Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="mb-3">Login screen updated in mobile </h5>
+                                                <p class="mb-3"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="iq-media-group">
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="btn bg-secondary-light">Design</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="mb-3">Helpdesk in dashboard plans</h5>
+                                                <p class="mb-3"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="iq-media-group">
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/07.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/08.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="btn bg-info-light">Testing</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="mb-3">Marketplace Admin Dashboard</h5>
+                                                <p class="mb-3"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="iq-media-group">
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/03.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/04.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/05.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/06.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="btn bg-success-light">SEO</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="mb-3">Multipurpose theme and design</h5>
+                                                <p class="mb-3"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="iq-media-group">
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/02.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/03.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/04.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="btn bg-primary-light">Content</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="mb-3">Minimal Design of IOT project</h5>
+                                                <p class="mb-3"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="iq-media-group">
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                        <a href="#" class="iq-media">
+                                                            <img src="../assets/images/user/02.jpg" class="img-fluid avatar-40 rounded-circle" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="btn bg-warning-light">Development</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card card-block card-stretch card-height">
+                            <div class="card-body">
+                                <div class="card border-bottom pb-2 shadow-none">
+                                    <div class="card-body text-center inln-date flet-datepickr">
+                                        <input type="text" id="inline-date" class="date-input basicFlatpickr d-none" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="card card-list">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <svg class="svg-icon text-secondary mr-3" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                            </svg>
+                                            <div class="pl-3 border-left">
+                                                <h5 class="mb-1">Direct Development</h5>
+                                                <p class="mb-0">Unveling the design system</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-list">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <svg class="svg-icon text-primary mr-3" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
+                                                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
+                                            </svg>
+                                            <div class="pl-3 border-left">
+                                                <h5 class="mb-1">action point assigned</h5>
+                                                <p class="mb-0">Unveling the design system</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-list">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <svg class="svg-icon text-warning mr-3" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                                <polyline points="22,6 12,13 2,6"></polyline>
+                                            </svg>
+                                            <div class="pl-3 border-left">
+                                                <h5 class="mb-1">Private Notes</h5>
+                                                <p class="mb-0">Unveling the design system</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-list mb-0">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <svg class="svg-icon text-success mr-3" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                            </svg>
+                                            <div class="pl-3 border-left">
+                                                <h5 class="mb-1">Support Request</h5>
+                                                <p class="mb-0">Unveling the design system</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div id="list" class="item-content animate__animated animate__fadeIn" data-toggle-extra="tab-content">
+                    <div class="table-responsive rounded bg-white mb-4">
+                        <table class="table mb-0 table-borderless tbl-server-info tble-min-width">
+                            <tbody>
+                                <tr>
+                                    <td>Hotel Management App UI Kit</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-secondary-light">
+                                            <span class="bg-secondary iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/01.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/02.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/03.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/04.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-secondary-light">Design</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>General Improvement</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-info-light">
+                                            <span class="bg-info iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/05.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/06.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/07.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/08.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-info-light">Testing</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Product list view changes</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-success-light">
+                                            <span class="bg-success iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/03.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/04.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/05.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/06.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-success-light">SEO</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Add Multiple theme options</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-primary-light">
+                                            <span class="bg-primary iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/01.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/02.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/03.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/04.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-primary-light">Content</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Product list view changes</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-success-light">
+                                            <span class="bg-success iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/01.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/02.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/03.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/04.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-success-light">SEO</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Admin Panel Customization</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-primary-light">
+                                            <span class="bg-primary iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/01.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/02.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/03.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/04.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-primary-light">Content</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Sidebar in dashboard plans</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-secondary-light">
+                                            <span class="bg-secondary iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/01.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/02.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/03.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/04.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-secondary-light">Design</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Login screen updated in mobile</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-secondary-light">
+                                            <span class="bg-secondary iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="iq-media">
+                                            <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/01.jpg" alt="">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-secondary-light">Design</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Helpdesk in dashboard plans</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-info-light">
+                                            <span class="bg-info iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/07.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/08.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-info-light">Testing</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Marketplace Admin Dashboard</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-secondary-light">
+                                            <span class="bg-secondary iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/07.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/08.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/03.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/04.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-secondary-light">Design</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Multipurpose theme and design</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-primary-light">
+                                            <span class="bg-primary iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/02.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/03.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/04.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-primary-light">Content</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Minimal Design of IOT project</td>
+                                    <td class="w-25">
+                                        <div class="iq-progress-bar bg-warning-light">
+                                            <span class="bg-warning iq-progress progress-1" data-percent="65" style="transition: width 2s ease 0s;"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>
+                                    <td>
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/01.jpg" alt="">
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/02.jpg" alt="">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn bg-warning-light">Development</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
