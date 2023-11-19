@@ -13,5 +13,9 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         {
             return View();
         }
+        public IActionResult StudentList()
+        {
+            return View();
+        }
     }
 }
