@@ -11,10 +11,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         }
         public IActionResult AdminClass()
         {
+            ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
             return View();
         }
         public IActionResult StudentList()
         {
+            ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
             return View();
         }
         public IActionResult ListLecturer()

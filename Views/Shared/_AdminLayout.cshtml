@@ -13,7 +13,7 @@
     <title>@ViewData["Title"]</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="https://templates.iqonic.design/product/lite/webkit/html/assets/images/favicon.ico" />
+    <link rel="shortcut icon" href="//lms.uef.edu.vn/pluginfile.php/1/theme_space/favicon/1668764229/favicon-lms.ico" />
     <link rel="stylesheet" href="/assets/css/backend-plugin.min.css">
     <link rel="stylesheet" href="/assets/css/backende209.css?v=1.0.0">
     <link rel="stylesheet" href="/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
@@ -55,10 +55,7 @@
 </head>
 <body class="  ">
     <!-- loader Start -->
-    <div id="loading">
-        <div id="loading-center">
-        </div>
-    </div>
+        @await Component.InvokeAsync("LoadingPage")
     <!-- loader END -->
 
     <!-- Wrapper Start -->
@@ -66,7 +63,7 @@
         <div class="iq-sidebar  sidebar-default ">
             <div class="iq-sidebar-logo d-flex align-items-center">
                 <a href="/Admin" class="header-logo">
-                    <img src="https://templates.iqonic.design/product/lite/webkit/html/assets/images/logo.svg" alt="logo">
+                    <img style="height: 70px" src="https://cdn.haitrieu.com/wp-content/uploads/2022/05/Logo-UEF.png" alt="logo">
                     <h3 class="logo-title light-logo">Admin</h3>
                 </a>
                 <div class="iq-menu-bt-sidebar ml-0">
