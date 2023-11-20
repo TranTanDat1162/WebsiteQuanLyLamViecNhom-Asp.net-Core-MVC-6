@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Data
 {
@@ -9,5 +10,6 @@ namespace WebsiteQuanLyLamViecNhom.Data
             : base(options)
         {
         }
+        public DbSet<WebsiteQuanLyLamViecNhom.Models.Teacher>? Teacher { get; set; }
     }
 }
