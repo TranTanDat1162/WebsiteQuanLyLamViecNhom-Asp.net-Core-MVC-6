@@ -2,25 +2,48 @@
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
 <div class="row">
-    <div class="col-sm-8 ">
-        <div class="card card-block card-stretch card-height">
-            <div class="card-body">
-                <div class="top-block d-flex align-items-center justify-content-between">
-                    <h5>Số lượng sinh viên</h5>
+    <div class="col-xl-8">
+        <div class="card-transparent card-block card-stretch card-height">
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-9">
+                                                <div class="mt-3 mt-md-0">
+                                                    <h5 class="mb-1">Số lượng sinh viên</h5>
+                                                    <h3><span class="counter">2000</span></h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-9">
+                                                <div class="mt-3 mt-md-0">
+                                                    <h5 class="mb-1">Số lượng giảng viên</h5>
+                                                    <h3><span class="counter">100</span></h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h3><span class="counter">2000</span></h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div class="card card-block card-stretch card-height">
-            <div class="card-body">
-                <div class="top-block d-flex align-items-center justify-content-between">
-                    <h5>Số lượng giảng viên</h5>
-                </div>
-                <h3><span class="counter">100</span></h3>
             </div>
         </div>
     </div>
@@ -29,17 +52,24 @@
             <div class="card-body">
                 <div class="card border-bottom pb-2 shadow-none">
                     <div class="card-body text-center inln-date flet-datepickr">
-                        <input type="text" id="inline-date" class="date-input basicFlatpickr d-none" readonly="readonly">
+                        <input type="text" id="inline-date" class="date-input basicFlatpickr d-none"
+                               readonly="readonly">
                     </div>
                 </div>
                 <div class="card card-list">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
-                            <svg class="svg-icon text-secondary mr-3" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            <svg class="svg-icon text-secondary mr-3" width="24" height="24"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
+                                </path>
                             </svg>
                             <div class="pl-3 border-left">
-                                <h5 class="mb-1"><a href="https://daotao.uef.edu.vn/">Trang đào tạo</a></h5>
+                                <h5 class="mb-1">
+                                    <a href="https://daotao.uef.edu.vn/">Trang đào tạo</a>
+                                </h5>
                             </div>
                         </div>
                     </div>
@@ -47,9 +77,13 @@
                 <div class="card card-list">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
-                            <svg class="svg-icon text-primary mr-3" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="svg-icon text-primary mr-3" width="24" height="24"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round">
                                 <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
-                                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
+                                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z">
+                                </path>
                             </svg>
                             <div class="pl-3 border-left">
                                 <h5 class="mb-1"><a href="https://lms.uef.edu.vn/">Tài liệu học tập</h5>
@@ -61,4 +95,3 @@
         </div>
     </div>
 </div>
-
