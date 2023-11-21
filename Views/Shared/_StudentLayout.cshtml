@@ -3,6 +3,7 @@
 *@
 @{
 }
+
 <!doctype html>
 <html lang="en">
 
@@ -14,16 +15,16 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="//lms.uef.edu.vn/pluginfile.php/1/theme_space/favicon/1668764229/favicon-lms.ico" />
-    <link rel="stylesheet" href="/assets/css/backend-plugin.min.css">
-    <link rel="stylesheet" href="/assets/css/backende209.css?v=1.0.0">
-    <link rel="stylesheet" href="/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
-    <link rel="stylesheet" href="/assets/vendor/remixicon/fonts/remixicon.css">
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backende209.css?v=1.0.0">
+    <link rel="stylesheet" href="../assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
+    <link rel="stylesheet" href="../assets/vendor/remixicon/fonts/remixicon.css">
 
-    <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-calendar/dist/tui-calendar.css">
-    <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-date-picker/dist/tui-date-picker.css">
-    <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-time-picker/dist/tui-time-picker.css">
+    <link rel="stylesheet" href="../assets/vendor/tui-calendar/tui-calendar/dist/tui-calendar.css">
+    <link rel="stylesheet" href="../assets/vendor/tui-calendar/tui-date-picker/dist/tui-date-picker.css">
+    <link rel="stylesheet" href="../assets/vendor/tui-calendar/tui-time-picker/dist/tui-time-picker.css">
     <!-- Google Tag Manager -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         (function (w, d, s, l, i) {
             w[l] = w[l] || []; w[l].push({
@@ -32,33 +33,16 @@
             }); var f = d.getElementsByTagName(s)[0],
                 j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
                     '../../../../../../www.googletagmanager.com/gtm5445.html?id=' + i + dl; f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-WNGH9RL'); window.tag_manager_event = 'dashboard-free-preview'; window.tag_manager_product = 'Webkit';
-    </script>
+        })(window, document, 'script', 'dataLayer', 'GTM-WNGH9RL'); window.tag_manager_event = 'dashboard-free-preview'; window.tag_manager_product = 'Webkit';</script>
     <!-- End Google Tag Manager -->
-
-    <script>
-        jQuery(document).on("click", ".iq-menu > li > a", function () {
-            jQuery(".iq-menu > li > a").parent().removeClass("active");
-            jQuery(this).parent().addClass("active");
-            localStorage.setItem("activeElement", jQuery(this).parent().index());
-        });
-
-        // Active menu
-        var parents = jQuery("li.active").parents(".iq-submenu.collapse");
-
-        parents.addClass("show");
-
-        parents.parents("li").addClass("active");
-        jQuery('li.active > a[aria-expanded="false"]').attr("aria-expanded", "true");
-    </script>
-
 </head>
 <body class="  ">
     <!-- loader Start -->
-    @await Component.InvokeAsync("LoadingPage")
+        @await Component.InvokeAsync("LoadingPage")
     <!-- loader END -->
     <!-- Wrapper Start -->
     <div class="wrapper">
+
         <div class="iq-sidebar  sidebar-default ">
             <div class="iq-sidebar-logo d-flex align-items-center">
                 <a href="/Student" class="header-logo">
@@ -72,7 +56,7 @@
             <div class="data-scrollbar" data-scroll="1">
                 <nav class="iq-sidebar-menu">
                     <ul id="iq-sidebar-toggle" class="iq-menu">
-                        <li id="dashboard-toggle" class="">
+                        <li class="active">
                             <a href="/Student" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -82,28 +66,44 @@
                             </a>
                         </li>
                         <li class="">
-                            <a href="" class="svg-icon">
-                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
+                            <a href="page-project.html" class="svg-icon">
+                                <svg class="svg-icon" id="p-dash13" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
                                 </svg>
                                 <span class="ml-4">Lớp</span>
                             </a>
                         </li>
                         <li class="">
-                            <a href="" class="svg-icon">
-                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
+                            <a href="page-employee.html" class="svg-icon">
+                                <svg class="svg-icon" id="p-dash17" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
                                 </svg>
-                                <span class="ml-4">Giảng viên</span>
+                                <span class="ml-4">Thông báo</span>
                             </a>
                         </li>
                     </ul>
                 </nav>
+                <div id="sidebar-bottom" class="position-relative sidebar-bottom">
+                    <div class="card border-none mb-0 shadow-none">
+                        <div class="card-body p-0">
+                            <div class="sidebarbottom-content">
+                                <h5 class="mb-3">Task Performed</h5>
+                                <div id="circle-progress-6" class="sidebar-circle circle-progress circle-progress-primary mb-4" data-min-value="0" data-max-value="100" data-value="55" data-type="percent"></div>
+                                <div class="custom-control custom-radio mb-1">
+                                    <input type="radio" id="customRadio6" name="customRadio-1" class="custom-control-input" checked="">
+                                    <label class="custom-control-label" for="customRadio6">Performed task</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio7" name="customRadio-1" class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadio7">Incomplete Task</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="pt-5 pb-2"></div>
             </div>
         </div>
@@ -116,7 +116,7 @@
                     jQuery(".iq-menu > li").eq(activeIndex).addClass("active");
                     localStorage.clear();
                 }
-                else {
+                else{
                     document.getElementById("dashboard-toggle").classList.add('active');
                 }
 
@@ -127,8 +127,9 @@
                 <nav class="navbar navbar-expand-lg navbar-light p-0">
                     <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
                         <i class="ri-menu-line wrapper-menu"></i>
-                        <a href="/Admin" class="header-logo">
+                        <a href="index.html" class="header-logo">
                             <h4 class="logo-title text-uppercase">Webkit</h4>
+
                         </a>
                     </div>
                     <div class="navbar-breadcrumb">
@@ -142,14 +143,14 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto navbar-list align-items-center">
-                                @*                                 <li>
-                                <div class="iq-search-bar device-search">
-                                <form action="#" class="searchbox">
-                                <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                                <input type="text" class="text search-input" placeholder="Search here...">
-                                </form>
-                                </div>
-                                </li> *@
+                                <li>
+                                    <div class="iq-search-bar device-search">
+                                        <form action="#" class="searchbox">
+                                            <a class="search-link" href="#"><i class="ri-search-line"></i></a>
+                                            <input type="text" class="text search-input" placeholder="Search here...">
+                                        </form>
+                                    </div>
+                                </li>
                                 <li class="nav-item nav-icon search-content">
                                     <a href="#" class="search-toggle rounded" id="dropdownSearch" data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
@@ -191,7 +192,7 @@
                                                         <div class="media align-items-center cust-card py-3 border-bottom">
                                                             <div class="">
                                                                 <img class="avatar-50 rounded-small"
-                                                                     src="/assets/images/user/01.jpg" alt="01">
+                                                                     src="../assets/images/user/01.jpg" alt="01">
                                                             </div>
                                                             <div class="media-body ml-3">
                                                                 <div class="d-flex align-items-center justify-content-between">
@@ -206,7 +207,7 @@
                                                         <div class="media align-items-center cust-card py-3 border-bottom">
                                                             <div class="">
                                                                 <img class="avatar-50 rounded-small"
-                                                                     src="/assets/images/user/02.jpg" alt="02">
+                                                                     src="../assets/images/user/02.jpg" alt="02">
                                                             </div>
                                                             <div class="media-body ml-3">
                                                                 <div class="d-flex align-items-center justify-content-between">
@@ -221,7 +222,7 @@
                                                         <div class="media align-items-center cust-card py-3">
                                                             <div class="">
                                                                 <img class="avatar-50 rounded-small"
-                                                                     src="/assets/images/user/03.jpg" alt="03">
+                                                                     src="../assets/images/user/03.jpg" alt="03">
                                                             </div>
                                                             <div class="media-body ml-3">
                                                                 <div class="d-flex align-items-center justify-content-between">
@@ -266,7 +267,7 @@
                                                         <div class="media align-items-center cust-card py-3 border-bottom">
                                                             <div class="">
                                                                 <img class="avatar-50 rounded-small"
-                                                                     src="/assets/images/user/01.jpg" alt="01">
+                                                                     src="../assets/images/user/01.jpg" alt="01">
                                                             </div>
                                                             <div class="media-body ml-3">
                                                                 <div class="d-flex align-items-center justify-content-between">
@@ -281,7 +282,7 @@
                                                         <div class="media align-items-center cust-card py-3 border-bottom">
                                                             <div class="">
                                                                 <img class="avatar-50 rounded-small"
-                                                                     src="/assets/images/user/02.jpg" alt="02">
+                                                                     src="../assets/images/user/02.jpg" alt="02">
                                                             </div>
                                                             <div class="media-body ml-3">
                                                                 <div class="d-flex align-items-center justify-content-between">
@@ -296,7 +297,7 @@
                                                         <div class="media align-items-center cust-card py-3">
                                                             <div class="">
                                                                 <img class="avatar-50 rounded-small"
-                                                                     src="/assets/images/user/03.jpg" alt="03">
+                                                                     src="../assets/images/user/03.jpg" alt="03">
                                                             </div>
                                                             <div class="media-body ml-3">
                                                                 <div class="d-flex align-items-center justify-content-between">
@@ -319,7 +320,7 @@
                                 <li class="nav-item nav-icon dropdown caption-content">
                                     <a href="#" class="search-toggle dropdown-toggle  d-flex align-items-center" id="dropdownMenuButton4"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <img src="/assets/images/user/1.jpg" class="img-fluid rounded-circle" alt="user">
+                                        <img src="../assets/images/user/1.jpg" class="img-fluid rounded-circle" alt="user">
                                         <div class="caption ml-3">
                                             <h6 class="mb-0 line-height">Savannah Nguyen<i class="las la-angle-down ml-2"></i></h6>
                                         </div>
@@ -645,29 +646,29 @@
                     </ul>
                 </div>
                 <div class="col-lg-6 text-right">
-                    <span class="mr-1"><script>document.write(new Date().getFullYear())</script>©</span> <a href="#" class="">UEF - Quản lý làm việc nhóm</a>.
+                    <span class="mr-1"><script>document.write(new Date().getFullYear())</script>©</span> <a href="#" class="">Webkit</a>.
                 </div>
             </div>
         </div>
     </footer>
     <!-- Backend Bundle JavaScript -->
-    <script src="/assets/js/backend-bundle.min.js"></script>
+    <script src="../assets/js/backend-bundle.min.js"></script>
 
     <!-- Table Treeview JavaScript -->
-    <script src="/assets/js/table-treeview.js"></script>
+    <script src="../assets/js/table-treeview.js"></script>
 
     <!-- Chart Custom JavaScript -->
-    <script src="/assets/js/customizer.js"></script>
+    <script src="../assets/js/customizer.js"></script>
 
     <!-- Chart Custom JavaScript -->
-    <script async src="/assets/js/chart-custom.js"></script>
+    <script async src="../assets/js/chart-custom.js"></script>
     <!-- Chart Custom JavaScript -->
-    <script async src="/assets/js/slider.js"></script>
+    <script async src="../assets/js/slider.js"></script>
 
     <!-- app JavaScript -->
-    <script src="/assets/js/app.js"></script>
+    <script src="../assets/js/app.js"></script>
 
-    <script src="/assets/vendor/moment.min.js"></script>
+    <script src="../assets/vendor/moment.min.js"></script>
 </body>
 
 <!-- Mirrored from templates.iqonic.design/product/lite/webkit/html/backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 11 Nov 2023 06:14:30 GMT -->
