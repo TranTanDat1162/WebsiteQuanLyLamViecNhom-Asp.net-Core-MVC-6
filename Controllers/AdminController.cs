@@ -10,6 +10,7 @@ using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
+
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
