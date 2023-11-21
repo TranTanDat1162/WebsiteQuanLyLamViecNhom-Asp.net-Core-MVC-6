@@ -33,12 +33,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
             return View();
         }
-/*        public IActionResult ListLecturer()
-        {
-            ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
-            return View();
-        }   
-*/
         //----------------------------------------//
 
         // GET: Lecturer
