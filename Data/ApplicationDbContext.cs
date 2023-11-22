@@ -13,4 +13,4 @@ namespace WebsiteQuanLyLamViecNhom.Data
         public DbSet<WebsiteQuanLyLamViecNhom.Models.Teacher>? Teacher { get; set; }
         public DbSet<WebsiteQuanLyLamViecNhom.Models.Admin>? Admin { get; set; }
     }
-}
+}   

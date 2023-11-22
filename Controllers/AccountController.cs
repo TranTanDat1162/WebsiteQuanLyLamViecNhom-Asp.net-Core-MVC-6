@@ -8,6 +8,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         public IActionResult Login()
         {
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
+            //return RedirectToPage("/Account/Login", new { area = "Identity" });
             return View();
         }
         // Giao diện nhập email để lấy mật khẩu

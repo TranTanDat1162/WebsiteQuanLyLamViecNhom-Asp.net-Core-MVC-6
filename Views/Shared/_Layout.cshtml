@@ -336,6 +336,8 @@
         </div>      <div class="content-page">
             <div class="container-fluid">
                 @RenderBody()
+                @RenderSection("scripts", required: false)
+
                 <!-- Page end  -->
             </div>
         </div>
