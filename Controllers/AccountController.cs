@@ -8,14 +8,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         public IActionResult Login()
         {
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
-            //return RedirectToPage("/Account/Login", new { area = "Identity" });
-            return View();
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
         }
         // Giao diện nhập email để lấy mật khẩu
         public IActionResult ForgotPassword()
         {
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
-            return View();
+            return RedirectToPage("/Account/ForgotPassword", new { area = "Identity" });
         }
         // Giao diện khi mail gửi thành công
         public IActionResult MailConfirm()

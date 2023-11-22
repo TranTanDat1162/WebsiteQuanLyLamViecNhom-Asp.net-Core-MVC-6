@@ -114,13 +114,32 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    if (User.IsInRole("Admin"))
+                    {
+                        _logger.LogInformation("Admin logged in.");
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    if (User.IsInRole("Teacher"))
+                    {
+                        _logger.LogInformation("Teacher logged in.");
+                        return RedirectToAction("Index", "Teacher");
+                    }
+                    if (User.IsInRole("Student"))
+                    {
+                        _logger.LogInformation("Student logged in.");
+                        return RedirectToAction("Index", "Student");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("User logged in.");
+                        return LocalRedirect(returnUrl);
+                    }
+                 
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
+                //if (result.RequiresTwoFactor)
+                //{
+                //    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                //}
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");

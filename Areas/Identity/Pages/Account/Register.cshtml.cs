@@ -91,6 +91,7 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
+            [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$", ErrorMessage = "The password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.")]
             public string Password { get; set; }
 
             /// <summary>
@@ -123,13 +124,20 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
-                var roleExist = await _roleManager.RoleExistsAsync("Admin");
+                //---------------------------------------------
+
+                var roleExist = await _roleManager.RoleExistsAsync("Student");
                 if (!roleExist)
                 {
-                    IdentityResult roleResult = await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                    IdentityResult roleResult = await _roleManager.CreateAsync(new IdentityRole("Student"));
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, "Student");
                 }
 
-                await _userManager.AddToRoleAsync(user, "Admin");
+
+                //---------------------------------------------
 
                 if (result.Succeeded)
                 {
