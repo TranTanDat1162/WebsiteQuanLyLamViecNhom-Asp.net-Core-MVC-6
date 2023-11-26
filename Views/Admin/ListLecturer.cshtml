@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<WebsiteQuanLyLamViecNhom.Models.Teacher>
+
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -25,7 +27,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+@*                             <tr>
                                 <td>LINHNTH11051990</td>
                                 <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
                                 <td>Nguyễn Thị Hoài Linh</td>
@@ -41,160 +43,44 @@
                                     </div>
                                 </td>
                                 <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
-                             <tr>
-                                <td>LINHNTH11051990</td>
-                                <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
-                                <td>Nguyễn Thị Hoài Linh</td>
-                                <td>linhnth20@uef.edu.vn</td>
-                                <td>11/05/1990</td>
-                                <td>
-                                    <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                        <div class="custom-switch-inner">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                            <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                            </label>
+                            </tr> *@
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TeacherId)
+                                    </td>
+                                    <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DOB)
+                                    </td>
+                                    <td>
+@*                                         <div class="custom-control custom-switch custom-switch-text custom-control-inline">
+                                            <div class="custom-switch-inner">
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
+
+                                                <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
+                                                </label>
+                                            </div>
+                                        </div> *@
+                                        <div class="custom-control custom-switch custom-switch-text custom-control-inline">
+                                            <div class="custom-switch-inner">
+                                                @* <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="@Html.ValueFor(model => model.IsLocked)" asp-for="IsLocked" /> *@
+                                                @Html.CheckBoxFor(modelItem => item.IsLocked, new { @class = "custom-control-input", @id = item.TeacherId })
+                                                <label class="custom-control-label" for=@Html.DisplayFor(modelItem => item.TeacherId) data-on-label="On" data-off-label="Off">
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
-                           <tr>
-                                <td>LINHNTH11051990</td>
-                                <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
-                                <td>Nguyễn Thị Hoài Linh</td>
-                                <td>linhnth20@uef.edu.vn</td>
-                                <td>11/05/1990</td>
-                                <td>
-                                    <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                        <div class="custom-switch-inner">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                            <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td>LINHNTH11051990</td>
-                                <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
-                                <td>Nguyễn Thị Hoài Linh</td>
-                                <td>linhnth20@uef.edu.vn</td>
-                                <td>11/05/1990</td>
-                                <td>
-                                    <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                        <div class="custom-switch-inner">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                            <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td>LINHNTH11051990</td>
-                                <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
-                                <td>Nguyễn Thị Hoài Linh</td>
-                                <td>linhnth20@uef.edu.vn</td>
-                                <td>11/05/1990</td>
-                                <td>
-                                    <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                        <div class="custom-switch-inner">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                            <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td>LINHNTH11051990</td>
-                                <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
-                                <td>Nguyễn Thị Hoài Linh</td>
-                                <td>linhnth20@uef.edu.vn</td>
-                                <td>11/05/1990</td>
-                                <td>
-                                    <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                        <div class="custom-switch-inner">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                            <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td>LINHNTH11051990</td>
-                                <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
-                                <td>Nguyễn Thị Hoài Linh</td>
-                                <td>linhnth20@uef.edu.vn</td>
-                                <td>11/05/1990</td>
-                                <td>
-                                    <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                        <div class="custom-switch-inner">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                            <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td>LINHNTH11051990</td>
-                                <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
-                                <td>Nguyễn Thị Hoài Linh</td>
-                                <td>linhnth20@uef.edu.vn</td>
-                                <td>11/05/1990</td>
-                                <td>
-                                    <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                        <div class="custom-switch-inner">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                            <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td>LINHNTH11051990</td>
-                                <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
-                                <td>Nguyễn Thị Hoài Linh</td>
-                                <td>linhnth20@uef.edu.vn</td>
-                                <td>11/05/1990</td>
-                                <td>
-                                    <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                        <div class="custom-switch-inner">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                            <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td>LINHNTH11051990</td>
-                                <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
-                                <td>Nguyễn Thị Hoài Linh</td>
-                                <td>linhnth20@uef.edu.vn</td>
-                                <td>11/05/1990</td>
-                                <td>
-                                    <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                        <div class="custom-switch-inner">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                            <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
-                            </tr>
+                                    </td>
+                                    <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
