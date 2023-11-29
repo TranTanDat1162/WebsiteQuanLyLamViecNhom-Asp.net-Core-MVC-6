@@ -12,5 +12,9 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         {
             return View();
         }
+        public IActionResult ProjectDetail()
+        {
+            return View();
+        }
     }
 }
