@@ -1,0 +1,30 @@
+﻿/*Dùng cho việc thêm style đặc biệt cho dự án*/
+/*Important:*/
+.link-spanner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    /* edit: fixes overlap error in IE7/8, 
+     make sure you have an empty gif 
+  background-image: url('empty.gif');*/
+}
+.class-hover {
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0);
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.class-hover:hover {
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125), 0 0 0 0.2rem rgba(112, 136, 255, 0.5);
+}
+
+.badge-leader {
+    color: #ffffff !important;
+    margin-bottom: 10px;
+    margin-left: 8px;
+    background-color: #FFCF52 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}

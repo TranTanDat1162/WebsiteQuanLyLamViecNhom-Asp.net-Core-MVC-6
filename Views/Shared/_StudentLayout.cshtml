@@ -1,10 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <!-- Mirrored from templates.iqonic.design/product/lite/webkit/html/backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 11 Nov 2023 06:14:01 GMT -->
@@ -23,35 +17,9 @@
     <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-calendar/dist/tui-calendar.css">
     <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-date-picker/dist/tui-date-picker.css">
     <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-time-picker/dist/tui-time-picker.css">
-    <!-- Google Tag Manager -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || []; w[l].push({
-                'gtm.start':
-                    new Date().getTime(), event: 'gtm.js'
-            }); var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-                    '../../../../../../www.googletagmanager.com/gtm5445.html?id=' + i + dl; f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-WNGH9RL'); window.tag_manager_event = 'dashboard-free-preview'; window.tag_manager_product = 'Webkit';
-    </script>
-    <!-- End Google Tag Manager -->
 
-    <script>
-        jQuery(document).on("click", ".iq-menu > li > a", function () {
-            jQuery(".iq-menu > li > a").parent().removeClass("active");
-            jQuery(this).parent().addClass("active");
-            localStorage.setItem("activeElement", jQuery(this).parent().index());
-        });
-
-        // Active menu
-        var parents = jQuery("li.active").parents(".iq-submenu.collapse");
-
-        parents.addClass("show");
-
-        parents.parents("li").addClass("active");
-        jQuery('li.active > a[aria-expanded="false"]').attr("aria-expanded", "true");
-    </script>
+    <!-- Custom stylesheet-->
+    <link rel="stylesheet" href="/assets/css/custom-style.css">
 
 </head>
 <body class="  ">
@@ -60,17 +28,16 @@
     <!-- loader END -->
     <!-- Wrapper Start -->
     <div class="wrapper">
-        <div style="width:100%" class="iq-top-navbar">
+        <div class="iq-top-navbar" style="width: 100%;">
             <div class="iq-navbar-custom">
                 <nav class="navbar navbar-expand-lg navbar-light p-0">
                     <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
-                        <i class="ri-menu-line wrapper-menu"></i>
-                        <a href="/Admin" class="header-logo">
-                            <h4 class="logo-title text-uppercase">Webkit</h4>
+                        <a href="/Student" class="header-logo">
+                            <h4 class="logo-title text-uppercase">Student</h4>
                         </a>
                     </div>
                     <div class="navbar-breadcrumb">
-                        <h5>Dashboard</h5>
+                        <h5>Student</h5>
                     </div>
                     <div class="d-flex align-items-center">
                         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -80,29 +47,6 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto navbar-list align-items-center">
-                                @*                                 <li>
-                                <div class="iq-search-bar device-search">
-                                <form action="#" class="searchbox">
-                                <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                                <input type="text" class="text search-input" placeholder="Search here...">
-                                </form>
-                                </div>
-                                </li> *@
-                                <li class="nav-item nav-icon search-content">
-                                    <a href="#" class="search-toggle rounded" id="dropdownSearch" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                                        <i class="ri-search-line"></i>
-                                    </a>
-                                    <div class="iq-search-bar iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownSearch">
-                                        <form action="#" class="searchbox p-2">
-                                            <div class="form-group mb-0 position-relative">
-                                                <input type="text" class="text search-input font-size-12"
-                                                       placeholder="type here to search...">
-                                                <a href="#" class="search-link"><i class="las la-search"></i></a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </li>
                                 <li class="nav-item nav-icon nav-item-icon dropdown">
                                     <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton2"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -301,9 +245,10 @@
                     </div>
                 </nav>
             </div>
-        </div>      
-        <div style="margin-left: auto" class="content-page">
+        </div>
+        <div class="content-page" style="margin-left: auto;">
             <div class="container-fluid">
+                <!-- https://stackoverflow.com/questions/1066777/how-can-dynamic-breadcrumbs-be-achieved-with-asp-net-mvc  -->
                 @RenderBody()
                 <!-- Page end  -->
             </div>
@@ -574,7 +519,7 @@
             </div>
         </div>
     </div>
-    <footer style="margin-left:0px; width:100%" class="iq-footer">
+    <footer class="iq-footer" style="margin-left: 0px;">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6">
