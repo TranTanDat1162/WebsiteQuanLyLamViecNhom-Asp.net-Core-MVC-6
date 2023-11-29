@@ -71,7 +71,6 @@
                                 <th>Email</th>
                                 <th>Ngày sinh</th>
                                 <th>Trạng thái</th>
-                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,22 +98,15 @@
                                                 </label>
                                             </div>
                                         </div> *@
-                                        <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                            <div class="custom-switch-inner">
-                                                @* <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="@Html.ValueFor(model => model.IsLocked)" asp-for="IsLocked" /> *@
-                                                @Html.CheckBoxFor(modelItem => item.IsLocked, new { @class = "custom-control-input", @id = item.TeacherId })
-                                               
-                                                <label class="custom-control-label" for="@Html.DisplayFor(modelItem => item.TeacherId)" data-on-label="On" data-off-label="Off"></label>
-@*                                                 <script type="text/javascript">
-                                                    $(document).on("change", @Html.DisplayFor(modelItem => item.TeacherId), function () {
-                                                        console.log("it ran");
-                                                        $('form').submit();
-                                                    });
-                                                </script> *@
+                                        <form asp-action="LecturerLock" asp-route-id="@item.TeacherId">
+                                            <div class="custom-control custom-switch custom-switch-text custom-control-inline">
+                                                <div class="custom-switch-inner">
+                                                    @Html.CheckBox("isLocked", item.IsLocked, new { @class = "custom-control-input", @id = item.TeacherId })
+                                                    <label class="custom-control-label" for="@Html.DisplayFor(modelItem => item.TeacherId)" data-on-label="On" data-off-label="Off"></label>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </td>
-                                    <td><a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a></td>
                                 </tr>
                             }
                         </tbody>
@@ -124,9 +116,13 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).on("change", "input", function () {
-        $('form').submit();
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var checkboxes = document.querySelectorAll("input[type='checkbox'].custom-control-input");
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener("change", function () {
+                this.closest("form").submit();
+            }); 
+        });
     });
 </script>

@@ -279,6 +279,43 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return View("~/Views/Admin/Lecturer/Edit.cshtml", teacher);
         }
 
+        // POST: Lecturer/Edit/5
+        // This was only for editting the IsLocked field
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult?> LecturerLock(int id, bool isLocked)
+        {
+            var teacher = await _context.Teacher.FindAsync(id);
+            if (teacher == null)
+            {
+                return NotFound();
+            }
+
+            teacher.IsLocked = isLocked;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(teacher);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TeacherExists(teacher.TeacherId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("LecturerList", "Admin"); ;
+            }
+            return View("~/Views/Admin/Lecturer/Edit.cshtml", teacher);
+        }
+
         // GET: Lecturer/Delete/5
         public async Task<IActionResult> LecturerDelete(int? id)
         {
