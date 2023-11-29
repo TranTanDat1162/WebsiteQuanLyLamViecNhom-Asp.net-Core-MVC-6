@@ -8,7 +8,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         {
             return View();
         }
-        public IActionResult ClassList()
+        public IActionResult ProjectDetail()
         {
             return View();
         }
