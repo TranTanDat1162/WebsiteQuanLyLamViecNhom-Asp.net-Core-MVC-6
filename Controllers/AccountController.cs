@@ -5,7 +5,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
     public class AccountController : Controller
     {
         // Giao diện đăng nhập
-        public IActionResult Login()
+        public IActionResult Index()
         {
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
             return RedirectToPage("/Account/Login", new { area = "Identity" });
