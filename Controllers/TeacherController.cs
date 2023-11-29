@@ -8,13 +8,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         {
             return View();
         }
-        public IActionResult TeacherClassList()
-        {
-            return View();
-        }
         public IActionResult TeacherClass()
         {
-            //TO-DO: return class info
             return View();
         }
     }

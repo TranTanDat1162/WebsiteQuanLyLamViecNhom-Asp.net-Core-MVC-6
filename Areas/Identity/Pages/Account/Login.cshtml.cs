@@ -122,6 +122,8 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
                 {
                     var user = await _userManager.FindByNameAsync(Input.Email);
                     var roles = await _userManager.GetRolesAsync(user);
+                    _logger.LogInformation(Input.Password);
+
                     if (roles.Contains("Student"))
                     {
                         _logger.LogInformation("Student logged in.");
