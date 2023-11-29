@@ -111,7 +111,8 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-          
+            _logger.LogInformation(Input.Password);
+
 
             if (ModelState.IsValid)
             {
@@ -122,6 +123,7 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
                 {
                     var user = await _userManager.FindByNameAsync(Input.Email);
                     var roles = await _userManager.GetRolesAsync(user);
+
                     if (roles.Contains("Student"))
                     {
                         _logger.LogInformation("Student logged in.");

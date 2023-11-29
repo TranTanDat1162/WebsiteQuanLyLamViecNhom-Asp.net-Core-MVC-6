@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="LecturerEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TeacherId" />
             <div class="form-group">
@@ -29,11 +29,35 @@
                 <input asp-for="DOB" class="form-control" />
                 <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+@*             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsLocked" /> @Html.DisplayNameFor(model => model.IsLocked)
                 </label>
+            </div> *@
+            <div class="custom-control custom-switch custom-switch-text custom-control-inline">
+                <div class="custom-switch-inner">
+                    @* <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="@Html.ValueFor(model => model.IsLocked)" asp-for="IsLocked" /> *@
+                    @Html.CheckBoxFor(model => model.IsLocked, new { @class = "custom-control-input", @id = "customSwitch-11", @onchange = "submitForm(this)" })
+                    <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off" onchange="submitForm()">
+                    </label>
+                </div>
             </div>
+            <script>
+                function submitForm(checkbox, form) {
+                    var isChecked = checkbox.checked;
+                    var checkboxId = checkbox.id;
+                    // Perform your desired actions
+                    $('form').submit();
+                    console.log("Checkbox with ID " + checkboxId + " has been changed. New value: " + isChecked);
+                }
+            </script>
+@*             <div class="custom-control custom-switch custom-switch-text custom-control-inline">
+                <div class="custom-switch-inner">
+                    <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
+                    <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
+                    </label>
+                </div>
+            </div> *@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -44,6 +68,12 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script type="text/javascript">
+    $(document).on("change", "#input", function () {
+            $('form').submit();
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
