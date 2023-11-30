@@ -183,8 +183,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         // GET: Lecturer
         public async Task<IActionResult> LecturerList()
         {
+            var teacherDynamicModels = new TeacherDynamicModels
+            {
+                Teachers = await _context.Teacher.ToListAsync(),
+                Teacher = null
+            };
             return _context.Teacher != null ?
-                        View("~/Views/Admin/Lecturer/Index.cshtml", await _context.Teacher.ToListAsync()) :
+                        View("~/Views/Admin/Lecturer/Index.cshtml", teacherDynamicModels) :
                         Problem("Entity set 'ApplicationDbContext.Teacher'  is null.");
         }
 
@@ -285,7 +290,9 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult?> LecturerLock(int id, bool isLocked)
         {
+            #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var teacher = await _context.Teacher.FindAsync(id);
+            #pragma warning restore CS8602 // Dereference of a possibly null reference.
             if (teacher == null)
             {
                 return NotFound();
@@ -311,6 +318,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                         throw;
                     }
                 }
+                //System.Diagnostics.Debug.WriteLine("Teacher "+id+" new IsLocked value " + isLocked);
                 return RedirectToAction("LecturerList", "Admin"); ;
             }
             return View("~/Views/Admin/Lecturer/Edit.cshtml", teacher);

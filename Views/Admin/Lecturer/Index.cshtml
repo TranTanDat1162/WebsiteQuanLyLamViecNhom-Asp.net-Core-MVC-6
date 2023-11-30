@@ -1,57 +1,9 @@
-﻿@model IEnumerable<WebsiteQuanLyLamViecNhom.Models.Teacher>
+﻿@model WebsiteQuanLyLamViecNhom.Data.TeacherDynamicModels
 
 @{
     ViewData["Title"] = "Lecturer List";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-@* 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DOB)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsLocked)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DOB)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsLocked)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TeacherId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TeacherId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TeacherId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table> *@
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
@@ -59,10 +11,13 @@
                 <div class="header-title">
                     <h4 class="card-title">Danh sách giảng viên</h4>
                 </div>
+                <div class="pl-3 border-left btn-new">
+                    <a href="#" class="btn btn-primary" data-target="#new-teacher-modal" data-toggle="modal">New Contact</a>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="datatable" class="table data-table table-striped">
+                    <table id="datatable" class="table data-table table-striped" style="width:99%">
                         <thead>
                             <tr class="ligth">
                                 <th>Mã số giảng viên</th>
@@ -74,7 +29,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.Teachers)
                             {
                                 <tr>
                                     <td>
@@ -91,13 +46,6 @@
                                         @Html.DisplayFor(modelItem => item.DOB)
                                     </td>
                                     <td>
-@*                                         <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                            <div class="custom-switch-inner">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="">
-                                                <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
-                                                </label>
-                                            </div>
-                                        </div> *@
                                         <form asp-action="LecturerLock" asp-route-id="@item.TeacherId">
                                             <div class="custom-control custom-switch custom-switch-text custom-control-inline">
                                                 <div class="custom-switch-inner">
@@ -116,13 +64,83 @@
         </div>
     </div>
 </div>
+<!--Model dialog-->
+<div class="modal fade bd-example-modal-lg" role="dialog" aria-modal="true" id="new-teacher-modal">
+    <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-block text-center pb-3 border-bttom">
+                <h3 class="modal-title" id="exampleModalCenterTitle02">New User</h3>
+            </div>
+            <div class="modal-body">
+                <form asp-action="LecturerCreate">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group mb-3 custom-file-small">
+                            <label for="exampleInputText01" class="h5">Upload Profile Picture</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile02">
+                                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="h5">Họ và tên</label>
+                            <input asp-for="@Model.Teacher.FullName" class="form-control" />
+                            <span asp-validation-for="@Model.Teacher.FullName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="h5">Địa chỉ Email</label>
+                            <input asp-for="@Model.Teacher.Email" class="form-control" />
+                            <span asp-validation-for="@Model.Teacher.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="h5">Ngày sinh</label>
+                            <input asp-for="@Model.Teacher.DOB" class="form-control" />
+                            <span asp-validation-for="@Model.Teacher.DOB" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group mb-3">
+                            <label for="exampleInputText05" class="h5">Khoá GV*</label>
+                            <div class="custom-control custom-switch custom-switch-text">
+                                <div class="custom-switch-inner">
+                                    @Html.CheckBoxFor(model => model.Teacher.IsLocked, new { @class = "custom-control-input", @style = "top: 9px", @id = "customSwitch-11" })
+                                    <label class="custom-control-label" for="customSwitch-11" data-on-label="On" data-off-label="Off">
+
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                            <input class="btn btn-primary mr-3" type="submit" value="Thêm giảng viên" />
+                            <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div><!--End of Model dialog-->
+
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var checkboxes = document.querySelectorAll("input[type='checkbox'].custom-control-input");
         checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener("change", function () {
-                this.closest("form").submit();
-            }); 
+            if (checkbox.id !== "customSwitch-11") {
+                checkbox.addEventListener("change", function () {
+                    this.closest("form").submit();
+                });
+            }
         });
     });
 </script>
