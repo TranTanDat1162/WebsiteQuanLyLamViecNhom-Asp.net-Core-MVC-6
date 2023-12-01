@@ -49,7 +49,7 @@
                                         <form asp-action="LecturerLock" asp-route-id="@item.TeacherId">
                                             <div class="custom-control custom-switch custom-switch-text custom-control-inline">
                                                 <div class="custom-switch-inner">
-                                                    @Html.CheckBox("isLocked", item.IsLocked, new { @class = "custom-control-input", @id = item.TeacherId })
+                                                    @Html.CheckBox("isLocked", item.IsLocked, new { @class = "custom-control-input", @id = item.TeacherId, @onchange = "submitForm(this)" })
                                                     <label class="custom-control-label" for="@Html.DisplayFor(modelItem => item.TeacherId)" data-on-label="On" data-off-label="Off"></label>
                                                 </div>
                                             </div>
@@ -129,18 +129,12 @@
             </div>
         </div>
     </div>
-</div><!--End of Model dialog-->
+</div>
+<!--End of Model dialog-->
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var checkboxes = document.querySelectorAll("input[type='checkbox'].custom-control-input");
-        checkboxes.forEach(function (checkbox) {
-            if (checkbox.id !== "customSwitch-11") {
-                checkbox.addEventListener("change", function () {
-                    this.closest("form").submit();
-                });
-            }
-        });
-    });
+    function submitForm(checkbox) {
+        checkbox.closest("form").submit();
+    }
 </script>

@@ -1,3 +1,7 @@
+//This file is for creating a custom javascript for a really specific usecase
+
+//Read the name and you can get the idea
+//By Minh Trièu
 (function generateBreadcrumbs() {
     // Get the current page URL
     var currentPageUrl = window.location.href;
@@ -5,7 +9,7 @@
     // Split the URL by '/' to extract the necessary information
     var urlParts = currentPageUrl.split('/');
 
-    // Remove the first empty item from the array
+    // Remove the first 3 empty items from the array
     urlParts.shift();
     urlParts.shift();
     urlParts.shift();
