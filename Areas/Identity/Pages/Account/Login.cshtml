@@ -20,24 +20,31 @@
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="col-lg-12">
                                         <div class="floating-label form-group">
-                                            <input asp-for="Input.Email" class="floating-input form-control" autocomplete="username" type="email" placeholder=" ">
-                                            <label asp-for="Input.Email" class="form-label">Email</label>
+                                            <input asp-for="Input.Email" class="floating-input form-control" autocomplete="username" type="email" placeholder="Email">
+                                            @*<label asp-for="Input.Email" class="form-label">Email</label>*@
                                             <span asp-validation-for="Input.Email" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="floating-label form-group">
-                                            <input asp-for="Input.Password" class="floating-input form-control" autocomplete="current-password" type="password" placeholder=" ">
-                                            <label asp-for="Input.Password" class="form-label">Password</label>
+                                            <input asp-for="Input.Password" class="floating-input form-control" autocomplete="current-password" type="password" placeholder="Password">
+                                            @*<label asp-for="Input.Password" class="form-label">Password</label>*@
                                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
-                                        <a id="forgot-password" asp-page="./ForgotPassword">Quên mật khẩu</a>
+                                        <a id="forgot-password" asp-page="./ForgotPassword" class="text-white float-right">Quên mật khẩu</a>
                                     </div>
                                 </div>
                                 <button id="login-submit" type="submit" class="btn btn-white">Đăng nhập</button>
                             </form>
+                            <!-- Alert container -->
+                            <div id="login-alert" class="alert alert-secondary" role="alert" style="position: fixed; top: 20px; right: 20px; display: none;">
+                                <div class="iq-alert-icon">
+                                    <i class="ri-information-line"></i>
+                                </div>
+                                <div class="iq-alert-text">A simple <b>secondary</b> alert—check it out!</div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6 content-right">
