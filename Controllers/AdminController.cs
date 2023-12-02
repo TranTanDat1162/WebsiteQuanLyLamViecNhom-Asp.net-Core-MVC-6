@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebsiteQuanLyLamViecNhom.Data;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
@@ -222,10 +223,19 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LecturerCreate([Bind("TeacherId,FullName,Email,DOB,IsLocked")] Teacher teacher)
+        public async Task<IActionResult> LecturerCreate([Bind("TeacherId,FullName,Email,DOB,ImgPfp,IsLocked")] Teacher teacher)
         {
             if (ModelState.IsValid)
             {
+                if(teacher.ImgPfp != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    byte[] data = uploadHelper.ConvertToByteArray(teacher.ImgPfp);
+                    var fileID =
+                    gDriveServices.UploadFile(teacher.TeacherId.ToString(),data,"1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
+                }
                 _context.Add(teacher);
                 await _context.SaveChangesAsync();
                 return  RedirectToAction("LecturerList", "Admin");

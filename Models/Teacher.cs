@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebsiteQuanLyLamViecNhom.Models
 {
@@ -12,6 +13,8 @@ namespace WebsiteQuanLyLamViecNhom.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime DOB { get; set; }
+        [NotMapped]
+        public IFormFile? ImgPfp { get; set; }
         public Boolean IsLocked { get; set; }
 
     }

@@ -79,7 +79,8 @@
                         <div class="form-group mb-3 custom-file-small">
                             <label for="exampleInputText01" class="h5">Upload Profile Picture</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="inputGroupFile02">
+                                <input asp-for="@Model.Teacher.ImgPfp" type="file" class="custom-file-input" id="inputGroupFile02">
+                                <span asp-validation-for="@Model.Teacher.FullName" class="text-danger"></span>
                                 <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
                             </div>
                         </div>
