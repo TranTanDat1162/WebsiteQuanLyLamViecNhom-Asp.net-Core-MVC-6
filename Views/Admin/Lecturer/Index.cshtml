@@ -33,11 +33,21 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.TeacherId)
+                                        @Html.DisplayFor(modelItem => item.TeacherCode)
                                     </td>
-                                    <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.FullName)
+                                        @if(item.ImgId != null)
+                                        {
+                                            <img class="avatar-70 rounded" src="https://drive.google.com/uc?id=@item.ImgId&export=download" alt="#" data-original-title="" title="">
+                                        }
+                                        else
+                                        {
+                                            <img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title="">
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LastName) @Html.DisplayFor(modelItem => item.FirstName) 
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Email)
@@ -72,7 +82,7 @@
                 <h3 class="modal-title" id="exampleModalCenterTitle02">New User</h3>
             </div>
             <div class="modal-body">
-                <form asp-action="LecturerCreate">
+                <form asp-action="LecturerCreate" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="row">
                     <div class="col-lg-6">
@@ -80,16 +90,23 @@
                             <label for="exampleInputText01" class="h5">Upload Profile Picture</label>
                             <div class="custom-file">
                                 <input asp-for="@Model.Teacher.ImgPfp" type="file" class="custom-file-input" id="inputGroupFile02">
-                                <span asp-validation-for="@Model.Teacher.FullName" class="text-danger"></span>
+                                <span asp-validation-for="@Model.Teacher.ImgPfp" class="text-danger"></span>
                                 <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-3">
                         <div class="form-group">
-                            <label class="h5">Họ và tên</label>
-                            <input asp-for="@Model.Teacher.FullName" class="form-control" />
-                            <span asp-validation-for="@Model.Teacher.FullName" class="text-danger"></span>
+                            <label class="h5">Họ</label>
+                            <input asp-for="@Model.Teacher.LastName" class="form-control" />
+                            <span asp-validation-for="@Model.Teacher.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="h5">Tên</label>
+                            <input asp-for="@Model.Teacher.FirstName" class="form-control" />
+                            <span asp-validation-for="@Model.Teacher.FirstName" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-lg-4">

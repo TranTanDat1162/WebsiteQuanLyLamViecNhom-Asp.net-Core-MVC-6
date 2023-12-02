@@ -7,7 +7,11 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
 {
     public class GDriveServices : DriveService
     {
-
+        /// <summary>
+        /// Get Mime type from file's name
+        /// </summary>
+        /// <param name="fileName"></param> 
+        /// <returns></returns>
         public string GetMimeType(string fileName)
         {
             var provider = new FileExtensionContentTypeProvider();
@@ -17,7 +21,10 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
             }
             return mimeType;
         }
-
+        /// <summary>
+        /// Get the already provided user account to do these actions
+        /// </summary>
+        /// <returns></returns>
         public DriveService GetService()
         {
             ClientSecrets clientSecrets = new ClientSecrets
@@ -27,7 +34,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
             };
 
             /* set where to save access token. The token stores the user's access and refresh tokens, and is created automatically when the authorization flow completes for the first time. */
-            string tokenPath = Path.GetTempPath(); // <- change
+            string tokenPath = Path.GetTempPath();
 
             string[] scopes = { Scope.Drive };
 
@@ -42,10 +49,14 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
             DriveService service = new DriveService(new Initializer()
             {
                 HttpClientInitializer = authorizedUserCredential,
-                ApplicationName = "Name_of_your_application", // <- change
+                ApplicationName = "GroupProjectManagement",
             });
             return service;
         }
+        /// <summary>
+        /// To act like as a bot account to do these actions
+        /// </summary>
+        /// <returns></returns>
         public DriveService? GetClient()
         {
             string credenitalsJSONPath
@@ -74,6 +85,20 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
             }
             return null;
         }
+        /// <summary>
+        /// For sending file into the designated google drive
+        /// </summary>
+        /// 
+        /// <param name="fileName"></param> string defining the file's name on drive
+        /// <param name="data"></param> the stream contatining the file's data
+        /// <param name="destinationFolderId"></param> Folder id
+        /// (Example:https://drive.google.com/drive/u/0/folders/1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP.
+        /// Then the Folder Id would be "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP").
+        /// 
+        /// FolderIds:
+        /// 1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP: Teacher profile picture
+        /// 
+        /// <returns>A string the the file's ID which can be used for loading the pic</returns>
         public string? UploadFile(string fileName, byte[] data, string destinationFolderId)
         {
             Google.Apis.Drive.v3.Data.File uploadedFile = null;
@@ -96,15 +121,29 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
                 var stream = new MemoryStream(data);
                 var mimetype = GetMimeType(fileName);
 
-                FilesResource.CreateMediaUpload request = _driveClient.Files.Create(metadata, stream, mimetype);
-                request.Fields = "id";
-                request.Upload();
+                var existingFile = _driveClient.Files.List().Execute().Files.FirstOrDefault(f => f.Name == fileName);
+                if (existingFile != null)
+                {
+                    // If a file with the same name exists, update it
+                    FilesResource.UpdateMediaUpload updateRequest = _driveClient.Files.Update(metadata, existingFile.Id, stream, mimetype);
+                    updateRequest.Fields = "id";
+                    updateRequest.Upload();
 
-                uploadedFile = request.ResponseBody;
+                    uploadedFile = updateRequest.ResponseBody;
+                }
+                else
+                {
+                    FilesResource.CreateMediaUpload createRequest = _driveClient.Files.Create(metadata, stream, mimetype);
+                    createRequest.Fields = "id";
+                    createRequest.Upload();
+
+                    uploadedFile = createRequest.ResponseBody;
+                }
             }
 
             return uploadedFile?.Id;
         }
+        //Returns a download link that can be use by <img src="link"/>
         public string? GetDownloadLink(string fileId)
         {
             Google.Apis.Drive.v3.Data.File fileResponse = null;

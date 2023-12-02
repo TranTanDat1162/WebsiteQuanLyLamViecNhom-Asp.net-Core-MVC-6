@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebsiteQuanLyLamViecNhom.Data;
 
@@ -11,9 +12,10 @@ using WebsiteQuanLyLamViecNhom.Data;
 namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231202041738_TeacherUpdate")]
+    partial class TeacherUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -272,9 +274,6 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeacherCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TeacherId");
