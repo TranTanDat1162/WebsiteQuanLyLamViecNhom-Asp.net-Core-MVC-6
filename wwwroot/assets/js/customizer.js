@@ -44,7 +44,7 @@
         }
         else {
             var breadcrumbLink = document.createElement("a");
-            breadcrumbLink.setAttribute("href", "#");
+            breadcrumbLink.setAttribute("href", "/" + breadcrumbItems[i]);
             breadcrumbLink.textContent = breadcrumbItems[i];
 
             breadcrumbItem.appendChild(breadcrumbLink);
