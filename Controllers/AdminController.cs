@@ -11,6 +11,7 @@ using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.Models;
 using Diacritics.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -18,10 +19,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context, UserManager<IdentityUser> usermanager)
         {
             _context = context;
+            _userManager = usermanager;
         }
         public IActionResult Index()
         {
