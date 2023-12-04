@@ -1,9 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <!-- Mirrored from templates.iqonic.design/product/lite/webkit/html/backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 11 Nov 2023 06:14:01 GMT -->
@@ -13,7 +8,7 @@
     <title>@ViewData["Title"]</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="https://templates.iqonic.design/product/lite/webkit/html/assets/images/favicon.ico" />
+    <link rel="shortcut icon" href="//lms.uef.edu.vn/pluginfile.php/1/theme_space/favicon/1668764229/favicon-lms.ico" />
     <link rel="stylesheet" href="/assets/css/backend-plugin.min.css">
     <link rel="stylesheet" href="/assets/css/backende209.css?v=1.0.0">
     <link rel="stylesheet" href="/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
@@ -22,87 +17,27 @@
     <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-calendar/dist/tui-calendar.css">
     <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-date-picker/dist/tui-date-picker.css">
     <link rel="stylesheet" href="/assets/vendor/tui-calendar/tui-time-picker/dist/tui-time-picker.css">
-    <!-- Google Tag Manager -->
 
-    <script>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || []; w[l].push({
-                'gtm.start':
-                    new Date().getTime(), event: 'gtm.js'
-            }); var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-                    '../../../../../../www.googletagmanager.com/gtm5445.html?id=' + i + dl; f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-WNGH9RL'); window.tag_manager_event = 'dashboard-free-preview'; window.tag_manager_product = 'Webkit';</script>
-    <!-- End Google Tag Manager -->
+    <!-- Custom stylesheet-->
+    <link rel="stylesheet" href="/assets/css/custom-style.css">
+
 </head>
 <body class="  ">
     <!-- loader Start -->
-    <div id="loading">
-        <div id="loading-center">
-        </div>
-    </div>
+    @await Component.InvokeAsync("LoadingPage")
     <!-- loader END -->
     <!-- Wrapper Start -->
     <div class="wrapper">
-
-        <div class="iq-sidebar  sidebar-default ">
-            <div class="iq-sidebar-logo d-flex align-items-center">
-                <a href="/Home" class="header-logo">
-                    <img src="https://templates.iqonic.design/product/lite/webkit/html/assets/images/logo.svg" alt="logo">
-                    <h3 class="logo-title light-logo">Webkit</h3>
-                </a>
-                <div class="iq-menu-bt-sidebar ml-0">
-                    <i class="las la-bars wrapper-menu"></i>
-                </div>
-            </div>
-            <div class="data-scrollbar" data-scroll="1">
-                <nav class="iq-sidebar-menu">
-                    <ul id="iq-sidebar-toggle" class="iq-menu">
-                        <li class="active">
-                            <a href="/Admin" class="svg-icon">
-                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                                <span class="ml-4">Trang chủ</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="page-project.html" class="svg-icon">
-                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                                <span class="ml-4">Lớp</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="page-employee.html" class="svg-icon">
-                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </svg>
-                                <span class="ml-4">Giảng viên</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="pt-5 pb-2"></div>
-            </div>
-        </div>      <div class="iq-top-navbar">
+        <div class="iq-top-navbar" style="width: 100%;">
             <div class="iq-navbar-custom">
                 <nav class="navbar navbar-expand-lg navbar-light p-0">
                     <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
-                        <i class="ri-menu-line wrapper-menu"></i>
-                        <a href="/Admin" class="header-logo">
-                            <h4 class="logo-title text-uppercase">Webkit</h4>
+                        <a asp-controller="Student" asp-action="Index" class="header-logo">
+                            <h4 class="logo-title text-uppercase">Group Work Management</h4>
                         </a>
                     </div>
                     <div class="navbar-breadcrumb">
-                        <h5>Dashboard</h5>
+                        <h5>Group Work Management</h5>
                     </div>
                     <div class="d-flex align-items-center">
                         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -112,29 +47,6 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto navbar-list align-items-center">
-                                <li>
-                                    <div class="iq-search-bar device-search">
-                                        <form action="#" class="searchbox">
-                                            <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                                            <input type="text" class="text search-input" placeholder="Search here...">
-                                        </form>
-                                    </div>
-                                </li>
-                                <li class="nav-item nav-icon search-content">
-                                    <a href="#" class="search-toggle rounded" id="dropdownSearch" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                                        <i class="ri-search-line"></i>
-                                    </a>
-                                    <div class="iq-search-bar iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownSearch">
-                                        <form action="#" class="searchbox p-2">
-                                            <div class="form-group mb-0 position-relative">
-                                                <input type="text" class="text search-input font-size-12"
-                                                       placeholder="type here to search...">
-                                                <a href="#" class="search-link"><i class="las la-search"></i></a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </li>
                                 <li class="nav-item nav-icon nav-item-icon dropdown">
                                     <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton2"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -333,11 +245,11 @@
                     </div>
                 </nav>
             </div>
-        </div>      <div class="content-page">
+        </div>
+        <div class="content-page" style="margin-left: auto;">
             <div class="container-fluid">
+                <!-- https://stackoverflow.com/questions/1066777/how-can-dynamic-breadcrumbs-be-achieved-with-asp-net-mvc  -->
                 @RenderBody()
-                @RenderSection("scripts", required: false)
-
                 <!-- Page end  -->
             </div>
         </div>
@@ -607,7 +519,7 @@
             </div>
         </div>
     </div>
-    <footer class="iq-footer">
+    <footer class="iq-footer" style="margin-left: 0px;">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6">
@@ -617,7 +529,7 @@
                     </ul>
                 </div>
                 <div class="col-lg-6 text-right">
-                    <span class="mr-1"><script>document.write(new Date().getFullYear())</script>©</span> <a href="#" class="">Quản lý làm việc nhóm</a>.
+                    <span class="mr-1"><script>document.write(new Date().getFullYear())</script>©</span> <a href="#" class="">UEF - Quản lý làm việc nhóm</a>.
                 </div>
             </div>
         </div>
