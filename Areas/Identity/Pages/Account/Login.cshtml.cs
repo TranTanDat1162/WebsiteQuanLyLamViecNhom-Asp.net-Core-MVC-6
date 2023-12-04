@@ -16,17 +16,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Security.Claims;
+using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<BaseApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<BaseApplicationUser> _userManager;
 
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
+        public LoginModel(SignInManager<BaseApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<BaseApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -123,39 +124,45 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
                 {
                     var user = await _userManager.FindByNameAsync(Input.Email);
                     var roles = await _userManager.GetRolesAsync(user);
-
-                    if (roles.Contains("Student"))
+                    if (user.IsLocked)
                     {
-                        _logger.LogInformation("Student logged in.");
-                        return RedirectToAction("Index", "Student");
-                    }
-                    else if (roles.Contains("Teacher"))
-                    {
-                        _logger.LogInformation("Teacher logged in.");
-                        return RedirectToAction("Index", "Teacher");
-                    }
-                    else if (roles.Contains("Admin"))
-                    {
-                        _logger.LogInformation("Admin logged in.");
-                        return RedirectToAction("Index", "Admin");
+                        if (roles.Contains("Student"))
+                        {
+                            _logger.LogInformation("Student logged in.");
+                            return RedirectToAction("Index", "Student");
+                        }
+                        else if (roles.Contains("Teacher"))
+                        {
+                            _logger.LogInformation("Teacher logged in.");
+                            return RedirectToAction("Index", "Teacher");
+                        }
+                        else if (roles.Contains("Admin"))
+                        {
+                            _logger.LogInformation("Admin logged in.");
+                            return RedirectToAction("Index", "Admin");
+                        }
+                        else
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                     else
                     {
-                        _logger.LogInformation("User logged in.");
-                        return LocalRedirect(returnUrl);
+                        _logger.LogWarning("User account locked out.");
+                        return RedirectToPage("./Lockout");
                     }
-
                 }
                 //if (result.RequiresTwoFactor)
                 //{
                 //    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 //}
-                else if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
-                else
+                //else if (result.IsLockedOut)
+                //{
+                //    _logger.LogWarning("User account locked out.");
+                //    return RedirectToPage("./Lockout");
+                //}
+                //else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();

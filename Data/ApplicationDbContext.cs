@@ -4,12 +4,13 @@ using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<BaseApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
+        public DbSet<WebsiteQuanLyLamViecNhom.Models.Student>? Student  { get; set; }
         public DbSet<WebsiteQuanLyLamViecNhom.Models.Teacher>? Teacher { get; set; }
         public DbSet<WebsiteQuanLyLamViecNhom.Models.Admin>? Admin { get; set; }
         public DbSet<WebsiteQuanLyLamViecNhom.Models.Student>? Student { get; set; }
