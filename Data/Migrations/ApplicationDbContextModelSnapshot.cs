@@ -245,6 +245,33 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                     b.ToTable("Admin");
                 });
 
+            modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Student", b =>
+                {
+                    b.Property<int>("StudentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"), 1L, 1);
+
+                    b.Property<DateTime>("DOB")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
+
+                    b.HasKey("StudentId");
+
+                    b.ToTable("Student");
+                });
+
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Teacher", b =>
                 {
                     b.Property<int>("TeacherId")
