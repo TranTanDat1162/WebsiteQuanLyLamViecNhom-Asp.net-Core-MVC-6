@@ -17,23 +17,21 @@
                             <p>UEF - Quản lý làm việc nhóm</p>
                             <form id="account" method="post">
                                 <div class="row">
-                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div id="validation-error" asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                                     <div class="col-lg-12">
                                         <div class="floating-label form-group">
-                                            <input asp-for="Input.Email" class="floating-input form-control" autocomplete="username" placeholder=" ">
-                                            <label asp-for="Input.Email" class="form-label">Email</label>
-                                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                            <input asp-for="Input.Email" class="floating-input form-control" autocomplete="username" type="email" placeholder="Email">
+                                            <span id="validation-error" asp-validation-for="Input.Email" class="alert alert-danger" style="display:none;"></span>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="floating-label form-group">
-                                            <input asp-for="Input.Password" class="floating-input form-control" autocomplete="current-password" type="password" placeholder=" ">
-                                            <label asp-for="Input.Password" class="form-label">Password</label>
-                                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                            <input asp-for="Input.Password" class="floating-input form-control" autocomplete="current-password" type="password" placeholder="Password">
+                                            <span id="validation-error" asp-validation-for="Input.Password" class="alert alert-danger" style="display:none;"></span>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
-                                        <a id="forgot-password" asp-page="./ForgotPassword">Quên mật khẩu</a>
+                                        <a id="forgot-password" class="text-white float-right" asp-page="./ForgotPassword">Quên mật khẩu</a>
                                     </div>
                                 </div>
                                 <button id="login-submit" type="submit" class="btn btn-white">Đăng nhập</button>
@@ -51,4 +49,38 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('login-submit').addEventListener('click', function (event) {
+                // Ngăn chặn sự kiện submit mặc định của form
+                event.preventDefault();
+
+                var email = document.getElementById('Input_Email').value;
+                var password = document.getElementById('Input_Password').value;
+                var errorMessage = '';
+
+                // Kiểm tra điều kiện và thiết lập thông báo
+                if (!email && !password) {
+                    errorMessage = 'Vui lòng nhập email và mật khẩu.';
+                } else if (!email) {
+                    errorMessage = 'Vui lòng nhập email.';
+                } else if (!password) {
+                    errorMessage = 'Vui lòng nhập mật khẩu.';
+                }
+
+                // Hiển thị hoặc ẩn thông báo và thiết lập timeout
+                var validationError = document.getElementById('validation-error');
+                if (errorMessage) {
+                    validationError.textContent = errorMessage;
+                    validationError.style.display = 'block';
+                    setTimeout(function () {
+                        validationError.style.display = 'none';
+                    }, 5000); // 5 giây
+                } else {
+                    validationError.style.display = 'none';
+                    document.getElementById('account').submit(); // Submit form nếu không có lỗi
+                }
+            });
+        });
+    </script>
 }
