@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Encodings.Web;
 using System.Text;
+using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -30,9 +31,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserStore<BaseApplicationUser> _userStore;
         private readonly IUserEmailStore<BaseApplicationUser> _emailStore;
-
-
-
 
         public AdminController(ApplicationDbContext context, UserManager<BaseApplicationUser> usermanager, ILogger<AdminController> logger)
         {
@@ -50,11 +48,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
             return View();
         }
-        public IActionResult StudentList()
-        {
-            ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
-            return View();
-        }
+        //public IActionResult StudentList()
+        //{
+        //    ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
+        //    return View();
+        //}
         //---------------------------------------------
         public async Task<IActionResult> OnPostAsync(Teacher teacher)
         {
@@ -83,6 +81,31 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             }
             // If we got this far, something failed, redisplay form
             return RedirectToAction("Index", "Admin");
+        }
+
+        public async Task OnPostAsync(Student student)
+        {
+            if (!ModelState.IsValid)
+            {
+                var user = student;
+
+                //await _userStore.SetUserNameAsync(user, teacher.Email, CancellationToken.None);
+                //await _emailStore.SetEmailAsync(user, teacher.Email, CancellationToken.None);
+                user.UserName = student.StudentCode;
+
+                var result = await _userManager.CreateAsync(user, student.DOB.ToString("ddMMyyyy"));
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User created a new account with password.");
+                    await _userManager.AddToRoleAsync(user, "Student");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                    _logger.LogInformation("Problems here!.");
+                }
+            }
         }
 
         //private IdentityUser CreateUser()
@@ -383,11 +406,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         // This was only for editting the IsLocked field
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult?> LecturerLock(int id, bool isLocked)
+        public async Task<IActionResult?> LecturerLock(string id, bool isLocked)
         {
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
             //var teacher = await _context.Teacher.FindAsync(id);
-            var teacher = await _context.Teacher.Where(x => x.TeacherId.Equals(id)).FirstOrDefaultAsync();
+            var teacher = await _context.Teacher.Where(x => x.TeacherCode.Contains(id)).FirstOrDefaultAsync();
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
             if (teacher == null)
             {
@@ -417,25 +440,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 //System.Diagnostics.Debug.WriteLine("Teacher "+id+" new IsLocked value " + isLocked);
                 return RedirectToAction("LecturerList", "Admin"); ;
             }
-            return View("~/Views/Admin/Lecturer/Edit.cshtml", teacher);
-        }
-
-        // GET: Lecturer/Delete/5
-        public async Task<IActionResult> LecturerDelete(int? id)
-        {
-            if (id == null || _context.Teacher == null)
-            {
-                return NotFound();
-            }
-
-            var teacher = await _context.Teacher
-                .FirstOrDefaultAsync(m => m.TeacherId == id);
-            if (teacher == null)
-            {
-                return NotFound();
-            }
-
-            return View("~/Views/Admin/Lecturer/Delete.cshtml", teacher);
+            //return View("~/Views/Admin/Lecturer/Edit.cshtml", teacher);
+            return null;
         }
 
         // POST: Lecturer/Delete/5
@@ -460,6 +466,102 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         private bool TeacherExists(int? id)
         {
             return (_context.Teacher?.Any(e => e.TeacherId == id)).GetValueOrDefault();
+        }
+
+        // GET: Lecturer/Delete/5
+        public async Task<IActionResult> LecturerDelete(int? id)
+        {
+            if (id == null || _context.Teacher == null)
+            {
+                return NotFound();
+            }
+
+            var teacher = await _context.Teacher
+                .FirstOrDefaultAsync(m => m.TeacherId == id);
+            if (teacher == null)
+            {
+                return NotFound();
+            }
+
+            return View("~/Views/Admin/Lecturer/Delete.cshtml", teacher);
+        }
+
+        // STUDENT
+
+        // GET: Student
+        public async Task<IActionResult> StudentList()
+        {
+            var studentList = await _context.Student.ToListAsync();
+            return _context.Teacher != null ?
+                        View("~/Views/Admin/StudentAccounts/Index.cshtml", studentList) :
+                        Problem("Entity set 'ApplicationDbContext.Student'  is null.");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult?> StudentLock(string id, bool isLocked)
+        {
+        #pragma warning disable CS8602 // Dereference of a possibly null reference.
+            //var teacher = await _context.Teacher.FindAsync(id);
+            var student = await _context.Student.Where(x => x.StudentCode.Contains(id)).FirstOrDefaultAsync();
+            #pragma warning restore CS8602 // Dereference of a possibly null reference.
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            student.IsLocked = isLocked;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(student);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TeacherExists(student.StudentId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                //System.Diagnostics.Debug.WriteLine("Teacher "+id+" new IsLocked value " + isLocked);
+                return RedirectToAction("StudentList", "Admin"); ;
+            }
+            //return View("~/Views/Admin/StudentAccounts/Edit.cshtml", student);
+            return null;
+        }
+
+        public IActionResult StudentCreate()
+        {
+            return View("~/Views/Admin/StudentAccounts/Create.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StudentCreate([Bind("StudentId,FirstName,LastName,Email,DOB,IsLocked")] Student student)
+        {
+            student.StudentCode = "205051051";
+
+            if (!ModelState.IsValid)
+            {
+                try
+                {
+                    await OnPostAsync(student);
+                }
+                catch
+                {
+                    _logger.LogInformation("Student created with problems.", student.StudentCode);
+                }
+                //_context.Add(student);
+                //await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("StudentList", "Admin");
         }
     }
 }

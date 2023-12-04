@@ -56,11 +56,11 @@
                                         @Html.DisplayFor(modelItem => item.DOB)
                                     </td>
                                     <td>
-                                        <form asp-action="LecturerLock" asp-route-id="@item.TeacherId">
+                                        <form asp-action="LecturerLock" asp-route-id="@item.TeacherCode">
                                             <div class="custom-control custom-switch custom-switch-text custom-control-inline">
                                                 <div class="custom-switch-inner">
-                                                    @Html.CheckBox("isLocked", item.IsLocked, new { @class = "custom-control-input", @id = item.TeacherId, @onchange = "submitForm(this)" })
-                                                    <label class="custom-control-label" for="@Html.DisplayFor(modelItem => item.TeacherId)" data-on-label="On" data-off-label="Off"></label>
+                                                    @Html.CheckBox("isLocked", item.IsLocked, new { @class = "custom-control-input", @id = item.TeacherCode, @onchange = "submitForm(this)" })
+                                                    <label class="custom-control-label" for="@Html.DisplayFor(modelItem => item.TeacherCode)" data-on-label="On" data-off-label="Off"></label>
                                                 </div>
                                             </div>
                                         </form>

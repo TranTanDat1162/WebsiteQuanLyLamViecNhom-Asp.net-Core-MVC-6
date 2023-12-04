@@ -1,4 +1,4 @@
-﻿    @model IEnumerable<WebsiteQuanLyLamViecNhom.Models.Student>
+﻿@model IEnumerable<WebsiteQuanLyLamViecNhom.Models.Student>
 
 @{
     ViewData["Title"] = "Index";
@@ -43,40 +43,41 @@
                                 <th>Trạng thái</th>
                             </tr>
                         </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DOB)
-            </td>
-                                    <td>
-                                        <form asp-action="StudentLock" asp-route-id="@item.StudentId">
-                                            <div class="custom-control custom-switch custom-switch-text custom-control-inline">
-                                                <div class="custom-switch-inner">
-                                                    @Html.CheckBox("isLocked", item.IsLocked, new { @class = "custom-control-input", @id = item.StudentId, @onchange = "submitForm(this)" })
-                                                    <label class="custom-control-label" for="@Html.DisplayFor(modelItem => item.StudentId)" data-on-label="On" data-off-label="Off"></label>
-                                                </div>
+                        <tbody>
+                            @foreach (var item in Model) {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StudentCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LastName) @Html.DisplayFor(modelItem => item.FirstName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DOB)
+                                </td>
+                                <td>
+                                    <form asp-action="StudentLock" asp-route-id="@item.StudentId">
+                                        <div class="custom-control custom-switch custom-switch-text custom-control-inline">
+                                            <div class="custom-switch-inner">
+                                                @Html.CheckBox("isLocked", item.IsLocked, new { @class = "custom-control-input", @id = item.StudentId, @onchange = "submitForm(this)" })
+                                                <label class="custom-control-label" for="@Html.DisplayFor(modelItem => item.StudentId)" data-on-label="On" data-off-label="Off"></label>
                                             </div>
-                                        </form>
-                                    </td>
-        </tr>
-}
-    </tbody>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     function submitForm(checkbox) {
         checkbox.closest("form").submit();
