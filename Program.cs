@@ -1,3 +1,4 @@
+using FluentAssertions.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>()
+builder.Services.AddDefaultIdentity<WebsiteQuanLyLamViecNhom.Models.BaseApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -24,11 +25,10 @@ builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings.
     options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 1;
 
     // Lockout settings.
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
@@ -89,7 +89,7 @@ app.MapRazorPages();
 using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
     var RoleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var UserManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var UserManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<WebsiteQuanLyLamViecNhom.Models.BaseApplicationUser>>();
     string[] roleNames = { "Admin", "Teacher", "Student" };
     IdentityResult roleResult;
 

@@ -12,19 +12,33 @@ using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.Models;
 using Diacritics.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text.Encodings.Web;
+using System.Text;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    //[Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<BaseApplicationUser> _userManager;
+        private readonly ILogger<AdminController> _logger;
+        private readonly SignInManager<BaseApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IUserStore<BaseApplicationUser> _userStore;
+        private readonly IUserEmailStore<BaseApplicationUser> _emailStore;
 
-        public AdminController(ApplicationDbContext context, UserManager<IdentityUser> usermanager)
+
+
+
+        public AdminController(ApplicationDbContext context, UserManager<BaseApplicationUser> usermanager, ILogger<AdminController> logger)
         {
             _context = context;
             _userManager = usermanager;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -41,6 +55,49 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
             return View();
         }
+        //---------------------------------------------
+        public async Task<IActionResult> OnPostAsync(Teacher teacher)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = teacher;
+
+                //await _userStore.SetUserNameAsync(user, teacher.Email, CancellationToken.None);
+                //await _emailStore.SetEmailAsync(user, teacher.Email, CancellationToken.None);
+                user.UserName = teacher.Email;
+
+                var result = await _userManager.CreateAsync(user, teacher.TeacherCode);
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User created a new account with password.");
+                    await _userManager.AddToRoleAsync(user, "Teacher");
+                    return RedirectToAction("LecturerList", "Admin");
+
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                    _logger.LogInformation("Problems here!." + ModelState.ToString());
+                }
+            }
+            // If we got this far, something failed, redisplay form
+            return RedirectToAction("Index", "Admin");
+        }
+
+        //private IdentityUser CreateUser()
+        //{
+        //    try
+        //    {
+        //        return Activator.CreateInstance<Teacher>();
+        //    }
+        //    catch
+        //    {
+        //        throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
+        //            $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+        //            $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+        //    }
+        //}
 
         //----------------------------------------//
         // GET: Admin
@@ -255,11 +312,18 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     gDriveServices.UploadFile(autogenTeacherId, data, "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
 
                     teacher.ImgId = fileID;
-
                 }
 
-                _context.Add(teacher);
-                await _context.SaveChangesAsync();
+                //_context.Add(teacher);
+                //await _context.SaveChangesAsync();
+                try
+                {
+                    await OnPostAsync(teacher);
+                }
+                catch 
+                {
+                    _logger.LogInformation("Teacher created with problems.",teacher.TeacherCode);
+                }
                 return  RedirectToAction("LecturerList", "Admin");
             }
             return View("~/Views/Admin/Lecturer/Create.cshtml", teacher);
@@ -319,10 +383,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         // This was only for editting the IsLocked field
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult?> LecturerLock(int? id, bool isLocked)
+        public async Task<IActionResult?> LecturerLock(int id, bool isLocked)
         {
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
-            var teacher = await _context.Teacher.FindAsync(id);
+            //var teacher = await _context.Teacher.FindAsync(id);
+            var teacher = await _context.Teacher.Where(x => x.TeacherId.Equals(id)).FirstOrDefaultAsync();
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
             if (teacher == null)
             {
