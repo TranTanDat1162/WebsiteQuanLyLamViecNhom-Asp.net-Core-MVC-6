@@ -124,7 +124,7 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
                 {
                     var user = await _userManager.FindByNameAsync(Input.Email);
                     var roles = await _userManager.GetRolesAsync(user);
-                    if (!user.IsLocked)
+                    if (user.IsLocked)
                     {
                         if (roles.Contains("Student"))
                         {

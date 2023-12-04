@@ -5,7 +5,9 @@ namespace WebsiteQuanLyLamViecNhom.Models
 {
     public class BaseApplicationUser : IdentityUser
     {
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
 
         [Required]

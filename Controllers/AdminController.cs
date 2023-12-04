@@ -295,8 +295,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
                 //"autogenTeacherId":
                 //  using the Removediacritic to turn vietnamese alphabet into non-accent alphabet
-                string autogenTeacherId = (autogenlastname +
-                    teacher.FirstName.ToUpper() + 
+                string autogenTeacherId = (teacher.FirstName.ToUpper() +
+                    autogenlastname + 
                     teacher.DOB.ToString("ddMMyyyy")).RemoveDiacritics();
 
                 teacher.TeacherCode = autogenTeacherId;

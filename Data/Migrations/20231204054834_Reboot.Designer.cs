@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebsiteQuanLyLamViecNhom.Data;
 
@@ -11,9 +12,10 @@ using WebsiteQuanLyLamViecNhom.Data;
 namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231204054834_Reboot")]
+    partial class Reboot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,20 +265,6 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("BaseApplicationUser");
-                });
-
-            modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Student", b =>
-                {
-                    b.HasBaseType("WebsiteQuanLyLamViecNhom.Models.BaseApplicationUser");
-
-                    b.Property<string>("StudentCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Teacher", b =>
