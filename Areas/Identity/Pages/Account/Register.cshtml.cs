@@ -126,14 +126,14 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
 
                 //---------------------------------------------
 
-                var roleExist = await _roleManager.RoleExistsAsync("Teacher");
+                var roleExist = await _roleManager.RoleExistsAsync("Admin");
                 if (!roleExist)
                 {
-                    IdentityResult roleResult = await _roleManager.CreateAsync(new IdentityRole("Teacher"));
+                    IdentityResult roleResult = await _roleManager.CreateAsync(new IdentityRole("Admin"));
                 }
                 else
                 {
-                    await _userManager.AddToRoleAsync(user, "Teacher");
+                    await _userManager.AddToRoleAsync(user, "Admin");
                 }
 
 

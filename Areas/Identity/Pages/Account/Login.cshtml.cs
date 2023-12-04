@@ -157,7 +157,8 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    // Xóa tất cả lỗi hiện tại trong ModelState
+                    ModelState.AddModelError(string.Empty, "Tài khoản hoặc mật khẩu chưa chính xác");
                     return Page();
                 }
             }

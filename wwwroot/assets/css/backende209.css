@@ -3514,13 +3514,30 @@ textarea.form-control {
     color: #5e4d1f; }
 
 .alert-danger {
-  color: #4c100f;
-  background-color: #e9d2d2;
-  border-color: #e1c0c0; }
-  .alert-danger hr {
-    border-top-color: #d9afaf; }
-  .alert-danger .alert-link {
-    color: #210707; }
+    color: #4c100f;
+    background-color: #e9d2d2;
+    border-color: #e1c0c0;
+    position: fixed; /* Sử dụng position: fixed để đặt vị trí cố định trên trang */
+    top: 0; /* Đặt top thành 0 để nằm ở góc trên cùng */
+    right: 0; /* Đặt right thành 0 để nằm ở bên phải */
+    margin: 15px; /* Cách lề để không bị chồng lên nội dung */
+    z-index: 1000; /* Đặt z-index để đảm bảo nó hiển thị trên mọi nội dung khác */
+
+}
+.alert-danger ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+
+    .alert-danger hr {
+        border-top-color: #d9afaf;
+    }
+
+    .alert-danger .alert-link {
+        color: #210707;
+    }
+
 
 .alert-light {
   color: #676a6e;
