@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebsiteQuanLyLamViecNhom.Data;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.Models;
+using Diacritics.Extensions;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -222,17 +225,42 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LecturerCreate([Bind("TeacherId,FullName,Email,DOB,IsLocked")] Teacher teacher)
+        public async Task<IActionResult> LecturerCreate([Bind("TeacherId,FirstName,LastName,Email,DOB,ImgPfp,IsLocked,TeacherCode")] Teacher teacher)
         {
             if (ModelState.IsValid)
             {
+                //"autogenlastname":
+                //  taking the only the first letter of each words in Teacher's Last name 
+                string autogenlastname = string.Concat(teacher.LastName.Split(' ').Select(s => s[0]));
+
+                //"autogenTeacherId":
+                //  using the Removediacritic to turn vietnamese alphabet into non-accent alphabet
+                string autogenTeacherId = (teacher.FirstName.ToUpper() +
+                    autogenlastname + 
+                    teacher.DOB.ToString("ddMMyyyy")).RemoveDiacritics();
+
+                teacher.TeacherCode = autogenTeacherId;
+
+                //If user put in imgpfp in form then it will upload to designated folder id
+                if (teacher.ImgPfp != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    byte[] data = uploadHelper.ConvertToByteArray(teacher.ImgPfp);
+                    var fileID =
+                    gDriveServices.UploadFile(autogenTeacherId, data, "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
+
+                    teacher.ImgId = fileID;
+
+                }
+
                 _context.Add(teacher);
                 await _context.SaveChangesAsync();
                 return  RedirectToAction("LecturerList", "Admin");
             }
             return View("~/Views/Admin/Lecturer/Create.cshtml", teacher);
         }
-
         // GET: Lecturer/Edit/5
         public async Task<IActionResult> LecturerEdit(int? id)
         {
@@ -288,7 +316,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         // This was only for editting the IsLocked field
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult?> LecturerLock(int id, bool isLocked)
+        public async Task<IActionResult?> LecturerLock(int? id, bool isLocked)
         {
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var teacher = await _context.Teacher.FindAsync(id);
@@ -361,7 +389,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TeacherExists(int id)
+        private bool TeacherExists(int? id)
         {
             return (_context.Teacher?.Any(e => e.TeacherId == id)).GetValueOrDefault();
         }
