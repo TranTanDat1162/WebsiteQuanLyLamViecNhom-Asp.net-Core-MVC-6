@@ -250,6 +250,7 @@
             <div class="container-fluid">
                 <!-- https://stackoverflow.com/questions/1066777/how-can-dynamic-breadcrumbs-be-achieved-with-asp-net-mvc  -->
                 @RenderBody()
+                @RenderSection("scripts", required: false)
                 <!-- Page end  -->
             </div>
         </div>

@@ -166,6 +166,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             {
                 _context.Add(admin);
                 await _context.SaveChangesAsync();
+                
                 return RedirectToAction("AdminList", "Admin");
             }
             return View("~/Views/Admin/Action/Index.cshtml", admin);
