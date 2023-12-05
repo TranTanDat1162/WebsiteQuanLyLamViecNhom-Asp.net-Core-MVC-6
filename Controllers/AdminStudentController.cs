@@ -6,12 +6,12 @@ using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
-    public class StudentController : Controller
+    public class AdminStudentController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BaseApplicationUser> _userManager;
         private readonly ILogger<AdminController> _logger;
-        public StudentController(ApplicationDbContext context, UserManager<BaseApplicationUser> usermanager, ILogger<AdminController> logger)
+        public AdminStudentController(ApplicationDbContext context, UserManager<BaseApplicationUser> usermanager, ILogger<AdminController> logger)
         {
             _context = context;
             _userManager = usermanager;
