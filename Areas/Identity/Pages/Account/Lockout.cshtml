@@ -2,9 +2,26 @@
 @model LockoutModel
 @{
     ViewData["Title"] = "Locked out";
+    Layout = "/Views/Shared/_ErrorLayout.cshtml";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+<div class="mt-5 iq-maintenance">
+    <div class="container-fluid p-0">
+        <div class="row no-gutters">
+            <div class="col-sm-12 text-center">
+                <div class="iq-maintenance">
+                    <img src="/assets/images/error/02.png" class="img-fluid" alt="">
+                    <h3 class="mt-4 mb-1">Tài khoản đã bị khóa</h3>
+                    <p>Liên hệ với admin</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-lg-6">
+                <a style="margin-left: 51%; padding: 3%;" href="/Identity/Account/Login" class="btn btn-primary btn-block">Quay lại trang đăng nhập</a>
+            </div>
+        </div>
+    </div>
+</div>
