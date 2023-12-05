@@ -444,49 +444,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             //return View("~/Views/Admin/Lecturer/Edit.cshtml", teacher);
             return null;
         }
-
-        // POST: Lecturer/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LecturerDeleteConfirmed(int id)
-        {
-            if (_context.Teacher == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Teacher'  is null.");
-            }
-            var teacher = await _context.Teacher.FindAsync(id);
-            if (teacher != null)
-            {
-                _context.Teacher.Remove(teacher);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool TeacherExists(int? id)
         {
             return (_context.Teacher?.Any(e => e.TeacherId == id)).GetValueOrDefault();
         }
-
-        // GET: Lecturer/Delete/5
-        public async Task<IActionResult> LecturerDelete(int? id)
-        {
-            if (id == null || _context.Teacher == null)
-            {
-                return NotFound();
-            }
-
-            var teacher = await _context.Teacher
-                .FirstOrDefaultAsync(m => m.TeacherId == id);
-            if (teacher == null)
-            {
-                return NotFound();
-            }
-
-            return View("~/Views/Admin/Lecturer/Delete.cshtml", teacher);
-        }
-
         // STUDENT
 
         // GET: Student
@@ -522,7 +483,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TeacherExists(student.StudentId))
+                    if (!StudentExist(student.StudentId))
                     {
                         return NotFound();
                     }
@@ -563,6 +524,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 //await _context.SaveChangesAsync();
             }
             return RedirectToAction("StudentList", "Admin");
+        }
+        private bool StudentExist(int? id)
+        {
+            return (_context.Student?.Any(e => e.StudentId == id)).GetValueOrDefault();
         }
     }
 }
