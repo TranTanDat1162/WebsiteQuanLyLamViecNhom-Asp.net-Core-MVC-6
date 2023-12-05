@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.Models;
+using System.Security.Claims;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -13,20 +15,33 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         {
             _context = context;
         }
+        
         public async Task<IActionResult> Index()
         {
-            var teacher = await _context.Teacher.FirstOrDefaultAsync(); 
-            string teacherCode = teacher?.TeacherCode;
-            string teacherImgId = teacher?.ImgId;
+            // Lấy thông tin người dùng đăng nhập
+            var user = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            
 
-            var viewModel = new Teacher
+            // Kiểm tra xem người dùng có tồn tại không
+            if (user != null)
             {
-                TeacherCode = teacherCode,
-                ImgId = teacherImgId
-            };
+                //var email = user.Email;
+                string teacherCode = user.TeacherCode;
+                string teacherImgId = user.ImgId;
 
-            return View(viewModel);
+                var viewModel = new Teacher
+                {
+                    TeacherCode = teacherCode,
+                    ImgId = teacherImgId
+                };
+
+                return View(viewModel);
+            }
+
+            // Xử lý trường hợp không có người dùng đăng nhập
+            return NotFound();
         }
+
         public IActionResult TeacherClass()
         {
             return View();
