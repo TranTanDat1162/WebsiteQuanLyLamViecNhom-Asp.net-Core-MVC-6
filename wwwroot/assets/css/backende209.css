@@ -4006,6 +4006,8 @@ a.close.disabled {
     overflow-y: auto; }
 
 .modal-dialog-centered {
+  padding:2%;
+  max-width:fit-content !important;
   display: flex;
   align-items: center;
   min-height: calc(100% - 1rem); }
