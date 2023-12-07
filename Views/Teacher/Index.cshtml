@@ -741,8 +741,20 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group mb-3">
-                                    <label for="exampleInputText004" class="h5">Ngày khoá lớp</label>
-                                    <input type="date" class="form-control" id="exampleInputText004" value="">
+                                    <label for="exampleInputText03" class="h5">Mã môn học *</label>
+                                    <input type="text" class="form-control" id="exampleInputText03" placeholder="Mã môn học">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="exampleInputText04" class="h5">Năm học *</label>
+                                    <input type="text" class="form-control" id="exampleInputText04" placeholder="Năm học">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="exampleInputText05" class="h5">Học kỳ *</label>
+                                    <input type="text" class="form-control" id="exampleInputText05" placeholder="Học kỳ">
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -761,27 +773,20 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="row">
-                            <div class="card-body" style="padding:5px;">
-                                <div class="table-responsive">
-                                    <div class="row justify-content-between">
-                                        <div class="col-sm-6 col-md-6">
-                                            <div id="user_list_datatable_info" class="dataTables_filter">
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="card-body" style="padding: 5px; overflow: hidden;">
+                                <div class="custom-table-responsive" style="overflow-x:hidden;max-height:600px;">
                                     <table id="user-list-table" class="table table-striped dataTable mt-4" role="grid" aria-describedby="user-list-page-info">
                                         <thead>
                                             <tr class="ligth">
                                                 <th>STT</th>
-                                                <th>MSSV</th>
-                                                <th>Họ và tên</th>
+                                                <th>Mã SV</th>
+                                                <th>Họ</th>
+                                                <th>Tên</th>
                                                 <th>Ngày sinh</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-
-                                            </tr>
+                                        <tbody style="height:150px; overflow-y: scroll ">
+                                            <!-- Dữ liệu bảng -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -796,9 +801,7 @@
 <!-- Modal list end -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
 <script>
-    document.getElementById('excelFile').addEventListener('change', handleFile);
-
-    function handleFile(e) {
+    document.getElementById('excelFile').addEventListener('change', function (e) {
         var file = e.target.files[0];
         if (!file) return;
 
@@ -812,10 +815,68 @@
 
             // Xử lý thông tin sinh viên và bảng
             handleStudentInfoTable(workbook);
+            // Xử lý thông tin học kỳ, năm học, và mã môn học
+            handleSemesterAndSubjectInfo(workbook);
         };
 
         reader.readAsBinaryString(file);
+    });
+function updateSTT() {
+    var table = document.getElementById('user-list-table');
+    var rows = table.rows;
+
+    for (var i = 1; i < rows.length; i++) {
+        rows[i].cells[0].innerText = i;
     }
+}
+
+function handleStudentInfoTable(workbook) {
+    var sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    // Clear existing data in the table
+    var table = document.getElementById('user-list-table');
+    var tbody = table.getElementsByTagName('tbody')[0];
+    tbody.innerHTML = '';
+
+    var headers = ["STT", "Mã SV", "Họ", "Tên", "Ngày sinh"];
+    var startRow = 10; // Bắt đầu đọc từ dòng 10
+
+    while (sheet["C" + startRow] && sheet["C" + startRow].v !== undefined) {
+        var rowData = [];
+        headers.forEach(function (header, index) {
+            var cell = sheet[String.fromCharCode(65 + index) + startRow];
+
+            if (cell && cell.v !== undefined) {
+                var cellValue = '';
+
+                if ((header === "Họ" || header === "Tên") && cell.s) {
+                    for (var i = cell.s.c; i <= cell.e.c; i++) {
+                        for (var j = cell.s.r; j <= cell.e.r; j++) {
+                            var cellRef = XLSX.utils.encode_cell({ c: i, r: j });
+                            cellValue += " " + (sheet[cellRef] ? sheet[cellRef].v : '');
+                        }
+                    }
+                    rowData.push(cellValue.trim());
+                } else {
+                    rowData.push(cell.v || '');
+                }
+            } else {
+                rowData.push('');
+            }
+        });
+
+        var newRow = tbody.insertRow();
+        rowData.forEach(function (value, index) {
+            var cell = newRow.insertCell(index);
+            cell.innerHTML = value;
+        });
+
+        startRow++;
+    }
+
+    updateSTT();
+}
+
 
     function handleClassCodeAndSubject(workbook) {
         // Lấy dữ liệu từ các ô cần thiết
@@ -833,85 +894,36 @@
         // Đặt giá trị vào ô mã lớp
         document.getElementById('exampleInputText02').value = classCode;
 
-        // Lấy giá trị từ ô A1 để đặt vào ô môn học
+        // Lấy giá trị từ ô C5 để đặt vào ô môn học
         var cellValue = workbook.Sheets[workbook.SheetNames[0]]['C5'].v;
         // Đặt giá trị vào ô môn học
         document.getElementById('exampleInputText01').value = cellValue;
     }
-    function updateSTT() {
-    var table = document.getElementById('user-list-table');
-    var rows = table.rows;
+    function handleSemesterAndSubjectInfo(workbook) {
+        // Lấy dữ liệu từ ô F4
+        var semesterInfoCell = workbook.Sheets[workbook.SheetNames[0]]['F4'];
+        var semesterInfo = semesterInfoCell ? semesterInfoCell.v : '';
 
-    for (var i = 1; i < rows.length; i++) {
-        rows[i].cells[0].innerText = i;
-    }
-}
-    function handleStudentInfoTable(workbook) {
-        // Lấy dữ liệu từ sheet đầu tiên
-        var sheet = workbook.Sheets[workbook.SheetNames[0]];
+        // Lấy dữ liệu từ ô C5
+        var subjectInfoCell = workbook.Sheets[workbook.SheetNames[0]]['C5'];
+        var subjectInfo = subjectInfoCell ? subjectInfoCell.v : '';
 
-        // Lấy đề mục
-        var headers = ["STT", "MSSV", "Họ và tên", "Ngày sinh"];
+        // Tách thông tin học kỳ và năm học
+        var semesterYearMatch = semesterInfo.match(/Học kỳ (\d+[A-Z]) - Năm Học (\d+-\d+)/);
+        var semester = semesterYearMatch ? semesterYearMatch[1] : '';
+        var year = semesterYearMatch ? semesterYearMatch[2] : '';
 
-        // Xóa dữ liệu cũ trong bảng
-        var table = document.getElementById('user-list-table');
-        var tbody = table.getElementsByTagName('tbody')[0];
-        tbody.innerHTML = '';
+        // Tách thông tin mã môn học
+        var subjectCodeMatch = subjectInfo.match(/\(([^)]+)\)/);
+        var subjectCode = subjectCodeMatch ? subjectCodeMatch[1] : '';
 
-        // Đọc dữ liệu từ file Excel và điền vào bảng
-        var row = 9; // Bắt đầu từ dòng chứa đề mục
-        var rowData;
-
-        do {
-            rowData = [];
-            headers.forEach(function (header) {
-                var cell = sheet[header + row];
-                rowData.push(cell ? cell.v : ''); // Lấy giá trị từ ô hoặc để trống nếu ô trống
-            });
-
-            console.log("rowData:", rowData); // In dữ liệu hàng ra console để kiểm tra
-
-            // Thêm dòng vào bảng
-            var newRow = tbody.insertRow();
-            rowData.forEach(function (value, index) {
-                var cell = newRow.insertCell(index);
-                cell.innerHTML = value;
-            });
-
-            row++;
-        } while (rowData.some(Boolean)); // Kiểm tra xem có dữ liệu trong dòng không
-
-        // Hiển thị số lượng sinh viên
-        var infoDiv = document.getElementById('user_list_datatable_info');
-        infoDiv.innerHTML = "Hiển thị " + (row - 10) + " sinh viên"; // Trừ đi dòng chứa đề mục
-
-        // Tính số thứ tự (STT)
-        updateSTT();
+        // Đặt giá trị vào ô Năm học, Học kỳ và Mã môn học
+        document.getElementById('exampleInputText04').value = year;
+        document.getElementById('exampleInputText05').value = semester;
+        document.getElementById('exampleInputText03').value = subjectCode;
     }
 
-    // Định nghĩa hàm xử lý sự kiện khi chọn file
-    document.getElementById('excelFile').addEventListener('change', handleFile);
-
-    // Định nghĩa hàm chính xử lý file
-    function handleFile(e) {
-        var file = e.target.files[0];
-        if (!file) return;
-
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            var data = e.target.result;
-            var workbook = XLSX.read(data, { type: 'binary' });
-
-            // Xử lý mã lớp và môn học
-            handleClassCodeAndSubject(workbook);
-
-            // Xử lý thông tin sinh viên và bảng
-            handleStudentInfoTable(workbook);
-        };
-
-        reader.readAsBinaryString(file);
-    }
-    </script>
+</script>
 
 
 
