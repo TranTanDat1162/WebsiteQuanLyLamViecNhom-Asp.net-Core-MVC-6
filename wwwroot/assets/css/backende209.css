@@ -10993,7 +10993,14 @@ body.tab-horizontal .iq-footer {
   .table span, .table p {
     color: #605C8D; }
   .table .ligth {
-    white-space: nowrap; }
+    white-space: nowrap;
+        
+  }
+table .ligth1 {
+    position:sticky;
+    top:0;
+    z-index:1;
+}
     .table .ligth th {
       padding: 15px 20px !important;
       text-transform: capitalize;

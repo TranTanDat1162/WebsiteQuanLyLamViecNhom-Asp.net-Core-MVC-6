@@ -28,6 +28,22 @@
     background-color: #FFCF52 !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
+.custom-table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.custom-table-responsive, tr {
+    display: block;     
+    float: left;
+}
+.custom-table-responsive, tr,td {
+    display: block;
+    float: left;
+}
+
+
 
 
 
