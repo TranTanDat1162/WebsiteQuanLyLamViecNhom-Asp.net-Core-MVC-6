@@ -48,7 +48,7 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.TeacherId)
+                                        @Html.DisplayFor(modelItem => item.Id)
                                     </td>
                                     <td><img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title=""></td>
                                     <td>
@@ -72,8 +72,8 @@
                                         <div class="custom-control custom-switch custom-switch-text custom-control-inline">
                                             <div class="custom-switch-inner">
                                                 @* <input type="checkbox" class="custom-control-input" id="customSwitch-11" checked="@Html.ValueFor(model => model.IsLocked)" asp-for="IsLocked" /> *@
-                                                @Html.CheckBoxFor(modelItem => item.IsLocked, new { @class = "custom-control-input", @id = item.TeacherId })
-                                                <label class="custom-control-label" for=@Html.DisplayFor(modelItem => item.TeacherId) data-on-label="On" data-off-label="Off">
+                                                @Html.CheckBoxFor(modelItem => item.IsLocked, new { @class = "custom-control-input", @id = item.Id })
+                                                <label class="custom-control-label" for=@Html.DisplayFor(modelItem => item.Id) data-on-label="On" data-off-label="Off">
                                                 </label>
                                             </div>
                                         </div>
