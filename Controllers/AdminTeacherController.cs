@@ -1,4 +1,5 @@
 ﻿using Diacritics.Extensions;
+using Google.Apis.Drive.v3.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,12 +26,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             if (ModelState.IsValid)
             {
                 var user = teacher;
-              
 
                 //await _userStore.SetUserNameAsync(user, teacher.Email, CancellationToken.None);
                 //await _emailStore.SetEmailAsync(user, teacher.Email, CancellationToken.None);
                 user.UserName = teacher.Email;
-
+                user.IsLocked = !teacher.IsLocked;
                 var result = await _userManager.CreateAsync(user, teacher.TeacherCode);
 
                 if (result.Succeeded)
@@ -66,7 +66,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         // GET: Lecturer/Details/5
         //WIP
         [Route("Admin/Teacher/Details")]
-        public async Task<IActionResult> LecturerDetails(int? id)
+        public async Task<IActionResult> LecturerDetails(string? id)
         {
             if (id == null || _context.Teacher == null)
             {
@@ -74,7 +74,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             }
 
             var teacher = await _context.Teacher
-                .FirstOrDefaultAsync(m => m.TeacherId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (teacher == null)
             {
                 return NotFound();
@@ -111,6 +111,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     teacher.DOB.ToString("ddMMyyyy")).RemoveDiacritics();
 
                 teacher.TeacherCode = autogenTeacherId;
+                teacher.IsLocked = !teacher.IsLocked;
 
                 //If user put in imgpfp in form then it will upload to designated folder id
                 if (teacher.ImgPfp != null)
@@ -127,15 +128,19 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
                 //_context.Add(teacher);
                 //await _context.SaveChangesAsync();
-                try
+                var result = await _userManager.CreateAsync(teacher, teacher.TeacherCode);
+
+                if (result.Succeeded)
                 {
-                    await OnPostAsync(teacher);
+                    _logger.LogInformation("User created a new account with password.");
+                    await _userManager.AddToRoleAsync(teacher, "Teacher");
+                        
                 }
-                catch
+                foreach (var error in result.Errors)
                 {
-                    _logger.LogInformation("Teacher created with problems.", teacher.TeacherCode);
+                    ModelState.AddModelError(string.Empty, error.Description);
+                    _logger.LogInformation("Problems here!." + ModelState.ToString());
                 }
-                return RedirectToAction("LecturerList", "Admin");
             }
             return View("~/Views/Admin/Lecturer/Create.cshtml", teacher);
         }
@@ -167,7 +172,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TeacherExists(teacher.TeacherId))
+                    if (!TeacherExists(teacher.Id))
                     {
                         return NotFound();
                     }
@@ -182,9 +187,9 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             //return View("~/Views/Admin/Lecturer/Edit.cshtml", teacher);
             return null;
         }
-        private bool TeacherExists(int? id)
+        private bool TeacherExists(string? id)
         {
-            return (_context.Teacher?.Any(e => e.TeacherId == id)).GetValueOrDefault();
+            return (_context.Teacher?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

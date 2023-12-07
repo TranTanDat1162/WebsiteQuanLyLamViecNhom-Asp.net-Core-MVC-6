@@ -7,7 +7,6 @@ namespace WebsiteQuanLyLamViecNhom.Models
 {
     public class Teacher : BaseApplicationUser
     {
-        public int TeacherId { get; set; }
         public string? TeacherCode { get; set; }
         [NotMapped]
         public IFormFile? ImgPfp { get; set; }

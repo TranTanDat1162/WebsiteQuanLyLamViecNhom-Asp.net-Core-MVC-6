@@ -51,8 +51,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
-
-
 //----------------------------------------------------
 
 var app = builder.Build();

@@ -4,12 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.Models;
 using System.Security.Claims;
+using Google.Apis.Drive.v3.Data;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     public class TeacherController : Controller
     {
         private readonly ApplicationDbContext _context;
+
+        string teacherCode;
+        string teacherImgId;
+        static Teacher viewModel;
 
         public TeacherController(ApplicationDbContext context)
         {
@@ -26,10 +31,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             if (user != null)
             {
                 //var email = user.Email;
-                string teacherCode = user.TeacherCode;
-                string teacherImgId = user.ImgId;
+                teacherCode = user.TeacherCode;
+                teacherImgId = user.ImgId;
 
-                var viewModel = new Teacher
+                viewModel = new Teacher
                 {
                     TeacherCode = teacherCode,
                     ImgId = teacherImgId
