@@ -38,7 +38,7 @@
                             </form>
                         </div>
                         <div class="pl-3 btn-new border-left">
-                            <a href="#" class="btn btn-primary" data-target="#new-class-modal" data-toggle="modal">Tạo Lớp</a>
+                            <a href="#" class="btn btn-primary" data-target="#new-class-modal" data-toggle="modal"><i class="ri-file-upload-line"></i>Import</a>
                         </div>
                     </div>
                 </div>
@@ -627,8 +627,9 @@
 </div>
 <!-- Modal list start -->
 <div class="modal fade" role="dialog" aria-modal="true" id="class-setting-modal">
-    <div class="modal-dialog  modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
+
             <div class="modal-header d-block text-center pb-3 border-bttom">
                 <h3 class="modal-title" id="exampleModalCenterTitle01">Cài đặt lớp</h3>
             </div>
@@ -691,58 +692,100 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                            <label for="exampleInputText01" class="h5">Môn học *</label>
-                            <input type="text" class="form-control" id="exampleInputText01" placeholder="Tên môn học">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group mb-0">
+                                    <label for="exampleInputText01" class="h5">Attachments</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="excelFile" accept=".xlsx, .xls">
+                                        <label class="custom-file-label" for="inputGroupFile003">Upload media</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="exampleInputText01" class="h5">Môn học *</label>
+                                    <input type="text" class="form-control" id="exampleInputText01" placeholder="Tên môn học">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="exampleInputText02" class="h5">Mã lớp *</label>
+                                    <input type="text" class="form-control" id="exampleInputText02" placeholder="Mã lớp">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="exampleInputText2" class="h5">Cách phân nhóm *</label>
+                                    <select name="type" class="selectpicker form-control" data-style="py-0">
+                                        <option>GV phân</option>
+                                        <option>SV đăng ký</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="exampleInputText2" class="h5">Cách giao đề tài *</label>
+                                    <select name="type" class="selectpicker form-control" data-style="py-0">
+                                        <option>GV giao</option>
+                                        <option>SV đăng ký</option>
+                                        <option>GV đưa đề tài SV chọn</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="exampleInputText004" class="h5">Ngày mở lớp*</label>
+                                    <input type="date" class="form-control" id="exampleInputText004" value="">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-3">
+                                    <label for="exampleInputText004" class="h5">Ngày khoá lớp</label>
+                                    <input type="date" class="form-control" id="exampleInputText004" value="">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group mb-3">
+                                    <label for="exampleInputText07" class="h5">Ghi chú</label>
+                                    <input type="text" class="form-control" id="exampleInputText07">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                    <div class="btn btn-primary mr-3" data-dismiss="modal">Tạo Lớp</div>
+                                    <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                            <label for="exampleInputText01" class="h5">Mã lớp *</label>
-                            <input type="text" class="form-control" id="exampleInputText01" placeholder="<Mã lớp">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                            <label for="exampleInputText2" class="h5">Cách phân nhóm *</label>
-                            <select name="type" class="selectpicker form-control" data-style="py-0">
-                                <option>GV phân</option>
-                                <option>SV đăng ký</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                            <label for="exampleInputText2" class="h5">Cách giao đề tài *</label>
-                            <select name="type" class="selectpicker form-control" data-style="py-0">
-                                <option>GV giao</option>
-                                <option>SV đăng ký</option>
-                                <option>GV đưa đề tài SV chọn</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                            <label for="exampleInputText004" class="h5">Ngày mở lớp*</label>
-                            <input type="date" class="form-control" id="exampleInputText004" value="">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                            <label for="exampleInputText004" class="h5">Ngày khoá lớp</label>
-                            <input type="date" class="form-control" id="exampleInputText004" value="">
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="form-group mb-3">
-                            <label for="exampleInputText07" class="h5">Ghi chú</label>
-                            <input type="text" class="form-control" id="exampleInputText07">
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
-                            <div class="btn btn-primary mr-3" data-dismiss="modal">Tạo Lớp</div>
-                            <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
+                        <div class="row">
+                            <div class="card-body" style="padding:5px;">
+                                <div class="table-responsive">
+                                    <div class="row justify-content-between">
+                                        <div class="col-sm-6 col-md-6">
+                                            <div id="user_list_datatable_info" class="dataTables_filter">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table id="user-list-table" class="table table-striped dataTable mt-4" role="grid" aria-describedby="user-list-page-info">
+                                        <thead>
+                                            <tr class="ligth">
+                                                <th>STT</th>
+                                                <th>MSSV</th>
+                                                <th>Họ và tên</th>
+                                                <th>Ngày sinh</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -751,3 +794,125 @@
     </div>
 </div>
 <!-- Modal list end -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+<script>
+    document.getElementById('excelFile').addEventListener('change', handleFile);
+
+    function handleFile(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var data = e.target.result;
+            var workbook = XLSX.read(data, { type: 'binary' });
+
+            // Xử lý mã lớp và môn học
+            handleClassCodeAndSubject(workbook);
+
+            // Xử lý thông tin sinh viên và bảng
+            handleStudentInfoTable(workbook);
+        };
+
+        reader.readAsBinaryString(file);
+    }
+
+    function handleClassCodeAndSubject(workbook) {
+        // Lấy dữ liệu từ các ô cần thiết
+        var semesterCell = workbook.Sheets[workbook.SheetNames[0]]['F4'];
+        var subjectCell = workbook.Sheets[workbook.SheetNames[0]]['C5'];
+        var groupCell = workbook.Sheets[workbook.SheetNames[0]]['J5'];
+
+        // Tạo mã lớp
+        var year = new Date().getFullYear().toString().substr(-2); // Lấy hai chữ số cuối cùng của năm hiện tại
+        var semester = semesterCell ? semesterCell.v.match(/\d+/)[0] : '';
+        var subjectCode = subjectCell ? subjectCell.v.match(/\(([^)]+)\)/)[1] : '';
+        var groupCode = groupCell ? groupCell.v : '';
+        var classCode = year + semester + '.' + subjectCode + '.' + groupCode;
+
+        // Đặt giá trị vào ô mã lớp
+        document.getElementById('exampleInputText02').value = classCode;
+
+        // Lấy giá trị từ ô A1 để đặt vào ô môn học
+        var cellValue = workbook.Sheets[workbook.SheetNames[0]]['C5'].v;
+        // Đặt giá trị vào ô môn học
+        document.getElementById('exampleInputText01').value = cellValue;
+    }
+    function updateSTT() {
+    var table = document.getElementById('user-list-table');
+    var rows = table.rows;
+
+    for (var i = 1; i < rows.length; i++) {
+        rows[i].cells[0].innerText = i;
+    }
+}
+    function handleStudentInfoTable(workbook) {
+        // Lấy dữ liệu từ sheet đầu tiên
+        var sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+        // Lấy đề mục
+        var headers = ["STT", "MSSV", "Họ và tên", "Ngày sinh"];
+
+        // Xóa dữ liệu cũ trong bảng
+        var table = document.getElementById('user-list-table');
+        var tbody = table.getElementsByTagName('tbody')[0];
+        tbody.innerHTML = '';
+
+        // Đọc dữ liệu từ file Excel và điền vào bảng
+        var row = 9; // Bắt đầu từ dòng chứa đề mục
+        var rowData;
+
+        do {
+            rowData = [];
+            headers.forEach(function (header) {
+                var cell = sheet[header + row];
+                rowData.push(cell ? cell.v : ''); // Lấy giá trị từ ô hoặc để trống nếu ô trống
+            });
+
+            console.log("rowData:", rowData); // In dữ liệu hàng ra console để kiểm tra
+
+            // Thêm dòng vào bảng
+            var newRow = tbody.insertRow();
+            rowData.forEach(function (value, index) {
+                var cell = newRow.insertCell(index);
+                cell.innerHTML = value;
+            });
+
+            row++;
+        } while (rowData.some(Boolean)); // Kiểm tra xem có dữ liệu trong dòng không
+
+        // Hiển thị số lượng sinh viên
+        var infoDiv = document.getElementById('user_list_datatable_info');
+        infoDiv.innerHTML = "Hiển thị " + (row - 10) + " sinh viên"; // Trừ đi dòng chứa đề mục
+
+        // Tính số thứ tự (STT)
+        updateSTT();
+    }
+
+    // Định nghĩa hàm xử lý sự kiện khi chọn file
+    document.getElementById('excelFile').addEventListener('change', handleFile);
+
+    // Định nghĩa hàm chính xử lý file
+    function handleFile(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var data = e.target.result;
+            var workbook = XLSX.read(data, { type: 'binary' });
+
+            // Xử lý mã lớp và môn học
+            handleClassCodeAndSubject(workbook);
+
+            // Xử lý thông tin sinh viên và bảng
+            handleStudentInfoTable(workbook);
+        };
+
+        reader.readAsBinaryString(file);
+    }
+    </script>
+
+
+
+

@@ -47,9 +47,30 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return NotFound();
         }
 
-        public IActionResult TeacherClass()
+        public async Task<IActionResult> TeacherClass()
         {
-            return View(viewModel);
+            // Lấy thông tin người dùng đăng nhập
+            var user = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+
+            // Kiểm tra xem người dùng có tồn tại không
+            if (user != null)
+            {
+                //var email = user.Email;
+                string teacherCode = user.TeacherCode;
+                string teacherImgId = user.ImgId;
+
+                var viewModel = new Teacher
+                {
+                    TeacherCode = teacherCode,
+                    ImgId = teacherImgId
+                };
+
+                return View(viewModel);
+            }
+
+            // Xử lý trường hợp không có người dùng đăng nhập
+            return NotFound();
         }
     }
 }
