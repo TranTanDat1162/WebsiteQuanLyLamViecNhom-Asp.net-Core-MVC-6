@@ -95,7 +95,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     }
                 }
                 //System.Diagnostics.Debug.WriteLine("Teacher "+id+" new IsLocked value " + isLocked);
-                return RedirectToAction("StudentList", "Student"); ;
+                return RedirectToAction("Student", "Admin"); ;
             }
             //return View("~/Views/Admin/StudentAccounts/Edit.cshtml", student);
             return null;

@@ -182,7 +182,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     }
                 }
                 //System.Diagnostics.Debug.WriteLine("Teacher "+id+" new IsLocked value " + isLocked);
-                return RedirectToAction("LecturerList", "Teacher"); ;
+                return RedirectToAction("Teacher", "Admin"); ;
             }
             //return View("~/Views/Admin/Lecturer/Edit.cshtml", teacher);
             return null;
