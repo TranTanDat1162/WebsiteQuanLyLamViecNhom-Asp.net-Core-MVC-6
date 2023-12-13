@@ -66,6 +66,14 @@
                         <div class="pl-3 border-left btn-new">
                             <a href="#"
                                class="btn btn-primary"
+                               data-target="#new-notification-modal"
+                               data-toggle="modal">                           
+                               <i class="ri-chat-new-line"></i>
+                              </a>
+                            </div>
+                        <div class="pl-3 border-left btn-new">
+                            <a href="#"
+                               class="btn btn-primary"
                                data-target="#new-project-modal"
                                data-toggle="modal">New Project</a>
                         </div>
@@ -502,7 +510,7 @@
                              data-type="percent"></div>
                         <i class="ri-star-fill m-0 text-warning"></i>
                     </div>
-                    <h5 class="mb-1">XAMIN: AI Theme</h5>
+                    <h5 class="mb-1">MEOMEO</h5>
                     <p class="mb-3">
                         Artificial Intelligence inspired WordPress theme.
                     </p>
@@ -1068,3 +1076,26 @@
         </div>
     </div>
 </div>
+    <script>
+    function saveNotification() {
+        // Lấy nội dung thông báo từ textarea
+        var notificationContent = document.getElementById('exampleFormControlTextarea2').value;
+
+        // Kiểm tra xem nội dung thông báo có rỗng không
+        if (notificationContent.trim() === '') {
+            alert('Vui lòng nhập nội dung thông báo.');
+            return;
+        }
+
+        // Thực hiện các thao tác lưu thông báo ở đây (ví dụ: hiển thị alert)
+        alert('Thông báo đã được lưu: ' + notificationContent);
+
+        // Đặt giả sử rằng bạn muốn đóng modal sau khi lưu thông báo
+        $('#new-notification-modal').modal('hide');
+
+        // Gọi hàm hiển thị thông báo
+        showNotification(notificationContent);
+    }
+
+</script>
+

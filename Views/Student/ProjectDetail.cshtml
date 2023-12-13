@@ -14,6 +14,11 @@
             <div class="card-body">
                 <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
                     <h5>(231.ITE1459.B09) Đồ án</h5>
+                    <a href="#" class="btn btn-primary" style="margin-left: 790px;"
+                       data-target="#show-notification-modal"
+                       data-toggle="modal">
+                       <i class="ri-inbox-line"></i>
+                   </a>
                     <div class="d-flex flex-wrap align-items-center">
                         <div class="dropdown dropdown-project mr-3">
                             <div class="dropdown-toggle" id="dropdownMenuButton03"
@@ -1115,4 +1120,54 @@
         </div>
     </div>
 </div>
+<script>
+    function showNotification(content) {
+        // Tạo phần tử thông báo
+        var notificationElement = document.createElement('div');
+        notificationElement.classList.add('p-3', 'bg-dark2');
 
+        // Tạo phần tử toast
+        var toastElement = document.createElement('div');
+        toastElement.classList.add('toast', 'fade', 'show');
+        toastElement.setAttribute('role', 'alert');
+        toastElement.setAttribute('aria-live', 'assertive');
+        toastElement.setAttribute('aria-atomic', 'true');
+
+        // Tạo phần tử toast-header
+        var toastHeaderElement = document.createElement('div');
+        toastHeaderElement.classList.add('toast-header');
+
+        // ...Thêm nội dung cho toast-header
+
+        // Tạo phần tử toast-body
+        var toastBodyElement = document.createElement('div');
+        toastBodyElement.classList.add('toast-body');
+        toastBodyElement.textContent = content;
+
+        // Gắn các phần tử con vào nhau
+        toastElement.appendChild(toastHeaderElement);
+        toastElement.appendChild(toastBodyElement);
+        notificationElement.appendChild(toastElement);
+
+        // Gắn thông báo vào container
+        var notificationContainer = document.getElementById('notification-container');
+        notificationContainer.appendChild(notificationElement);
+        // Thêm nội dung thông báo vào thẻ toast
+        toast.innerHTML = `
+            <div class="toast-header">
+                <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+                    <rect width="100%" height="100%" fill="#007aff"></rect>
+                </svg>
+                <strong class="mr-auto">Bootstrap</strong>
+                <small>Just now</small>
+            </div>
+            <div class="toast-body">
+                ${notificationContent}
+            </div>
+        `;
+
+        // Thêm thẻ toast vào container (đặt ID 'notification-container' cho container)
+        document.getElementById('notification-container').appendChild(toast);
+    }
+    }
+</script>
