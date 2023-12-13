@@ -11,5 +11,6 @@ namespace WebsiteQuanLyLamViecNhom.Models
         [NotMapped]
         public IFormFile? ImgPfp { get; set; }
         public string? ImgId { get; set; }
+        public ICollection<Class>? ClassList { get; set; }
     }
 }

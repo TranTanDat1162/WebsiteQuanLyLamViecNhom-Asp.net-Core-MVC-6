@@ -5,10 +5,9 @@ namespace WebsiteQuanLyLamViecNhom.Data
 {
     public class TeacherDynamicModels
     {
-        public IEnumerable<WebsiteQuanLyLamViecNhom.Models.Teacher>? Teachers { get; set; }
-        public WebsiteQuanLyLamViecNhom.Models.Teacher? Teacher { get; set; }
+        public IEnumerable<Models.Teacher>? Teachers { get; set; }
+        public Models.Teacher? Teacher { get; set; }
 
     }
-
 
 }

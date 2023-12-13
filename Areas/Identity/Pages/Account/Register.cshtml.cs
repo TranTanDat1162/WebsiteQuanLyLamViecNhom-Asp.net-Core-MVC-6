@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using WebsiteQuanLyLamViecNhom.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
 {

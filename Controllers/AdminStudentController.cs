@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {

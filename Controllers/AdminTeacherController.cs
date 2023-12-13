@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -112,6 +113,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
                 teacher.TeacherCode = autogenTeacherId;
                 teacher.IsLocked = !teacher.IsLocked;
+                teacher.UserName = teacher.Email;
 
                 //If user put in imgpfp in form then it will upload to designated folder id
                 if (teacher.ImgPfp != null)
@@ -141,8 +143,9 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                     _logger.LogInformation("Problems here!." + ModelState.ToString());
                 }
+                return View("LecturerList", teacher);
             }
-            return View("~/Views/Admin/Lecturer/Create.cshtml", teacher);
+            return RedirectToAction("LecturerList", "AdminTeacher");
         }
 
         // POST: Lecturer/Lock/5
@@ -182,7 +185,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     }
                 }
                 //System.Diagnostics.Debug.WriteLine("Teacher "+id+" new IsLocked value " + isLocked);
-                return RedirectToAction("LecturerList", "Teacher"); ;
+                return RedirectToAction("LecturerList", "AdminTeacher");
             }
             //return View("~/Views/Admin/Lecturer/Edit.cshtml", teacher);
             return null;
