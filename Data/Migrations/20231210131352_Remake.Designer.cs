@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebsiteQuanLyLamViecNhom.Data;
 
@@ -11,9 +12,10 @@ using WebsiteQuanLyLamViecNhom.Data;
 namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210131352_Remake")]
+    partial class Remake
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("GroupStudent", b =>
+                {
+                    b.Property<string>("GroupsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StudentsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("GroupsId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("GroupStudent");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -159,21 +176,6 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("StudentClassTask", b =>
-                {
-                    b.Property<int>("StudentClassId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TasksTaskId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("StudentClassId", "TasksTaskId");
-
-                    b.HasIndex("TasksTaskId");
-
-                    b.ToTable("StudentClassTask");
-                });
-
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Admin", b =>
                 {
                     b.Property<int>("Id")
@@ -288,20 +290,16 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ClassGroup")
+                    b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Code")
+                    b.Property<string>("Group")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsLocked")
                         .HasColumnType("bit");
-
-                    b.Property<string>("MOTD")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OpenDate")
                         .HasColumnType("datetime2");
@@ -445,6 +443,10 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<float>("TaskGradedByLeader")
                         .HasColumnType("real");
 
@@ -454,6 +456,8 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                     b.HasKey("TaskId");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Task");
                 });
@@ -483,6 +487,21 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Teacher");
+                });
+
+            modelBuilder.Entity("GroupStudent", b =>
+                {
+                    b.HasOne("WebsiteQuanLyLamViecNhom.Models.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebsiteQuanLyLamViecNhom.Models.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -536,21 +555,6 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StudentClassTask", b =>
-                {
-                    b.HasOne("WebsiteQuanLyLamViecNhom.Models.StudentClass", null)
-                        .WithMany()
-                        .HasForeignKey("StudentClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebsiteQuanLyLamViecNhom.Models.Task", null)
-                        .WithMany()
-                        .HasForeignKey("TasksTaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Class", b =>
                 {
                     b.HasOne("WebsiteQuanLyLamViecNhom.Models.Teacher", "Teacher")
@@ -593,7 +597,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("WebsiteQuanLyLamViecNhom.Models.Group", "Group")
-                        .WithMany("Students")
+                        .WithMany()
                         .HasForeignKey("GroupID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -619,17 +623,22 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Group");
-                });
+                    b.HasOne("WebsiteQuanLyLamViecNhom.Models.Student", "Student")
+                        .WithMany("Tasks")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Group", b =>
-                {
-                    b.Navigation("Students");
+                    b.Navigation("Group");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Student", b =>
                 {
                     b.Navigation("ClassList");
+
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Teacher", b =>

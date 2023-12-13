@@ -10,8 +10,13 @@ namespace WebsiteQuanLyLamViecNhom.Data
             : base(options)
         {
         }
-        public DbSet<WebsiteQuanLyLamViecNhom.Models.Student>? Student  { get; set; }
-        public DbSet<WebsiteQuanLyLamViecNhom.Models.Teacher>? Teacher { get; set; }
-        public DbSet<WebsiteQuanLyLamViecNhom.Models.Admin>? Admin { get; set; }
+        public DbSet<Models.Task>? Task { get; set; }
+        public DbSet<Group>? Group { get; set; }
+        public DbSet<Project>? Project{ get; set; }
+        public DbSet<StudentClass>? StudentClass { get; set; }
+        public DbSet<Class>? Class { get; set; }
+        public DbSet<Student>? Student  { get; set; }
+        public DbSet<Teacher>? Teacher { get; set; }
+        public DbSet<Admin>? Admin { get; set; }
     }
 }   

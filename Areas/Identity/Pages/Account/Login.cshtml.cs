@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Security.Claims;
 using WebsiteQuanLyLamViecNhom.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
 {
@@ -161,7 +162,7 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
                 //    _logger.LogWarning("User account locked out.");
                 //    return RedirectToPage("./Lockout");
                 //}
-                //else
+                else
                 {
                     // Xóa tất cả lỗi hiện tại trong ModelState
                     ModelState.AddModelError(string.Empty, "Tài khoản hoặc mật khẩu chưa chính xác");

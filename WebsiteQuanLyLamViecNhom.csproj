@@ -11,6 +11,7 @@
     <PackageReference Include="Diacritics" Version="3.3.18" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.64.0.3155" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.23" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.23" />

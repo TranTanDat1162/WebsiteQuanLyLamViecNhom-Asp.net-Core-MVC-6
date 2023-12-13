@@ -6,6 +6,7 @@ namespace WebsiteQuanLyLamViecNhom.Models
     {
         public int StudentId { get; set; }
         [Required]
-        public string? StudentCode { get; set; }
+        public string? StudentCode { get; set; }   
+        public ICollection<StudentClass>? ClassList { get; set; }
     }
 }
