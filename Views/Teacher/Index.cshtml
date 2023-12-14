@@ -1,4 +1,5 @@
-﻿@{
+﻿@model WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO
+@{
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
 }
 <div class="row">
@@ -685,109 +686,133 @@
 </div>
 <div class="modal fade" role="dialog" aria-modal="true" id="new-class-modal">
     <div class="modal-dialog  modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content"> 
             <div class="modal-header d-block text-center pb-3 border-bttom">
                 <h3 class="modal-title" id="exampleModalCenterTitle01">Tạo Lớp mới</h3>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group mb-0">
-                                    <label for="exampleInputText01" class="h5">Attachments</label>
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="excelFile" accept=".xlsx, .xls">
-                                        <label class="custom-file-label" for="inputGroupFile003">Upload media</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="exampleInputText01" class="h5">Môn học *</label>
-                                    <input type="text" class="form-control" id="exampleInputText01" placeholder="Tên môn học">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="exampleInputText02" class="h5">Mã lớp *</label>
-                                    <input type="text" class="form-control" id="exampleInputText02" placeholder="Mã lớp">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="exampleInputText2" class="h5">Cách phân nhóm *</label>
-                                    <select name="type" class="selectpicker form-control" data-style="py-0">
-                                        <option>GV phân</option>
-                                        <option>SV đăng ký</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="exampleInputText2" class="h5">Cách giao đề tài *</label>
-                                    <select name="type" class="selectpicker form-control" data-style="py-0">
-                                        <option>GV giao</option>
-                                        <option>SV đăng ký</option>
-                                        <option>GV đưa đề tài SV chọn</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="exampleInputText004" class="h5">Ngày mở lớp*</label>
-                                    <input type="date" class="form-control" id="exampleInputText004" value="">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="exampleInputText004" class="h5">Ngày khoá lớp</label>
-                                    <input type="date" class="form-control" id="exampleInputText004" value="">
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group mb-3">
-                                    <label for="exampleInputText07" class="h5">Ghi chú</label>
-                                    <input type="text" class="form-control" id="exampleInputText07">
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
-                                    <div class="btn btn-primary mr-3" data-dismiss="modal">Tạo Lớp</div>
-                                    <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <div class="card-body" style="padding:5px;">
-                                <div class="table-responsive">
-                                    <div class="row justify-content-between">
-                                        <div class="col-sm-6 col-md-6">
-                                            <div id="user_list_datatable_info" class="dataTables_filter">
-                                            </div>
+                    <form asp-action="CreateClass">
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-0">
+                                        <label for="exampleInputText01" class="h5">Attachments</label>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="excelFile" accept=".xlsx, .xls">
+                                            <label class="custom-file-label" for="inputGroupFile003">Upload media</label>
                                         </div>
                                     </div>
-                                    <table id="user-list-table" class="table table-striped dataTable mt-4" role="grid" aria-describedby="user-list-page-info">
-                                        <thead>
-                                            <tr class="ligth">
-                                                <th>STT</th>
-                                                <th>MSSV</th>
-                                                <th>Họ và tên</th>
-                                                <th>Ngày sinh</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputText01" class="h5">Môn học *</label>
+                                        <input asp-for="@Model.classDTO.SubjectName" type="text" class="form-control" id="exampleInputText01" placeholder="Tên môn học">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputText02" class="h5">Mã lớp *</label>
+                                        <input asp-for="@Model.classDTO.Code" type="text" class="form-control" id="exampleInputText02" placeholder="Mã lớp">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputText2" class="h5">Cách phân nhóm *</label>
+                                        <select asp-for="@Model.classDTO.RoleGroup" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="type" class="selectpicker form-control" data-style="py-0">
+                                            <option selected="selected" value="">Please select</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputText2" class="h5">Cách giao đề tài *</label>
+                                        <select asp-for="@Model.classDTO.RoleProject" asp-items="Html.GetEnumSelectList<RoleProject>()" name="type" class="selectpicker form-control" data-style="py-0">
+                                            <option selected="selected" value="">Please select</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputText004" class="h5">Ngày mở lớp*</label>
+                                        <input asp-for="@Model.classDTO.OpenDate" type="date" class="form-control" id="exampleInputText004" value="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputText03" class="h5">Mã môn học *</label>
+                                        <input asp-for="@Model.classDTO.SubjectId" type="text" class="form-control" id="exampleInputText03" placeholder="Mã môn học">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputText04" class="h5">Năm học *</label>
+                                        <input asp-for="@Model.classDTO.Year" type="text" class="form-control" id="exampleInputText04" placeholder="Năm học">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputText05" class="h5">Học kỳ *</label>
+                                        <input asp-for="@Model.classDTO.Semester" type="text" class="form-control" id="exampleInputText05" placeholder="Học kỳ">
+                                    </div>
+                                </div> 
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleInputText07" class="h5">Ghi chú</label>
+                                        <input asp-for="@Model.classDTO.ProjectRequirements" type="text" class="form-control" id="exampleInputText07">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                        <input type="submit" value="Tạo Lớp" class="btn btn-primary mr-3" />
+                                        <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <!-- Student List start-->
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <div class="card-body" style="padding: 5px; overflow: hidden;">
+                                    <div class="table-responsive" style="overflow-x:hidden;max-height:600px;">
+                                        <table id="user-list-table" class="table table-striped dataTable mt-4" role="grid" aria-describedby="user-list-page-info">
+                                            <thead>
+                                                <tr class="ligth">
+                                                    <th>STT</th>
+                                                    <th>Mã SV</th>
+                                                    <th>Họ</th>
+                                                    <th>Tên</th>
+                                                    <th>Ngày sinh</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="height:150px; overflow-y: scroll ">
+@*                                              <tr>
+                                                    <td>
+                                                        0
+                                                    </td>
+                                                    <td>
+                                                        <input asp-for="@Model.classDTO.Students[i].StudentCode" />
+                                                    </td>
+                                                    <td>
+                                                        <input asp-for="@Model.classDTO.Students[i].StudentLastName" />
+                                                    </td>
+                                                    <td>
+                                                        <input asp-for="@Model.classDTO.Students[i].StudentFirstName" />
+                                                    </td>
+                                                    <td>
+                                                        <input asp-for="@Model.classDTO.Students[i].DOB" />
+                                                    </td>
+                                                </tr> *@
+                                                <!-- Dữ liệu bảng -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Student List end-->
+                    </form>
                 </div>
             </div>
         </div>
@@ -795,6 +820,8 @@
 </div>
 <!-- Modal list end -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+
+<!-- Import class script start -->
 <script>
     document.getElementById('excelFile').addEventListener('change', handleFile);
 
@@ -816,6 +843,109 @@
 
         reader.readAsBinaryString(file);
     }
+}
+
+// function handleStudentInfoTable(workbook) {
+//     var sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+//     // Clear existing data in the table
+//     var table = document.getElementById('user-list-table');
+//     var tbody = table.getElementsByTagName('tbody')[0];
+//     tbody.innerHTML = '';
+
+//     var headers = ["STT", "Mã SV", "Họ", "Tên", "Ngày sinh"];
+//     var startRow = 10; // Bắt đầu đọc từ dòng 10
+
+//     while (sheet["C" + startRow] && sheet["C" + startRow].v !== undefined) {
+//         var rowData = [];
+//         headers.forEach(function (header, index) {
+//             var cell = sheet[String.fromCharCode(65 + index) + startRow];
+
+//             if (cell && cell.v !== undefined) {
+//                 var cellValue = '';
+
+//                 if ((header === "Họ" || header === "Tên") && cell.s) {
+//                     for (var i = cell.s.c; i <= cell.e.c; i++) {
+//                         for (var j = cell.s.r; j <= cell.e.r; j++) {
+//                             var cellRef = XLSX.utils.encode_cell({ c: i, r: j });
+//                             cellValue += " " + (sheet[cellRef] ? sheet[cellRef].v : '');
+//                         }
+//                     }
+//                     rowData.push(cellValue.trim());
+//                 } else {
+//                     rowData.push(cell.v || '');
+//                 }
+//             } else {
+//                 rowData.push('');
+//             }
+//         });
+
+//         var newRow = tbody.insertRow();
+//         rowData.forEach(function (value, index) {
+//             var cell = newRow.insertCell(index);
+//             cell.innerHTML = value;
+//         });
+
+//         startRow++;
+//     }
+
+//     updateSTT();
+// }
+    function handleStudentInfoTable(workbook) {
+        var sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+        // Clear existing data in the table
+        var table = document.getElementById('user-list-table');
+        var tbody = table.getElementsByTagName('tbody')[0];
+        tbody.innerHTML = '';
+
+        var startRow = 10; // Bắt đầu đọc từ dòng 10
+
+        while (sheet["C" + startRow] && sheet["C" + startRow].v !== undefined) {
+            // Extract student data based on your model properties
+            var studentCode = sheet["B" + startRow].v || '';
+            var studentLastName = sheet["C" + startRow].v || '';
+            var studentFirstName = sheet["D" + startRow].v || '';
+            var dob = sheet["E" + startRow].v; // Adjust based on cell format
+
+            // Create and populate a new row
+            var newRow = tbody.insertRow();
+            var rowIndex = newRow.rowIndex;
+
+            // Generate input elements for each student property
+            var studentCodeInput = document.createElement("input");
+            studentCodeInput.setAttribute("type", "text");
+            studentCodeInput.setAttribute("name", `Students[${rowIndex}].StudentCode`); // Bind to model using index
+            studentCodeInput.value = studentCode;
+            newRow.insertCell().appendChild(studentCodeInput);
+
+            var lastNameInput = document.createElement("input");
+            lastNameInput.setAttribute("type", "text");
+            lastNameInput.setAttribute("name", `Students[${rowIndex}].StudentLastName`);
+            lastNameInput.value = studentLastName;
+            newRow.insertCell().appendChild(lastNameInput);
+
+            var firstNameInput = document.createElement("input");
+            firstNameInput.setAttribute("type", "text");
+            firstNameInput.setAttribute("name", `Students[${rowIndex}].StudentFirstName`);
+            firstNameInput.value = studentFirstName;
+            newRow.insertCell().appendChild(firstNameInput);
+
+            // Add input for DOB if needed and adjust based on cell format
+            if (dob) {
+                var dobInput = document.createElement("input");
+                dobInput.setAttribute("type", "date"); // Adjust type based on desired format
+                dobInput.setAttribute("name", `Students[${rowIndex}].DOB`);
+                dobInput.value = dob; // Handle date format conversion if necessary
+                newRow.insertCell().appendChild(dobInput);
+            }
+
+            startRow++;
+        }
+
+        updateSTT();
+    }
+
 
     function handleClassCodeAndSubject(workbook) {
         // Lấy dữ liệu từ các ô cần thiết

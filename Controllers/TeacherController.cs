@@ -5,42 +5,35 @@ using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.Models;
 using System.Security.Claims;
 using Google.Apis.Drive.v3.Data;
+using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     public class TeacherController : Controller
     {
         private readonly ApplicationDbContext _context;
+        
+        static Teacher? viewModel = new Teacher
+        {
+            TeacherCode = "Teacher",
+            ImgId = null
+        };
 
-        string teacherCode;
-        string teacherImgId;
-        static Teacher viewModel;
 
         public TeacherController(ApplicationDbContext context)
         {
             _context = context;
         }
-        
+
         public async Task<IActionResult> Index()
         {
             // Lấy thông tin người dùng đăng nhập
-            var user = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            
-
+            viewModel = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             // Kiểm tra xem người dùng có tồn tại không
-            if (user != null)
+            if (viewModel != null)
             {
-                //var email = user.Email;
-                teacherCode = user.TeacherCode;
-                teacherImgId = user.ImgId;
-
-                viewModel = new Teacher
-                {
-                    TeacherCode = teacherCode,
-                    ImgId = teacherImgId
-                };
-
-                return View(viewModel);
+                ViewData["Teacher"] = viewModel;
+                return View();
             }
 
             // Xử lý trường hợp không có người dùng đăng nhập
@@ -49,28 +42,63 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
         public async Task<IActionResult> TeacherClass()
         {
-            // Lấy thông tin người dùng đăng nhập
-            var user = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            ViewData["Teacher"] = viewModel;
+            return View();
+        }
 
-
-            // Kiểm tra xem người dùng có tồn tại không
-            if (user != null)
+        public async Task<IActionResult> CreateClass(CreateClassDTO classDTO)
+        {
+            if(ModelState.IsValid)
             {
-                //var email = user.Email;
-                string teacherCode = user.TeacherCode;
-                string teacherImgId = user.ImgId;
-
-                var viewModel = new Teacher
+                try
                 {
-                    TeacherCode = teacherCode,
-                    ImgId = teacherImgId
-                };
+                    if (classDTO.classDTO == null) {
+                        classDTO.classDTO.OpenDate = DateTime.Now;
+                    }
+                    Class newClass = new Class
+                    {
+                        SubjectName = classDTO.classDTO.SubjectName,
+                        SubjectId = classDTO.classDTO.SubjectId,
+                        Code = classDTO.classDTO.Code,
+                        ClassGroup = classDTO.classDTO.Code.Substring(classDTO.classDTO.Code.Length - 3),
+                        RoleGroup = classDTO.classDTO.RoleGroup,
+                        RoleProject = classDTO.classDTO.RoleProject,
+                        ProjectRequirements = classDTO.classDTO.ProjectRequirements,
+                        OpenDate = (DateTime)classDTO.classDTO.OpenDate,
+                        Year =  int.Parse(classDTO.classDTO.Year.Substring(0, 4)),
+                        Semester = classDTO.classDTO.Semester,
+                        TeacherId = viewModel.Id
+                    };
+                    foreach (var student in classDTO.classDTO.Students)
+                    {
+                        Student? TempStudent = await _context.Student.FirstOrDefaultAsync(e => e.StudentCode == student.StudentCode);
+                        if (TempStudent == null)
+                        {
+                            Student newStudent = new Student
+                            {
+                                StudentCode = student.StudentCode,
+                                FirstName = student.StudentFirstName,
+                                LastName = student.StudentLastName,
+                                DOB = (DateTime)student.DOB
+                            };
+                        }
+                        //else
+                        //{
+                        //    TempStudent.ClassList.Add
+                        //}
+                    }
+                    _context.Add(newClass);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Teacher");
 
-                return View(viewModel);
+                }
+                catch (Exception ex)
+                {
+                    RedirectToAction("Index", "Teacher", ex.Message);
+                }
+                return RedirectToAction("Index", "Teacher");
             }
-
-            // Xử lý trường hợp không có người dùng đăng nhập
-            return NotFound();
+            return RedirectToAction("Index", "Teacher", ModelState);
         }
     }
 }

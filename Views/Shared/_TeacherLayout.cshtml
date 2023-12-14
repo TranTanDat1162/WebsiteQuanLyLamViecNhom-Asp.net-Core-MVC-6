@@ -1,4 +1,4 @@
-﻿@model WebsiteQuanLyLamViecNhom.Models.Teacher
+﻿@using WebsiteQuanLyLamViecNhom.Models
 
 <!doctype html>
 <html lang="en">
@@ -28,6 +28,11 @@
     <!-- loader Start -->
     @await Component.InvokeAsync("LoadingPage")
     <!-- loader END -->
+    <!-- Data Start -->
+    @{
+        var data = (Teacher)ViewData["Teacher"];
+    }
+    <!-- Data END -->
     <!-- Wrapper Start -->
     <div class="wrapper">
         <div class="iq-top-navbar" style="width: 100%;">
@@ -52,9 +57,16 @@
                                 <li class="nav-item nav-icon dropdown caption-content">
                                     <a href="#" class="search-toggle dropdown-toggle  d-flex align-items-center" id="dropdownMenuButton4"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <img src="https://drive.google.com/uc?id=@Model.ImgId&export=download" class="img-fluid rounded-circle" alt="user">
+                                        @if(data.ImgId != null)
+                                        {
+                                            <img src="https://drive.google.com/uc?id=@data.ImgId&export=download" class="img-fluid rounded-circle" alt="user">
+                                        }
+                                        else
+                                        {
+                                            <img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title="">
+                                        }
                                         <div class="caption ml-3">
-                                            <h6 class="mb-0 line-height">@Model.TeacherCode<i class="las la-angle-down ml-2"></i></h6>
+                                            <h6 class="mb-0 line-height">@data.TeacherCode<i class="las la-angle-down ml-2"></i></h6>
                                         </div>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right border-none" aria-labelledby="dropdownMenuButton">
