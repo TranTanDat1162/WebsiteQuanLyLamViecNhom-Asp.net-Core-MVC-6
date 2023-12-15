@@ -312,14 +312,14 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-12 col-md-12">
                             <div class="card-body">
+                                <div id="toast-container" class="toast-container">
                                 <div class="p-3 bg-dark2" id="notification-container">
                                     <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
                                         <div class="toast-header">
                                             <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
                                                 <rect width="100%" height="100%" fill="#007aff"></rect>
                                             </svg>
-                                            <strong class="mr-auto">Bootstrap</strong>
-                                            <small>11 mins ago</small>
+                                            <small>1m ago</small>
                                         </div>
                                         <div class="toast-body">
                                             Hello, world! This is a toast message.
@@ -328,6 +328,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                     <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
                         <div class="btn btn-primary mr-3" data-dismiss="modal">Close</div>
@@ -338,7 +339,7 @@
     </div>
 
     <div class="modal fade bd-example-modal-lg" role="dialog" aria-modal="true" id="new-task-modal">
-        <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog  modal-dialog-centered modal-lg" role="document" style="max-width: 80% !important;">
             <div class="modal-content">
                 <div class="modal-header d-block text-center pb-3 border-bttom">
                     <h3 class="modal-title" id="exampleModalCenterTitle">New Task</h3>
@@ -349,13 +350,12 @@
                             <div class="form-group mb-3">
                                 <label for="exampleInputText02" class="h5">Task Name</label>
                                 <input type="text" class="form-control" id="exampleInputText02" placeholder="Enter task Name">
-                                <a href="#" class="task-edit text-body"><i class="ri-edit-box-line"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText2" class="h5">Assigned to</label>
-                                <select name="type" class="selectpicker form-control" data-style="py-0">
+                                <select name="assignees[]" class="selectpicker form-control" data-style="py-0" multiple>
                                     <option>Memebers</option>
                                     <option>Kianna Septimus</option>
                                     <option>Jaxson Herwitz</option>
@@ -365,41 +365,14 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText05" class="h5">Due Dates*</label>
+                                <label for="exampleInputText05" class="h5">Deadline*</label>
                                 <input type="date" class="form-control" id="exampleInputText05" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group mb-3">
-                                <label for="exampleInputText2" class="h5">Category</label>
-                                <select name="type" class="selectpicker form-control" data-style="py-0">
-                                    <option>Design</option>
-                                    <option>Android</option>
-                                    <option>IOS</option>
-                                    <option>Ui/Ux Design</option>
-                                    <option>Development</option>
-                                </select>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText040" class="h5">Description</label>
                                 <textarea class="form-control" id="exampleInputText040" rows="2"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group mb-3">
-                                <label for="exampleInputText005" class="h5">Checklist</label>
-                                <input type="text" class="form-control" id="exampleInputText005" placeholder="Add List">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group mb-0">
-                                <label for="exampleInputText01" class="h5">Attachments</label>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="inputGroupFile003">
-                                    <label class="custom-file-label" for="inputGroupFile003">Upload media</label>
-                                </div>
                             </div>
                         </div>
                         <div class="col-lg-12">

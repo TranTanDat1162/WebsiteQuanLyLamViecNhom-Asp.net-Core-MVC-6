@@ -111,7 +111,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> StudentCreate([Bind("StudentId,FirstName,LastName,Email,DOB,IsLocked")] Student student)
         {
-            student.StudentCode = "205051051";
+            student.StudentCode = "205051448";
 
             if (!ModelState.IsValid)
             {
@@ -126,7 +126,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 //_context.Add(student);
                 //await _context.SaveChangesAsync();
             }
-            return RedirectToAction("StudentList", "Student");
+            return RedirectToAction("Index", "AdminStudent");
         }
         private bool StudentExist(int? id)
         {

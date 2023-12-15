@@ -39,6 +39,12 @@ button.bg-dark2:focus {
     color: black !important;
     background-color: white !important;
 }
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner2 {
+    font-weight: normal;
+    color: #605C8D;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
 
 
 

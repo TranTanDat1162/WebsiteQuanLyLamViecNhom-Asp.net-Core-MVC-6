@@ -11554,7 +11554,8 @@ table .ligth1 {
     .bootstrap-select.calender-select .dropdown-toggle::after {
       margin-left: 10px; }
     .bootstrap-select.calender-select .dropdown-toggle .filter-option-inner-inner {
-      color: #fff; }
+       color: #fff;
+    }
 
 .custom-file {
   height: 60px; }
@@ -23497,9 +23498,10 @@ ul.iq-contact-rest li a p {
   -ms-border-radius: 16px;
   -o-border-radius: 16px;
   border-radius: 16px; }
-  .bootstrap-select .dropdown-toggle .filter-option-inner-inner {
-    font-weight: normal;
-    color: #605C8D; }
+    .bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+        font-weight: normal;
+        color: #605C8D;
+    }
   .bootstrap-select .dropdown-toggle:focus {
     outline: unset !important; }
 
