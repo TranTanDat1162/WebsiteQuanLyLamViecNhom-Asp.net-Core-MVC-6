@@ -6,6 +6,7 @@ using WebsiteQuanLyLamViecNhom.Models;
 using System.Security.Claims;
 using Google.Apis.Drive.v3.Data;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
+using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -46,30 +47,30 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CreateClass(CreateClassDTO classDTO)
+        public async Task<IActionResult> CreateClass(CreateClassDTO createClassDTO)
         {
             if(ModelState.IsValid)
             {
                 try
                 {
-                    if (classDTO.classDTO == null) {
-                        classDTO.classDTO.OpenDate = DateTime.Now;
+                    if (createClassDTO.classDTO == null) {
+                        createClassDTO.classDTO.OpenDate = DateTime.Now;
                     }
                     Class newClass = new Class
                     {
-                        SubjectName = classDTO.classDTO.SubjectName,
-                        SubjectId = classDTO.classDTO.SubjectId,
-                        Code = classDTO.classDTO.Code,
-                        ClassGroup = classDTO.classDTO.Code.Substring(classDTO.classDTO.Code.Length - 3),
-                        RoleGroup = classDTO.classDTO.RoleGroup,
-                        RoleProject = classDTO.classDTO.RoleProject,
-                        ProjectRequirements = classDTO.classDTO.ProjectRequirements,
-                        OpenDate = (DateTime)classDTO.classDTO.OpenDate,
-                        Year =  int.Parse(classDTO.classDTO.Year.Substring(0, 4)),
-                        Semester = classDTO.classDTO.Semester,
+                        SubjectName = createClassDTO.classDTO.SubjectName,
+                        SubjectId = createClassDTO.classDTO.SubjectId,
+                        Code = createClassDTO.classDTO.Code,
+                        ClassGroup = createClassDTO.classDTO.Code.Substring(createClassDTO.classDTO.Code.Length - 3),
+                        RoleGroup = createClassDTO.classDTO.RoleGroup,
+                        RoleProject = createClassDTO.classDTO.RoleProject,
+                        ProjectRequirements = createClassDTO.classDTO.ProjectRequirements,
+                        OpenDate = (DateTime)createClassDTO.classDTO.OpenDate,
+                        Year =  int.Parse(createClassDTO.classDTO.Year.Substring(0, 4)),
+                        Semester = createClassDTO.classDTO.Semester,
                         TeacherId = viewModel.Id
                     };
-                    foreach (var student in classDTO.classDTO.Students)
+                    foreach (var student in createClassDTO.classDTO.Students)
                     {
                         Student? TempStudent = await _context.Student.FirstOrDefaultAsync(e => e.StudentCode == student.StudentCode);
                         if (TempStudent == null)
@@ -81,11 +82,20 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                 LastName = student.StudentLastName,
                                 DOB = (DateTime)student.DOB
                             };
+                            _context.Add(newStudent);
+                            await _context.SaveChangesAsync();
                         }
-                        //else
-                        //{
-                        //    TempStudent.ClassList.Add
-                        //}
+                        else
+                        {
+                            TempStudent.ClassList.Add(new StudentClass
+                            {
+                                ClassId = newClass.Id,
+                                StudentId = TempStudent.Id,
+                                Class = newClass,
+                                Student = TempStudent,                        
+                            });
+                            _context.Update(TempStudent);
+                        }
                     }
                     _context.Add(newClass);
                     await _context.SaveChangesAsync();

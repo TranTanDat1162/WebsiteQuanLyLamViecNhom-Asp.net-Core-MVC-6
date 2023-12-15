@@ -23,7 +23,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string Year { get; set; }
             public string Semester { get; set; }
             public string? ProjectRequirements { get; set; }
-            public List<StudentDTO> Students { get; set; }
+            public List<StudentDTO> Students{ get; set; }
 
         }
     }

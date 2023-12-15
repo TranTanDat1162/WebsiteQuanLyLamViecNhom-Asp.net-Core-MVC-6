@@ -15,8 +15,8 @@ namespace WebsiteQuanLyLamViecNhom.Models
 
         public virtual Class Class { get; set; }
         public virtual Student Student { get; set; }
-        public virtual Group Group { get; set; }
-        public ICollection<Task> Tasks { get; set; }
+        public virtual Group? Group { get; set; }
+        public ICollection<Task>? Tasks { get; set; }
 
     }
 }
