@@ -23,7 +23,7 @@ namespace WebsiteQuanLyLamViecNhom.Models
         public string SubjectId { get; set; }
         public string SubjectName { get; set; }
         public string ClassGroup { get; set; }
-        public string MOTD { get; set; }
+        public string? MOTD { get; set; }
         public string? ProjectRequirements{ get; set; }
         public RoleGroup RoleGroup {  get; set; }
         public RoleProject RoleProject { get; set; }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebsiteQuanLyLamViecNhom.Data;
 
@@ -11,9 +12,10 @@ using WebsiteQuanLyLamViecNhom.Data;
 namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231213091657_nullableMOTD")]
+    partial class nullableMOTD
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,7 +173,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("TasksTaskId");
 
-                    b.ToTable("StudentClassTask", (string)null);
+                    b.ToTable("StudentClassTask");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Admin", b =>
@@ -192,7 +194,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admin", (string)null);
+                    b.ToTable("Admin");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.BaseApplicationUser", b =>
@@ -337,7 +339,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Class", (string)null);
+                    b.ToTable("Class");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Group", b =>
@@ -356,7 +358,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Group", (string)null);
+                    b.ToTable("Group");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Project", b =>
@@ -385,7 +387,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("ClassId");
 
-                    b.ToTable("Project", (string)null);
+                    b.ToTable("Project");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.StudentClass", b =>
@@ -400,9 +402,10 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("GroupID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<float?>("Score")
+                    b.Property<float>("Score")
                         .HasColumnType("real");
 
                     b.Property<string>("StudentId")
@@ -417,7 +420,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentClass", (string)null);
+                    b.ToTable("StudentClass");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Task", b =>
@@ -453,7 +456,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Task", (string)null);
+                    b.ToTable("Task");
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Student", b =>
@@ -592,7 +595,9 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasOne("WebsiteQuanLyLamViecNhom.Models.Group", "Group")
                         .WithMany("Students")
-                        .HasForeignKey("GroupID");
+                        .HasForeignKey("GroupID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebsiteQuanLyLamViecNhom.Models.Student", "Student")
                         .WithMany("ClassList")

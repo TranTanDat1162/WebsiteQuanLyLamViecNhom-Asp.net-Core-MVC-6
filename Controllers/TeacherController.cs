@@ -5,42 +5,42 @@ using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.Models;
 using System.Security.Claims;
 using Google.Apis.Drive.v3.Data;
+using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
+using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
+using WebsiteQuanLyLamViecNhom.Data.Migrations;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     public class TeacherController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Models.BaseApplicationUser> _userManager;
+        private readonly ILogger<TeacherController> _logger;
 
-        string teacherCode;
-        string teacherImgId;
-        static Teacher viewModel;
 
-        public TeacherController(ApplicationDbContext context)
+        static Teacher? viewModel = new Teacher
+        {
+            TeacherCode = "Teacher",
+            ImgId = null
+        };
+
+
+        public TeacherController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<TeacherController> logger)
         {
             _context = context;
+            _userManager = userManager;
+            _logger = logger;
         }
-        
+
         public async Task<IActionResult> Index()
         {
             // Lấy thông tin người dùng đăng nhập
-            var user = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            
-
+            viewModel = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             // Kiểm tra xem người dùng có tồn tại không
-            if (user != null)
+            if (viewModel != null)
             {
-                //var email = user.Email;
-                teacherCode = user.TeacherCode;
-                teacherImgId = user.ImgId;
-
-                viewModel = new Teacher
-                {
-                    TeacherCode = teacherCode,
-                    ImgId = teacherImgId
-                };
-
-                return View(viewModel);
+                ViewData["Teacher"] = viewModel;
+                return View();
             }
 
             // Xử lý trường hợp không có người dùng đăng nhập
@@ -49,28 +49,87 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
         public async Task<IActionResult> TeacherClass()
         {
-            // Lấy thông tin người dùng đăng nhập
-            var user = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            ViewData["Teacher"] = viewModel;
+            return View();
+        }
 
-
-            // Kiểm tra xem người dùng có tồn tại không
-            if (user != null)
+        public async Task<IActionResult> CreateClass(CreateClassDTO createClassDTO)
+        {
+            createClassDTO.classDTO.Students.RemoveAt(createClassDTO.classDTO.Students.Count - 1);
+            //TODO: Still missing some condition and the condition below is rubbishly workable
+            if (ModelState.IsValid)
             {
-                //var email = user.Email;
-                string teacherCode = user.TeacherCode;
-                string teacherImgId = user.ImgId;
-
-                var viewModel = new Teacher
+                try
                 {
-                    TeacherCode = teacherCode,
-                    ImgId = teacherImgId
-                };
+                    if (createClassDTO.classDTO.OpenDate == null) {
+                        createClassDTO.classDTO.OpenDate = DateTime.Now;
+                    }
+                    Class newClass = new Class
+                    {
+                        SubjectName = createClassDTO.classDTO.SubjectName,
+                        SubjectId = createClassDTO.classDTO.SubjectId,
+                        Code = createClassDTO.classDTO.Code,
+                        ClassGroup = createClassDTO.classDTO.Code.Substring(createClassDTO.classDTO.Code.Length - 3),
+                        RoleGroup = createClassDTO.classDTO.RoleGroup,
+                        RoleProject = createClassDTO.classDTO.RoleProject,
+                        ProjectRequirements = createClassDTO.classDTO.ProjectRequirements,
+                        OpenDate = (DateTime)createClassDTO.classDTO.OpenDate,
+                        Year =  int.Parse(createClassDTO.classDTO.Year.Substring(0, 4)),
+                        Semester = createClassDTO.classDTO.Semester,
+                        TeacherId = viewModel.Id
+                    };
+                    foreach (var student in createClassDTO.classDTO.Students)
+                    {   
+                        Student? TempStudent = await _context.Student.FirstOrDefaultAsync(e => e.StudentCode == student.StudentCode);
+                        if (TempStudent == null)
+                        {
+                            Student newStudent = new Student
+                            {
+                                StudentCode = student.StudentCode,
+                                FirstName = student.StudentFirstName,
+                                LastName = student.StudentLastName,
+                                DOB = (DateTime)student.DOB,
+                                UserName = student.StudentCode,
+                                IsLocked = true
+                            };
+                            //TODO: set a "randomly" generated id for studentId field. https://stackoverflow.com/questions/26967215/generate-seemingly-random-unique-numeric-id-in-sql-server
+                            var result = await _userManager.CreateAsync(newStudent, newStudent.DOB.ToString("ddMMyyyy"));
+                            if (result.Succeeded)
+                            {
+                                await _userManager.AddToRoleAsync(newStudent, "Student");
+                                _logger.LogInformation("Student has been created a new account. Assigning role to them",
+                                    new { studentId = newStudent.Id, username = newStudent.UserName });
+                            }
+                        }
+                        else
+                        {
+                            _logger.LogInformation("Student already exist... updating classlist.",
+                                new { studentId = TempStudent.Id, username = TempStudent.UserName });
+                            TempStudent.ClassList.Add(new StudentClass
+                            {
+                                ClassId = newClass.Id,
+                                StudentId = TempStudent.Id,
+                                Class = newClass,
+                                Student = TempStudent,                        
+                            });
+                            _context.Update(TempStudent);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    _context.Add(newClass);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Class has been created",
+                        new { studentId = newClass.Id, code = newClass.Code });
+                    return RedirectToAction("Index", "Teacher");
 
-                return View(viewModel);
+                }
+                catch (Exception ex)
+                {
+                    RedirectToAction("Index", "Teacher", ex.Message);
+                }
+                return RedirectToAction("Index", "Teacher");
             }
-
-            // Xử lý trường hợp không có người dùng đăng nhập
-            return NotFound();
+            return RedirectToAction("Index", "Teacher", ModelState);
         }
     }
 }
