@@ -7,13 +7,17 @@ using System.Security.Claims;
 using Google.Apis.Drive.v3.Data;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
+using WebsiteQuanLyLamViecNhom.Data.Migrations;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     public class TeacherController : Controller
     {
         private readonly ApplicationDbContext _context;
-        
+        private readonly UserManager<Models.BaseApplicationUser> _userManager;
+        private readonly ILogger<TeacherController> _logger;
+
+
         static Teacher? viewModel = new Teacher
         {
             TeacherCode = "Teacher",
@@ -21,9 +25,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         };
 
 
-        public TeacherController(ApplicationDbContext context)
+        public TeacherController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<TeacherController> logger)
         {
             _context = context;
+            _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -49,11 +55,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
         public async Task<IActionResult> CreateClass(CreateClassDTO createClassDTO)
         {
-            if(ModelState.IsValid)
+            createClassDTO.classDTO.Students.RemoveAt(createClassDTO.classDTO.Students.Count - 1);
+            //TODO: Still missing some condition and the condition below is rubbishly workable
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    if (createClassDTO.classDTO == null) {
+                    if (createClassDTO.classDTO.OpenDate == null) {
                         createClassDTO.classDTO.OpenDate = DateTime.Now;
                     }
                     Class newClass = new Class
@@ -71,7 +79,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                         TeacherId = viewModel.Id
                     };
                     foreach (var student in createClassDTO.classDTO.Students)
-                    {
+                    {   
                         Student? TempStudent = await _context.Student.FirstOrDefaultAsync(e => e.StudentCode == student.StudentCode);
                         if (TempStudent == null)
                         {
@@ -80,13 +88,23 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                 StudentCode = student.StudentCode,
                                 FirstName = student.StudentFirstName,
                                 LastName = student.StudentLastName,
-                                DOB = (DateTime)student.DOB
+                                DOB = (DateTime)student.DOB,
+                                UserName = student.StudentCode,
+                                IsLocked = true
                             };
-                            _context.Add(newStudent);
-                            await _context.SaveChangesAsync();
+                            //TODO: set a "randomly" generated id for studentId field. https://stackoverflow.com/questions/26967215/generate-seemingly-random-unique-numeric-id-in-sql-server
+                            var result = await _userManager.CreateAsync(newStudent, newStudent.DOB.ToString("ddMMyyyy"));
+                            if (result.Succeeded)
+                            {
+                                await _userManager.AddToRoleAsync(newStudent, "Student");
+                                _logger.LogInformation("Student has been created a new account. Assigning role to them",
+                                    new { studentId = newStudent.Id, username = newStudent.UserName });
+                            }
                         }
                         else
                         {
+                            _logger.LogInformation("Student already exist... updating classlist.",
+                                new { studentId = TempStudent.Id, username = TempStudent.UserName });
                             TempStudent.ClassList.Add(new StudentClass
                             {
                                 ClassId = newClass.Id,
@@ -95,10 +113,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                 Student = TempStudent,                        
                             });
                             _context.Update(TempStudent);
+                            await _context.SaveChangesAsync();
                         }
                     }
                     _context.Add(newClass);
                     await _context.SaveChangesAsync();
+                    _logger.LogInformation("Class has been created",
+                        new { studentId = newClass.Id, code = newClass.Code });
                     return RedirectToAction("Index", "Teacher");
 
                 }

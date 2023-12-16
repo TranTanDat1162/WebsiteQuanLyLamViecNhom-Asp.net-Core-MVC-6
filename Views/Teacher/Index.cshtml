@@ -849,57 +849,65 @@
             var studentCode = sheet["B" + startRow].v || '';
             var studentLastName = sheet["C" + startRow].v || '';
             var studentFirstName = sheet["D" + startRow].v || '';
-            var dob = sheet["E" + startRow].v; // Adjust based on cell format
+            const dob = sheet["E" + startRow]?.v ?? '';
 
-            var newRow = tbody.insertRow();
-            var rowIndex = newRow.rowIndex;
-            // Create an empty slot for numbering later on
-            var indexcell = newRow.insertCell();
-            indexcell.innerHTML = '';
-            indexcell.setAttribute("style", "max-width: 90px;");
+            if (studentCode !== undefined && studentCode !== '') {
+                var newRow = tbody.insertRow();
+                var rowIndex = newRow.rowIndex;
+                // Create an empty slot for numbering later on
+                var indexcell = newRow.insertCell();
+                indexcell.innerHTML = '';
+                indexcell.setAttribute("style", "max-width: 90px;");
 
-            for (const prop of ["StudentCode", "StudentLastName", "StudentFirstName"]) {
-                // Create an input element for the current property
-                const input = document.createElement("input");
-                input.setAttribute("type", "text");
-                input.setAttribute("name", `Students[${rowIndex}].${prop}`);
-                input.setAttribute("style", "border: none;background: none;max-width: 90px;");
+                for (const prop of ["StudentCode", "StudentLastName", "StudentFirstName"]) {
+                    // Create an input element for the current property
+                    const input = document.createElement("input");
+                    input.setAttribute("type", "text");
+                    input.setAttribute("name", `classDTO.Students[${rowIndex - 1}].${prop}`);
+                    input.setAttribute("style", "border: none;background: none;max-width: 90px;");
 
-                switch (prop) {
-                    case "StudentCode":
-                        input.value = studentCode;
-                        break;
-                    case "StudentLastName":
-                        input.value = studentLastName;
-                        break;
-                    case "StudentFirstName":
-                        input.value = studentFirstName;
-                        input.setAttribute("style", "border: none;background: none;max-width: 60px;");
-                        break;
+                    switch (prop) {
+                        case "StudentCode":
+                            input.value = studentCode;
+                            break;
+                        case "StudentLastName":
+                            input.value = studentLastName;
+                            break;
+                        case "StudentFirstName":
+                            input.value = studentFirstName;
+                            input.setAttribute("style", "border: none;background: none;max-width: 60px;");
+                            break;
+                    }
+
+                    // Create and style a new cell for the input
+                    const newCell = newRow.insertCell();
+                    newCell.appendChild(input);
                 }
 
-                // Create and style a new cell for the input
-                const newCell = newRow.insertCell();
-                newCell.appendChild(input);
-            }
-
-            // Add input for DOB if needed and adjust based on cell format
-            if (dob) {
                 var dobInput = document.createElement("input");
                 dobInput.setAttribute("type", "date"); // Adjust type based on desired format
-                dobInput.setAttribute("name", `Students[${rowIndex}].DOB`);
+                dobInput.setAttribute("name", `classDTO.Students[${rowIndex-1}].DOB`);
                 dobInput.setAttribute("style", "all: unset");
+                if (dob) {
+                    const dateParts = dob.split("/");
+                    const formattedDob = `${dateParts[1]}/${dateParts[0]}/${dateParts[2]}`;
 
-                const dateParts = dob.split("/");
-                const formattedDob = `${dateParts[1]}/${dateParts[0]}/${dateParts[2]}`;
-
-                const dobDate = new Date(formattedDob);
-                dobInput.valueAsNumber = dobDate.getTime();
+                    const dobDate = new Date(formattedDob);
+                    dobInput.valueAsNumber = dobDate.getTime();
+                }
+                else{
+                    const currentDate = new Date();
+                    // const year = currentDate.getFullYear();
+                    // const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+                    // const day = currentDate.getDate().toString().padStart(2, "0");
+                    // const formattedDob = `${day}/${month}/${year}`;
+                    dobInput.valueAsNumber = currentDate.getTime();
+                }
 
                 newCell = newRow.insertCell();
                 newCell.appendChild(dobInput);
             }
-
+            
             startRow++;
         }
 
@@ -951,7 +959,7 @@
         document.getElementById('exampleInputText05').value = semester;
         document.getElementById('exampleInputText03').value = subjectCode;
     }
-
+    //# sourceURL=ImportClass.js
 </script>
 
 
