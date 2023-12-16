@@ -78,9 +78,17 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                         Semester = createClassDTO.classDTO.Semester,
                         TeacherId = viewModel.Id
                     };
+                    _context.Add(newClass);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Class has been created",
+                        new { studentId = newClass.Id, code = newClass.Code });
+
                     foreach (var student in createClassDTO.classDTO.Students)
-                    {   
-                        Student? TempStudent = await _context.Student.FirstOrDefaultAsync(e => e.StudentCode == student.StudentCode);
+                    {
+                        //Student? TempStudent = await _context.Student.FirstOrDefaultAsync(e => e.StudentCode == student.StudentCode);
+                        Student? TempStudent = await _context.Student
+                                    .Include(s => s.ClassList)
+                                    .FirstOrDefaultAsync(e => e.StudentCode == student.StudentCode);
                         if (TempStudent == null)
                         {
                             Student newStudent = new Student
@@ -105,21 +113,35 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                         {
                             _logger.LogInformation("Student already exist... updating classlist.",
                                 new { studentId = TempStudent.Id, username = TempStudent.UserName });
-                            TempStudent.ClassList.Add(new StudentClass
+
+                            if (TempStudent.ClassList == null)
+                            {
+                                TempStudent.ClassList = new List<StudentClass>();
+                            }
+                            //var existingEntry = TempStudent.ClassList.FirstOrDefault(c => c.Class.Code == newClass.Code);
+
+                            //if(existingEntry == null)
+                            //{
+                            var newStudentClass = new StudentClass
                             {
                                 ClassId = newClass.Id,
                                 StudentId = TempStudent.Id,
                                 Class = newClass,
-                                Student = TempStudent,                        
-                            });
+                                Student = TempStudent,
+                            };
+                            TempStudent.ClassList.Add(newStudentClass);
+
+                            _context.Entry(newStudentClass).State = EntityState.Added;
+
+                            _context.Attach(TempStudent);
                             _context.Update(TempStudent);
                             await _context.SaveChangesAsync();
+                            //}
+                            //else
+                            //    _logger.LogInformation("Student's already in this class... aborting");
                         }
                     }
-                    _context.Add(newClass);
-                    await _context.SaveChangesAsync();
-                    _logger.LogInformation("Class has been created",
-                        new { studentId = newClass.Id, code = newClass.Code });
+
                     return RedirectToAction("Index", "Teacher");
 
                 }
