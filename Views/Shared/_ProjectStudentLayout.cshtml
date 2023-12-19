@@ -1,4 +1,6 @@
-﻿<!doctype html>
+﻿@using WebsiteQuanLyLamViecNhom.Models
+
+<!doctype html>
 <html lang="en">
 
 <!-- Mirrored from templates.iqonic.design/product/lite/webkit/html/backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 11 Nov 2023 06:14:01 GMT -->
@@ -50,7 +52,7 @@
                                 aria-label="Toggle navigation">
                             <i class="ri-menu-3-line"></i>
                         </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div class="collapse navbar-col lapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto navbar-list align-items-center">
                                 <li class="nav-item nav-icon nav-item-icon dropdown">
                                     <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton2"
@@ -286,7 +288,7 @@
         </div>
     </div>
     <div class="modal fade bd-example-modal-lg" role="dialog" aria-modal="true" id="new-task-modal">
-        <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog  modal-dialog-centered modal-lg" role="document" style="max-width: 80% !important;">
             <div class="modal-content">
                 <div class="modal-header d-block text-center pb-3 border-bttom">
                     <h3 class="modal-title" id="exampleModalCenterTitle">New Task</h3>
@@ -297,13 +299,12 @@
                             <div class="form-group mb-3">
                                 <label for="exampleInputText02" class="h5">Task Name</label>
                                 <input type="text" class="form-control" id="exampleInputText02" placeholder="Enter task Name">
-                                <a href="#" class="task-edit text-body"><i class="ri-edit-box-line"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText2" class="h5">Assigned to</label>
-                                <select name="type" class="selectpicker form-control" data-style="py-0">
+                                <select name="assignees[]" class="selectpicker form-control" data-style="py-0" multiple>
                                     <option>Memebers</option>
                                     <option>Kianna Septimus</option>
                                     <option>Jaxson Herwitz</option>
@@ -313,41 +314,14 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText05" class="h5">Due Dates*</label>
+                                <label for="exampleInputText05" class="h5">Deadline*</label>
                                 <input type="date" class="form-control" id="exampleInputText05" value="">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group mb-3">
-                                <label for="exampleInputText2" class="h5">Category</label>
-                                <select name="type" class="selectpicker form-control" data-style="py-0">
-                                    <option>Design</option>
-                                    <option>Android</option>
-                                    <option>IOS</option>
-                                    <option>Ui/Ux Design</option>
-                                    <option>Development</option>
-                                </select>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText040" class="h5">Description</label>
                                 <textarea class="form-control" id="exampleInputText040" rows="2"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group mb-3">
-                                <label for="exampleInputText005" class="h5">Checklist</label>
-                                <input type="text" class="form-control" id="exampleInputText005" placeholder="Add List">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group mb-0">
-                                <label for="exampleInputText01" class="h5">Attachments</label>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="inputGroupFile003">
-                                    <label class="custom-file-label" for="inputGroupFile003">Upload media</label>
-                                </div>
                             </div>
                         </div>
                         <div class="col-lg-12">
