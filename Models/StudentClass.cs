@@ -9,10 +9,12 @@ namespace WebsiteQuanLyLamViecNhom.Models
         [Key]
         public int Id { get; set; }
         public float? Score { get; set; }
-
+        [Required]
         public int ClassId { get; set; }
         public string StudentId { get; set; }
         public string? GroupID { get; set; }
+        [ForeignKey("ClassId")]
+        [Required]
         public virtual Class Class { get; set; }
         public virtual Student Student { get; set; }
         public virtual Group? Group { get; set; }
