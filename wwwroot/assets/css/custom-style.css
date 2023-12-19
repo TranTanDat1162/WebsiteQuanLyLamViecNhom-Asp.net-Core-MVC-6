@@ -28,7 +28,23 @@
     background-color: #FFCF52 !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
+.bg-dark2 {
+    color: black !important;
+    background-color: white !important;
+}
 
+a.bg-dark2:hover, a.bg-dark2:focus,
+button.bg-dark2:hover,
+button.bg-dark2:focus {
+    color: black !important;
+    background-color: white !important;
+}
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner2 {
+    font-weight: normal;
+    color: #605C8D;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
 
 
 

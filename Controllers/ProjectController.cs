@@ -44,5 +44,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return View();
         }
 
+        // Return View for Student
+        public async Task<IActionResult> Student()
+        {
+            viewModelStudent = await _context.Student.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            ViewData["Student"] = viewModelStudent;
+            return View();
+        }
     }
 }

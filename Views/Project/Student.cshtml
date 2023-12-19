@@ -1,7 +1,6 @@
-﻿
-@{
-    ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
-    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+﻿@{
+    ViewData["Title"] = "Student";
+    Layout = "~/Views/Shared/_ProjectStudentLayout.cshtml";
 }
 
 <div class="row">
@@ -134,6 +133,7 @@
                                         </div>
                                     </div>
                                     <div class="media align-items-center mt-md-0 mt-3">
+                                        <a href="#" class="btn bg-secondary-light mr-3">Design</a>
                                         <a class="btn bg-secondary-light" data-toggle="collapse"
                                            href="#collapseEdit1" role="button" aria-expanded="false"
                                            aria-controls="collapseEdit1">
@@ -146,7 +146,26 @@
                         <div class="collapse" id="collapseEdit1">
                             <div class="card card-list task-card">
                                 <div class="card-header d-flex align-items-center justify-content-between px-0 mx-3">
+                                    <div class="header-title">
+                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                            <input type="checkbox" class="custom-control-input"
+                                                   id="customCheck05" />
+                                            <label class="custom-control-label h5"
+                                                   for="customCheck05">Mark as done</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="btn bg-secondary-light">Design</a>
+                                    </div>
+                                </div>
                                 <div class="card-body">
+                                    <div class="form-group mb-3 position-relative">
+                                        <input type="text" class="form-control bg-white"
+                                               placeholder="Design landing page of webkit" />
+                                        <a href="#" class="task-edit task-simple-edit text-body">
+                                            <i class="ri-edit-box-line"></i>
+                                        </a>
+                                    </div>
                                     <div class="card mb-3">
                                         <div class="card-body">
                                             <div class="row">
@@ -190,6 +209,77 @@
                                                         amet.
                                                     </p>
                                                 </div>
+                                                <div class="col-lg-6">
+                                                    <h5 class="mb-2">Checklist</h5>
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <div class="custom-control custom-checkbox custom-control-inline mr-0">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="customCheck1" />
+                                                                <label class="custom-control-label mb-1"
+                                                                       for="customCheck1">
+                                                                    Design mobile
+                                                                    version
+                                                                </label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox custom-control-inline mr-0">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="customCheck02" />
+                                                                <label class="custom-control-label mb-1"
+                                                                       for="customCheck02">
+                                                                    Use images of
+                                                                    unsplash.com
+                                                                </label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox custom-control-inline mr-0">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="customCheck3" />
+                                                                <label class="custom-control-label"
+                                                                       for="customCheck3">
+                                                                    Vector images of
+                                                                    small size.
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="custom-control custom-checkbox custom-control-inline mr-0">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="customCheck04" />
+                                                                <label class="custom-control-label mb-1"
+                                                                       for="customCheck04">
+                                                                    Design mobile
+                                                                    version of landing
+                                                                    page
+                                                                </label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox custom-control-inline mr-0">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="customCheck5" />
+                                                                <label class="custom-control-label mb-1"
+                                                                       for="customCheck5">
+                                                                    Use images of
+                                                                    unsplash.com
+                                                                </label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox custom-control-inline mr-0">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="customCheck06" />
+                                                                <label class="custom-control-label"
+                                                                       for="customCheck06">
+                                                                    Vector images of
+                                                                    small
+                                                                    size..
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -232,6 +322,7 @@
                                         </div>
                                     </div>
                                     <div class="media align-items-center mt-md-0 mt-3">
+                                        <a href="#" class="btn bg-success-light mr-3">Design</a>
                                         <a class="btn bg-success-light" data-toggle="collapse"
                                            href="#collapseEdit2" role="button" aria-expanded="false"
                                            aria-controls="collapseEdit2">
@@ -251,6 +342,9 @@
                                             <label class="custom-control-label h5"
                                                    for="customCheck006">Mark as done</label>
                                         </div>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="btn bg-secondary-light">Design</a>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -417,6 +511,7 @@
                                         </div>
                                     </div>
                                     <div class="media align-items-center mt-md-0 mt-3">
+                                        <a href="#" class="btn bg-primary-light mr-3">Design</a>
                                         <a class="btn bg-primary-light" data-toggle="collapse"
                                            href="#collapseEdit3" role="button" aria-expanded="false"
                                            aria-controls="collapseEdit3">
@@ -436,6 +531,9 @@
                                             <label class="custom-control-label h5"
                                                    for="customCheck11">Mark as done</label>
                                         </div>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="btn bg-secondary-light">Design</a>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -602,6 +700,7 @@
                                         </div>
                                     </div>
                                     <div class="media align-items-center mt-md-0 mt-3">
+                                        <a href="#" class="btn bg-info-light mr-3">Design</a>
                                         <a class="btn bg-info-light" data-toggle="collapse"
                                            href="#collapseEdit4" role="button" aria-expanded="false"
                                            aria-controls="collapseEdit4">
@@ -621,6 +720,9 @@
                                             <label class="custom-control-label h5"
                                                    for="customCheck19">Mark as done</label>
                                         </div>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="btn bg-secondary-light">Design</a>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -787,6 +889,7 @@
                                         </div>
                                     </div>
                                     <div class="media align-items-center mt-md-0 mt-3">
+                                        <a href="#" class="btn bg-secondary-light mr-3">Design</a>
                                         <a class="btn bg-secondary-light" data-toggle="collapse"
                                            href="#collapseEdit5" role="button" aria-expanded="false"
                                            aria-controls="collapseEdit5">
@@ -806,6 +909,9 @@
                                             <label class="custom-control-label h5"
                                                    for="customCheck27">Mark as done</label>
                                         </div>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="btn bg-secondary-light">Design</a>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -953,11 +1059,11 @@
     <div class="col-lg-4">
         <div id="list" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
             <div class="table-responsive rounded bg-white mb-4">
-                <div class="card-body">
-                    <h5 class="md-3">Members List</h5>
-                </div>
                 <table class="table mb-0 table-borderless tbl-server-info">
                     <tbody>
+                        <div class="card-body">
+                            <h5 class="md-3">Members List</h5>
+                        </div>
                         <tr>
                             <td>
                                 <div class="media align-items-center">
@@ -970,8 +1076,6 @@
                                     </span>
                                 </div>
                             </td>
-
-
                         </tr>
                         <tr>
                             <td>
@@ -986,8 +1090,6 @@
                                     <h6 class="ml-3">Corey Press</h6>
                                 </div>
                             </td>
-
-
                         </tr>
                         <tr>
                             <td>
@@ -995,8 +1097,6 @@
                                     <h6 class="ml-3">Zain Carder</h6>
                                 </div>
                             </td>
-
-
                         </tr>
                         <tr>
                             <td>
