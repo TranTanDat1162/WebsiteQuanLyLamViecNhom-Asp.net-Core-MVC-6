@@ -48,14 +48,21 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 ClassList.ClassListDTO = currentTeacher.ClassList;
                 return View(ClassList);
             }
-
             // Xử lý trường hợp không có người dùng đăng nhập
             return NotFound();
         }
-
-        public async Task<IActionResult> TeacherClass()
+        [Route("Teacher/TeacherClass/{id?}")]
+        public async Task<IActionResult> TeacherClass(int id)
         {
             ViewData["Teacher"] = viewModel;
+            var result = await _context.Project
+                .Where(t => t.ClassId == id)
+                .FirstOrDefaultAsync();
+
+            return View(result);
+        }
+        public async Task<IActionResult> CreateProject()
+        {
             return View();
         }
 

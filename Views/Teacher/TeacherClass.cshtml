@@ -1,4 +1,4 @@
-﻿@model ICollection<WebsiteQuanLyLamViecNhom.Models.Project>
+﻿@model ICollection<WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateProjectDTO>
 @{
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
 }
@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
-                    <h5>Your Projects</h5>
+                    <h5> Projects</h5>
                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                         <div class="dropdown status-dropdown mr-3">
                             <div class="dropdown-toggle"
@@ -88,29 +88,38 @@
      class="item-content animate__animated animate__fadeIn active"
      data-toggle-extra="tab-content">
     <div class="row">
-        @foreach (var item in Model)
+        @if (Model != null)
         {
-            <div class="col-lg-4 col-md-6">
-                <div class="card card-block card-stretch card-height class-hover">
-                    <div class="card-body">
-                        <a href="/Project/Index">
-                            <span class="link-spanner"></span>
-                        </a>
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div id="circle-progress-01"
-                                 class="circle-progress-01 circle-progress circle-progress-primary"
-                                 data-min-value="0"
-                                 data-max-value="100"
-                                 data-value="25"
-                                 data-type="percent"></div>
-                            <i class="ri-star-fill m-0 text-warning"></i>
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-block card-stretch card-height class-hover">
+                        <div class="card-body">
+                            <a href="/Project/Index">
+                                <span class="link-spanner"></span>
+                            </a>
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div id="circle-progress-01"
+                                class="circle-progress-01 circle-progress circle-progress-primary"
+                                data-min-value="0"
+                                data-max-value="100"
+                                data-value="25"
+                                data-type="percent"></div>
+                                <i class="ri-star-fill m-0 text-warning"></i>
+                            </div>
+                            <h5 class="mb-1">@item.Name</h5>
+                            <p class="mb-3">
+                                Placeholder
+                            </p>
                         </div>
-                        <h5 class="mb-1">Theme development</h5>
-                        <p class="mb-3">
-                            Preparing framework of block-based WordPress Theme.
-                        </p>
                     </div>
                 </div>
+            }
+        }
+        else
+        {
+            <div class="col-lg-4 col-md-6">
+                No projects found at the moment.
             </div>
         }
     </div>
@@ -652,3 +661,51 @@
         </div>
     </div>
 </div>
+
+<!-- Modal list start -->
+<div class="modal fade" role="dialog" aria-modal="true" id="new-project-modal">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-block text-center pb-3 border-bttom">
+                <h3 class="modal-title" id="exampleModalCenterTitle01">New Project</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group mb-3">
+                            <label for="exampleInputText01" class="h5">Project Name*</label>
+                            <input type="text" class="form-control" id="exampleInputText01" placeholder="Project Name">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group mb-3">
+                            <label for="exampleInputText2" class="h5">Requirement *</label>
+                            <input type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group mb-3">
+                            <label for="exampleInputText004" class="h5">Deadline*</label>
+                            <input type="date" class="form-control" id="exampleInputText004" value="">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group mb-3">
+                            <label for="exampleInputText07" class="h5">Assign Members*</label>
+                            <select asp-for="classDTO.RoleGroup" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="type" class="selectpicker form-control" data-style="py-0">
+                                <option selected="selected" value="">Please select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                            <div class="btn btn-primary mr-3" data-dismiss="modal">Save</div>
+                            <div class="btn btn-primary" data-dismiss="modal">Cancel</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal list end -->
