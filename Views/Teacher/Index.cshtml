@@ -524,7 +524,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label for="exampleInputText2" class="h5">Cách phân nhóm *</label>
-                                        <select asp-for="classDTO.RoleGroup" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="type" class="selectpicker form-control" data-style="py-0">
+                                        <select asp-for="classDTO.RoleGroup" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="RoleGroup" data-style="py-0">
                                             <option selected="selected" value="">Please select</option>
                                         </select>
                                     </div>
@@ -532,7 +532,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label for="exampleInputText2" class="h5">Cách giao đề tài *</label>
-                                        <select asp-for="classDTO.RoleProject" asp-items="Html.GetEnumSelectList<RoleProject>()" name="type" class="selectpicker form-control" data-style="py-0">
+                                        <select asp-for="classDTO.RoleProject" asp-items="Html.GetEnumSelectList<RoleProject>()" name="RoleProject" data-style="py-0">
                                             <option selected="selected" value="">Please select</option>
                                         </select>
                                     </div>
