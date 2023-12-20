@@ -54,15 +54,23 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         public async Task<IActionResult> TeacherClass(string id)
         {
             ViewData["Teacher"] = viewModel;
-            var result = await _context.Project
+
+            var projectList = await _context.Project
                 .Where(t => t.Class.Code == id)
+                .ToListAsync();
+
+            var studentList = await _context.StudentClass
+                .Where(s => s.Class.Code == id)
+                .Include(l => l.Student)
                 .ToListAsync();
 
             ProjectDTO ProjectDTO = new()
             {
-                CurrentProjects = result,
-                ClassID = result.ToArray().First().ClassId
+                CurrentProjects = projectList,
+                ClassID = projectList.ToArray().First().ClassId,
+                StudentList = studentList
             };
+
             return View(ProjectDTO);
         }
         [Route("Teacher/TeacherClass/CreateProject/{id?}")]
@@ -91,14 +99,30 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
         }
         [Route("Teacher/TeacherClass/CreateGroup/{id?}")]
-        public async Task<IActionResult> CreateGroup(int id, ProjectDTO.CreateProjectDTO createProjectDTO)
+        public async Task<IActionResult> CreateGroup(int id, ProjectDTO.CreateGroupDTO createGroupDTO)
         {
             var currentclass = await _context.Class
                 .Where(t => t.Id == id)
                 .FirstOrDefaultAsync();
+
+            var selectedProject = await _context.Project
+                .Where(p => p.Id == createGroupDTO.ProjectId)
+                .FirstOrDefaultAsync();
+            List<StudentClass> memberList = new List<StudentClass>();
+            foreach(var studentid in createGroupDTO.memberList)
+            {
+                var member = await _context.StudentClass
+                                    .Where(sc => sc.StudentId == studentid)
+                                    .FirstOrDefaultAsync();
+                memberList.Add(member);
+            }
             if(ModelState.IsValid)
             {
-
+                Group newGroup = new Group
+                {
+                    MOTD = createGroupDTO.MOTD,
+                    Project = selectedProject
+                };
             }
             return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
         }
