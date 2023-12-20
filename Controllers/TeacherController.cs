@@ -9,7 +9,6 @@ using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using NuGet.Versioning;
-
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     public class TeacherController : Controller
@@ -41,7 +40,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             if (viewModel != null)
             {
                 ViewData["Teacher"] = viewModel;
-                Teacher currentTeacher = await _context.Teacher
+                Teacher? currentTeacher = await _context.Teacher
                     .Include(t => t.ClassList)
                     .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
                 CreateClassDTO ClassList = new CreateClassDTO();
@@ -51,21 +50,58 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             // Xử lý trường hợp không có người dùng đăng nhập
             return NotFound();
         }
-        [Route("Teacher/TeacherClass/{id?}")]
-        public async Task<IActionResult> TeacherClass(int id)
+        [Route("Teacher/TeacherClass/{id}")]
+        public async Task<IActionResult> TeacherClass(string id)
         {
             ViewData["Teacher"] = viewModel;
             var result = await _context.Project
-                .Where(t => t.ClassId == id)
-                .FirstOrDefaultAsync();
+                .Where(t => t.Class.Code == id)
+                .ToListAsync();
 
-            return View(result);
+            ProjectDTO ProjectDTO = new()
+            {
+                CurrentProjects = result,
+                ClassID = result.ToArray().First().ClassId
+            };
+            return View(ProjectDTO);
         }
-        public async Task<IActionResult> CreateProject()
+        [Route("Teacher/TeacherClass/CreateProject/{id?}")]
+        public async Task<IActionResult> CreateProject(int id, ProjectDTO.CreateProjectDTO createProjectDTO)
         {
-            return View();
+            var currentclass = await _context.Class
+                .Where(t => t.Id == id)
+                .FirstOrDefaultAsync();
+            if (ModelState.IsValid)
+            {
+                Project newProject = new Project
+                {
+                    Name = createProjectDTO.Name,
+                    Requirements = createProjectDTO.Requirement,
+                    Deadline = createProjectDTO.Deadline,
+                    ClassId = id,
+                    Class = currentclass
+                };
+                _context.Add(newProject);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("New project has been created {Project}",
+                    new { projectId = newProject.Id, code = newProject.Name, Class = newProject.ClassId });
+            }
+            //TODO: create a dynamic error view
+            //return View("~/Views/Shared/Error.cshtml");
+            return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
         }
+        [Route("Teacher/TeacherClass/CreateGroup/{id?}")]
+        public async Task<IActionResult> CreateGroup(int id, ProjectDTO.CreateProjectDTO createProjectDTO)
+        {
+            var currentclass = await _context.Class
+                .Where(t => t.Id == id)
+                .FirstOrDefaultAsync();
+            if(ModelState.IsValid)
+            {
 
+            }
+            return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
+        }
         public async Task<IActionResult> CreateClass(CreateClassDTO createClassDTO)
         {
             createClassDTO.classDTO.Students.RemoveAt(createClassDTO.classDTO.Students.Count - 1);

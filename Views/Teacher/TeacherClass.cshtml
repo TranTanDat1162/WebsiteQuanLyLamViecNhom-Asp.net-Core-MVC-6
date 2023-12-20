@@ -1,7 +1,8 @@
-﻿@model ICollection<WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateProjectDTO>
+﻿@model WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.ProjectDTO
 @{
     Layout = "~/Views/Shared/_TeacherLayout.cshtml";
 }
+<!-- Class header start -->
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
@@ -27,7 +28,7 @@
                         <div class="list-grid-toggle d-flex align-items-center mr-3">
                             <div data-toggle-extra="tab"
                                  data-target-extra="#grid"
-                                 class="active">
+                                 >
                                 <div class="grid-icon mr-3">
                                     <svg width="20"
                                          height="20"
@@ -45,7 +46,9 @@
                                     </svg>
                                 </div>
                             </div>
-                            <div data-toggle-extra="tab" data-target-extra="#list">
+                            <div data-toggle-extra="tab" 
+                                 data-target-extra="#list"
+                                 class="active">
                                 <div class="grid-icon">
                                     <svg width="20"
                                          height="20"
@@ -64,7 +67,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="pl-3 border-left btn-new">
+                        <div class="pl-3 pr-3 border-left btn-new">
                             <a href="#"
                                class="btn btn-primary"
                                data-target="#new-notification-modal"
@@ -72,11 +75,17 @@
                                <i class="ri-chat-new-line"></i>
                               </a>
                             </div>
-                        <div class="pl-3 border-left btn-new">
+                        <div class="pl-3 pr-2 border-left btn-new">
                             <a href="#"
                                class="btn btn-primary"
                                data-target="#new-project-modal"
                                data-toggle="modal">New Project</a>
+                        </div>
+                        <div class="pl-2 border-left btn-new">
+                            <a href="#"
+                               class="btn btn-primary"
+                               data-target="#new-group-modal"
+                               data-toggle="modal">New Group</a>
                         </div>
                     </div>
                 </div>
@@ -84,13 +93,16 @@
         </div>
     </div>
 </div>
+<!-- Class header end -->
+
+<!-- Project list start -->
 <div id="grid"
-     class="item-content animate__animated animate__fadeIn active"
+     class="item-content animate__animated animate__fadeIn"
      data-toggle-extra="tab-content">
     <div class="row">
         @if (Model != null)
         {
-            @foreach (var item in Model)
+            @foreach (var item in Model.CurrentProjects)
             {
                 <div class="col-lg-4 col-md-6">
                     <div class="card card-block card-stretch card-height class-hover">
@@ -124,8 +136,11 @@
         }
     </div>
 </div>
+<!-- Project list end -->
+
+<!-- Group list start -->
 <div id="list"
-     class="item-content animate__animated animate__fadeIn"
+     class="item-content animate__animated animate__fadeIn active"
      data-toggle-extra="tab-content">
     <div class="row">
         <div class="col-lg-6">
@@ -661,51 +676,106 @@
         </div>
     </div>
 </div>
+<!-- Group list end -->
 
 <!-- Modal list start -->
 <div class="modal fade" role="dialog" aria-modal="true" id="new-project-modal">
     <div class="modal-dialog  modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header d-block text-center pb-3 border-bttom">
-                <h3 class="modal-title" id="exampleModalCenterTitle01">New Project</h3>
+                <h3 class="modal-title" id="exampleModalCenterTitle01">Tạo Project</h3>
             </div>
-            <div class="modal-body">
+            <form asp-action="CreateProject" asp-controller="Teacher">
+                <div class="modal-body">
                 <div class="row">
+                    <input type="hidden" name="id" value="@Model.ClassID" />
                     <div class="col-lg-12">
                         <div class="form-group mb-3">
-                            <label for="exampleInputText01" class="h5">Project Name*</label>
-                            <input type="text" class="form-control" id="exampleInputText01" placeholder="Project Name">
+                            <label for="exampleInputText01" class="h5">Tên Project*</label>
+                            <input asp-for="createProjectDTO.Name" type="text" class="form-control" id="exampleInputText01" placeholder="Project Name">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group mb-3">
-                            <label for="exampleInputText2" class="h5">Requirement *</label>
-                            <input type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder">
+                            <label for="exampleInputText2" class="h5">Yêu cầu *</label>
+                            <input asp-for="createProjectDTO.Requirement" type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group mb-3">
-                            <label for="exampleInputText004" class="h5">Deadline*</label>
-                            <input type="date" class="form-control" id="exampleInputText004" value="">
+                            <label for="exampleInputText004" class="h5">Ngày kết thúc*</label>
+                            <input asp-for="createProjectDTO.Deadline" type="date" class="form-control" id="exampleInputText004" value="">
                         </div>
                     </div>
-                    <div class="col-lg-12">
+@*                     <div class="col-lg-12">
                         <div class="form-group mb-3">
                             <label for="exampleInputText07" class="h5">Assign Members*</label>
-                            <select asp-for="classDTO.RoleGroup" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="type" class="selectpicker form-control" data-style="py-0">
+                                 <select asp-for="" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="type" class="selectpicker form-control" data-style="py-0">
                                 <option selected="selected" value="">Please select</option>
-                            </select>
+                            </select> 
                         </div>
-                    </div>
+                    </div> *@
                     <div class="col-lg-12">
                         <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
-                            <div class="btn btn-primary mr-3" data-dismiss="modal">Save</div>
-                            <div class="btn btn-primary" data-dismiss="modal">Cancel</div>
+                            <input type="submit" value="Tạo Lớp" class="btn btn-primary mr-3" />
+                            <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
                         </div>
                     </div>
                 </div>
             </div>
+            </form>
         </div>
     </div>
 </div>
+<div class="modal fade" role="dialog" aria-modal="true" id="new-group-modal">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-block text-center pb-3 border-bttom">
+                <h3 class="modal-title" id="exampleModalCenterTitle01">Tạo Nhóm</h3>
+            </div>
+            <form asp-action="CreateProject" asp-controller="Teacher">
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" name="id" value="@Model.ClassID" />
+                        <div class="col-lg-12">
+                            <div class="form-group mb-3">
+                                <label for="exampleInputText01" class="h5">Chọn Project*</label>
+                                <select asp-for="" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="type" class="selectpicker form-control" data-style="py-0">
+                                    <option selected="selected" value="">Please select</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group mb-3">
+                                <label for="exampleInputText2" class="h5">Yêu cầu *</label>
+                                <input asp-for="createProjectDTO.Requirement" type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group mb-3">
+                                <label for="exampleInputText004" class="h5">Ngày kết thúc*</label>
+                                <input asp-for="createProjectDTO.Deadline" type="date" class="form-control" id="exampleInputText004" value="">
+                            </div>
+                        </div>
+                        @*                     <div class="col-lg-12">
+                        <div class="form-group mb-3">
+                        <label for="exampleInputText07" class="h5">Assign Members*</label>
+                        <select asp-for="" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="type" class="selectpicker form-control" data-style="py-0">
+                        <option selected="selected" value="">Please select</option>
+                        </select>
+                        </div>
+                        </div> *@
+                        <div class="col-lg-12">
+                            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                <input type="submit" value="Tạo Lớp" class="btn btn-primary mr-3" />
+                                <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal list end -->
