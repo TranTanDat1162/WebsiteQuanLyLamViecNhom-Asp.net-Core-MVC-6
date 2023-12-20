@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Google.Apis.Drive.v3.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebsiteQuanLyLamViecNhom.Data;
+using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
@@ -9,7 +12,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
     public class ProjectController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<Models.BaseApplicationUser> _userManager;
+        private readonly UserManager<BaseApplicationUser> _userManager;
 
         public ProjectController(ApplicationDbContext context, UserManager<BaseApplicationUser> userManager)
         {
@@ -30,10 +33,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         //TO-DO:
         //https://stackoverflow.com/questions/37554536/ho-do-i-show-a-button-that-links-to-a-page-only-if-the-user-is-authorized-to-vie
         // Return View for Teacher
-        public async Task<IActionResult> Index()
+        [Route("Teacher/TeacherClass/{id?}")]
+        public async Task<IActionResult> Index(string id)
         {
             viewModelTeacher = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             ViewData["Teacher"] = viewModelTeacher;
+
+            var result = _context.Class.Where(t => t.Code == id);
+
             return View();
         }
 
