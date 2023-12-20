@@ -171,7 +171,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("TasksTaskId");
 
-                    b.ToTable("StudentClassTask");
+                    b.ToTable("StudentClassTask", (string)null);
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Admin", b =>
@@ -192,7 +192,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admin");
+                    b.ToTable("Admin", (string)null);
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.BaseApplicationUser", b =>
@@ -337,7 +337,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Class");
+                    b.ToTable("Class", (string)null);
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Group", b =>
@@ -356,7 +356,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Group");
+                    b.ToTable("Group", (string)null);
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Project", b =>
@@ -385,7 +385,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("ClassId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Project", (string)null);
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.StudentClass", b =>
@@ -417,7 +417,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentClass");
+                    b.ToTable("StudentClass", (string)null);
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Task", b =>
@@ -453,7 +453,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Task");
+                    b.ToTable("Task", (string)null);
                 });
 
             modelBuilder.Entity("WebsiteQuanLyLamViecNhom.Models.Student", b =>

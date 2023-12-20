@@ -9,7 +9,6 @@ using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using NuGet.Versioning;
-
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     public class TeacherController : Controller
@@ -41,24 +40,92 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             if (viewModel != null)
             {
                 ViewData["Teacher"] = viewModel;
-                Teacher currentTeacher = await _context.Teacher
+                Teacher? currentTeacher = await _context.Teacher
                     .Include(t => t.ClassList)
                     .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
                 CreateClassDTO ClassList = new CreateClassDTO();
                 ClassList.ClassListDTO = currentTeacher.ClassList;
                 return View(ClassList);
             }
-
             // Xử lý trường hợp không có người dùng đăng nhập
             return NotFound();
         }
-
-        public async Task<IActionResult> TeacherClass()
+        [Route("Teacher/TeacherClass/{id}")]
+        public async Task<IActionResult> TeacherClass(string id)
         {
             ViewData["Teacher"] = viewModel;
-            return View();
-        }
 
+            var projectList = await _context.Project
+                .Where(t => t.Class.Code == id)
+                .ToListAsync();
+
+            var studentList = await _context.StudentClass
+                .Where(s => s.Class.Code == id)
+                .Include(l => l.Student)
+                .ToListAsync();
+
+            ProjectDTO ProjectDTO = new()
+            {
+                CurrentProjects = projectList,
+                ClassID = projectList.ToArray().First().ClassId,
+                StudentList = studentList
+            };
+
+            return View(ProjectDTO);
+        }
+        [Route("Teacher/TeacherClass/CreateProject/{id?}")]
+        public async Task<IActionResult> CreateProject(int id, ProjectDTO.CreateProjectDTO createProjectDTO)
+        {
+            var currentclass = await _context.Class
+                .Where(t => t.Id == id)
+                .FirstOrDefaultAsync();
+            if (ModelState.IsValid)
+            {
+                Project newProject = new Project
+                {
+                    Name = createProjectDTO.Name,
+                    Requirements = createProjectDTO.Requirement,
+                    Deadline = createProjectDTO.Deadline,
+                    ClassId = id,
+                    Class = currentclass
+                };
+                _context.Add(newProject);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("New project has been created {Project}",
+                    new { projectId = newProject.Id, code = newProject.Name, Class = newProject.ClassId });
+            }
+            //TODO: create a dynamic error view
+            //return View("~/Views/Shared/Error.cshtml");
+            return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
+        }
+        [Route("Teacher/TeacherClass/CreateGroup/{id?}")]
+        public async Task<IActionResult> CreateGroup(int id, ProjectDTO.CreateGroupDTO createGroupDTO)
+        {
+            var currentclass = await _context.Class
+                .Where(t => t.Id == id)
+                .FirstOrDefaultAsync();
+
+            var selectedProject = await _context.Project
+                .Where(p => p.Id == createGroupDTO.ProjectId)
+                .FirstOrDefaultAsync();
+            List<StudentClass> memberList = new List<StudentClass>();
+            foreach(var studentid in createGroupDTO.memberList)
+            {
+                var member = await _context.StudentClass
+                                    .Where(sc => sc.StudentId == studentid)
+                                    .FirstOrDefaultAsync();
+                memberList.Add(member);
+            }
+            if(ModelState.IsValid)
+            {
+                Group newGroup = new Group
+                {
+                    MOTD = createGroupDTO.MOTD,
+                    Project = selectedProject
+                };
+            }
+            return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
+        }
         public async Task<IActionResult> CreateClass(CreateClassDTO createClassDTO)
         {
             createClassDTO.classDTO.Students.RemoveAt(createClassDTO.classDTO.Students.Count - 1);
