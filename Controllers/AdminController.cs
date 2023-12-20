@@ -4,6 +4,8 @@ using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using Google.Apis.Drive.v3.Data;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -20,8 +22,31 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             _userManager = usermanager;
             _logger = logger;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            //var numberOfStudentAccounts = _userManager.Users
+            //                                .Where(x => x.)
+            //                                .Count();
+            //var numberOfTeacherAccounts = await _userManager.Users
+            //                                .Where(x =>  User.IsInRole("Teacher"))
+            //                                .CountAsync();
+
+            var Total = await _userManager.Users.ToListAsync();
+            int s = 0, t = 0;
+            foreach(var acc in Total)
+            {
+                var roles = await _userManager.GetRolesAsync(acc);
+                if (roles.Contains("Student"))
+                {
+                    s++;
+                }
+                else if (roles.Contains("Teacher"))
+                {
+                    t++;
+                }
+            }
+            ViewData["NumberOfStudentAccounts"] = s;
+            ViewData["NumberOfTeacherfAccounts"] = t;
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
             return View();
         }
