@@ -17,9 +17,9 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string Id { get; set; }
             public string MOTD { get; set; }
             public int ProjectId { get; set; }
-            public virtual ICollection<StudentClassDTO> Students { get; set; }
         }
         public int ClassID { get; set; }
+        public CreateGroupDTO? createGroupDTO { get; set; }
         public CreateProjectDTO? createProjectDTO { get; set; }
         public ICollection<Project>? CurrentProjects { get; set; }
         public ICollection<Student>? StudentList{ get; set; }

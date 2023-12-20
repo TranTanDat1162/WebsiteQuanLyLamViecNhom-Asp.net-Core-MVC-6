@@ -740,23 +740,40 @@
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText01" class="h5">Chọn Project*</label>
-                                <select asp-for="" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="type" class="selectpicker form-control" data-style="py-0">
+                                <select asp-for="createGroupDTO.ProjectId" name="type" class="selectpicker form-control" data-style="py-0">
                                     <option selected="selected" value="">Please select</option>
+                                    @foreach (var project in Model.CurrentProjects)
+                                    {
+                                        <option value="@project.Id">@project.Name</option>
+                                    }
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText2" class="h5">Yêu cầu *</label>
-                                <input asp-for="createProjectDTO.Requirement" type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder">
+                                <label for="exampleInputText2" class="h5">Ghi chú *</label>
+                                <input asp-for="createGroupDTO.MOTD" type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText004" class="h5">Ngày kết thúc*</label>
-                                <input asp-for="createProjectDTO.Deadline" type="date" class="form-control" id="exampleInputText004" value="">
+                                <label for="exampleInputText01" class="h5">Chọn Project*</label>
+                                <asp:listbox runat="server" id="lstBoxTest" selectionmode="Multiple">
+                                    <asp:listitem text="Red" value="0"></asp:listitem>
+                                    <asp:listitem text="Green" value="1"></asp:listitem>
+                                    <asp:listitem text="Yellow" value="2"></asp:listitem>
+                                    <asp:listitem text="Blue" value="3"></asp:listitem>
+                                    <asp:listitem text="Black" value="4"></asp:listitem>
+                                </asp:listbox>
                             </div>
                         </div>
+@*                         <div class="col-lg-6">
+                            <div class="form-group mb-3">
+                                <label for="exampleInputText004" class="h5">Ngày kết thúc*</label>
+                                <input asp-for="createGroupDTO." type="date" class="form-control" id="exampleInputText004" value="">
+                            </div>
+                        </div> *@
+                        
                         @*                     <div class="col-lg-12">
                         <div class="form-group mb-3">
                         <label for="exampleInputText07" class="h5">Assign Members*</label>
