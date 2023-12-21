@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebsiteQuanLyLamViecNhom.Data;
+using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
+using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
@@ -32,7 +35,16 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             if (viewModel != null)
             {
                 ViewData["Student"] = viewModel;
-                return View();
+                Student? currentStudent = await _context.Student
+                    .Include(t => t.ClassList)
+                    .ThenInclude(t => t.Class)
+                    .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                CreateClassDTO ClassList = new CreateClassDTO();
+                foreach(var studentClass in currentStudent.ClassList)
+                {
+                    ClassList.ClassListDTO.Add(studentClass.Class);
+                }
+                return View(ClassList);
             }
 
             // Xử lý trường hợp không có người dùng đăng nhập
