@@ -17,6 +17,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string Id { get; set; }
             public string MOTD { get; set; }
             public int ProjectId { get; set; }
+            public string LeaderID { get; set; }
             public string[] memberList { get; set; }
         }
         public int ClassID { get; set; }

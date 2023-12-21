@@ -127,7 +127,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 {
                     MOTD = createGroupDTO.MOTD,
                     Project = selectedProject,
-                    Students = memberList
+                    Students = memberList,
+                    LeaderID = createGroupDTO.LeaderID
                 };                             
                 _context.Group.Add(newGroup);
                 await _context.SaveChangesAsync();

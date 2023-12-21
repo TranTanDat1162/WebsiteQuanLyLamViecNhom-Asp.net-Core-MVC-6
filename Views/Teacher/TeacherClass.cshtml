@@ -272,7 +272,7 @@
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText2" class="h5">Chọn thành viên *</label>
-                                <select asp-for="createGroupDTO.memberList" name="createGroupDTO.memberList"
+                                <select asp-for="createGroupDTO.memberList" id="createGroupDTO_memberList" name="createGroupDTO.memberList"
                                         class="selectpicker form-control"
                                         data-style="py-0" multiple>
                                     <option disabled value="">Please select</option>
@@ -280,6 +280,14 @@
                                     {
                                         <option value="@student.StudentId">@($"{student.Student.FirstName} {student.Student.LastName}")</option>
                                     }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group mb-3">
+                                <label for="exampleInputText2" class="h5">Chọn nhóm trưởng *</label>
+                                <select asp-for="createGroupDTO.LeaderID" id="dependentDropdown" class="selectpicker form-control">
+                                    <option disabled value="">Please select leader</option>
                                 </select>
                             </div>
                         </div>
@@ -297,28 +305,27 @@
 </div>
 <!-- Modal list end -->
 <script>
-    $('#createGroupDTO_memberList').on('change', function () {
+
+    document.getElementById('createGroupDTO_memberList').addEventListener('change', function () {
         // Get selected student IDs
-        var selectedStudentIds = $(this).val();
+        var selectedStudentIds = this.value;
 
         // Fetch filtered options based on selections
         fetchDependentOptions(selectedStudentIds);
     });
 
     function fetchDependentOptions(selectedStudentIds) {
-        // Replace with your actual AJAX call to fetch options
         $.ajax({
-            url: '/Teacher/GetDependentOptions', // Adjust URL as needed
+            url: '/Teacher/GetDependentOptions',
             data: { selectedStudentIds: selectedStudentIds },
             type: 'POST',
             success: function (response) {
-                // Populate the second dropdown with fetched options
                 $('#dependentDropdown').empty();
                 $('#dependentDropdown').append('<option disabled value="">Please select</option>');
                 $.each(response.data, function (index, option) {
-                    <span class="math-inline" >\('\#dependentDropdown'\) \.append\(</span>('<option></option > ').val(option.value).text(option.text));
+                    $('#dependentDropdown').append($('<option></option>').val(option.value).text(option.text)); // Corrected extra bracket
                 });
-                $('#dependentDropdown').selectpicker('refresh'); // Refresh Bootstrap Selectpicker
+                $('#dependentDropdown').selectpicker('refresh');
             }
         });
     }
