@@ -45,6 +45,9 @@ button.bg-dark2:focus {
     overflow: hidden;
     text-overflow:ellipsis;
 }
+.d-none {
+    display: none !important;
+}
 
 
 
