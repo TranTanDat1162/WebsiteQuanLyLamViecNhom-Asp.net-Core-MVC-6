@@ -64,8 +64,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 .Include(l => l.Student)
                 .ToListAsync();
 
+            var groupList = await _context.Group
+                .Where(t => t.Project.Class.Code == id)
+                .ToListAsync();
+
             ProjectDTO ProjectDTO = new()
             {
+                CurrentGroups = groupList,
                 CurrentProjects = projectList,
                 ClassID = projectList.ToArray().First().ClassId,
                 StudentList = studentList
@@ -121,11 +126,35 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 Group newGroup = new Group
                 {
                     MOTD = createGroupDTO.MOTD,
-                    Project = selectedProject
-                };
+                    Project = selectedProject,
+                    Students = memberList
+                };                             
+                _context.Group.Add(newGroup);
+                await _context.SaveChangesAsync();
             }
             return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
         }
+
+        public async Task<IActionResult> GetDependentOptions(List<string> selectedStudentIds)
+        {
+            var dependentOptions = new List<Object>();
+            foreach (var studentid in selectedStudentIds)
+            {
+                var fetchedStudent = await _context.Student
+                                        .Where(s => s.StudentCode == studentid)
+                                        .FirstOrDefaultAsync();
+                var option = new
+                {
+                    value = fetchedStudent.StudentCode,
+                    text = (fetchedStudent.FirstName +" "+ fetchedStudent.LastName)
+                };
+                dependentOptions.Add(option);
+
+            }
+            return Json(new { data = dependentOptions });
+        }
+
+
         public async Task<IActionResult> CreateClass(CreateClassDTO createClassDTO)
         {
             createClassDTO.classDTO.Students.RemoveAt(createClassDTO.classDTO.Students.Count - 1);

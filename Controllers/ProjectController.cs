@@ -44,7 +44,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             viewModelTeacher = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             ViewData["Teacher"] = viewModelTeacher;
             var result = await _context.Class.Where(t => t.Code == id).FirstOrDefaultAsync();
-            
+
             return View("~/Views/Project/Index.cshtml",result);
         }
 

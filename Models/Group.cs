@@ -12,5 +12,6 @@ namespace WebsiteQuanLyLamViecNhom.Models
         [ForeignKey("ProjectId")]
         public virtual Project Project { get; set; }
         public virtual ICollection<StudentClass> Students { get; set; }
+        public virtual string LeaderID { get; set; }
     }
 }

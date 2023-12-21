@@ -23,6 +23,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         public CreateGroupDTO? createGroupDTO { get; set; }
         public CreateProjectDTO? createProjectDTO { get; set; }
         public ICollection<Project>? CurrentProjects { get; set; }
+        public ICollection<Group>? CurrentGroups { get; set; }
         public ICollection<StudentClass>? StudentList{ get; set; }
     }
 }
