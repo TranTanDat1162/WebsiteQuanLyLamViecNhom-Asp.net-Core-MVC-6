@@ -4,6 +4,9 @@ using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using Google.Apis.Drive.v3.Data;
+using WebsiteQuanLyLamViecNhom.Models.ViewModel;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -20,8 +23,45 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             _userManager = usermanager;
             _logger = logger;
         }
-        public IActionResult Index()
+
+        //static AdminDashboardViewModel? viewModel = new AdminDashboardViewModel
+        //{
+        //    NumberOfStudentAccounts = 2000,
+        //    NumberOfTeacherAccounts = 100
+        //};
+
+        public async Task<IActionResult> Index()
         {
+            //var numberOfStudentAccounts = _userManager.Users
+            //                                .Where(x => x.)
+            //                                .Count();
+            //var numberOfTeacherAccounts = await _userManager.Users
+            //                                .Where(x =>  User.IsInRole("Teacher"))
+            //                                .CountAsync();
+
+            var Total = await _userManager.Users.ToListAsync();
+            int numberOfStudentAccounts = 0, numberOfTeacherAccounts = 0;
+            foreach(var acc in Total)
+            {
+                var roles = await _userManager.GetRolesAsync(acc);
+                if (roles.Contains("Student"))
+                {
+                    numberOfStudentAccounts++;
+                }
+                else if (roles.Contains("Teacher"))
+                {
+                    numberOfTeacherAccounts++;
+                }
+            }
+            // Tạo model
+            ViewData["NumberOfAccounts"] = new AdminDashboardViewModel()
+            {
+                NumberOfStudentAccounts = numberOfStudentAccounts,
+                NumberOfTeacherAccounts = numberOfTeacherAccounts
+            };
+
+            //ViewData["NumberOfStudentAccounts"] = numberOfStudentAccounts;
+            //ViewData["NumberOfTeacherfAccounts"] = numberOfTeacherAccounts;
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
             return View();
         }

@@ -1,7 +1,12 @@
-﻿
+﻿@using WebsiteQuanLyLamViecNhom.Models.ViewModel;
+
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var numberOfAccounts = ViewData["NumberOfAccounts"] as AdminDashboardViewModel;
+
 }
+
+ 
 <div class="row">
     <div class="col-xl-8">
         <div class="card-transparent card-block card-stretch card-height">
@@ -16,7 +21,7 @@
                                             <div class="col-md-9">
                                                 <div class="mt-3 mt-md-0">
                                                     <h5 class="mb-1">Số lượng sinh viên</h5>
-                                                    <h3><span class="counter">2000</span></h3>
+                                                    <h3><span class="counter">@numberOfAccounts.NumberOfStudentAccounts</span></h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -34,7 +39,7 @@
                                             <div class="col-md-9">
                                                 <div class="mt-3 mt-md-0">
                                                     <h5 class="mb-1">Số lượng giảng viên</h5>
-                                                    <h3><span class="counter">100</span></h3>
+                                                    <h3><span class="counter">@numberOfAccounts.NumberOfTeacherAccounts</span></h3>
                                                 </div>
                                             </div>
                                         </div>

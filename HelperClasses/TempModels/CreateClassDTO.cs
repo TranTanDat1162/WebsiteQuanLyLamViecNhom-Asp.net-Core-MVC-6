@@ -26,6 +26,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public List<StudentDTO> Students{ get; set; }
 
         }
+        public ICollection<Class>? ClassListDTO { get; set; }
     }
 
 }
