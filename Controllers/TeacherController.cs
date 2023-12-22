@@ -9,8 +9,10 @@ using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using NuGet.Versioning;
+using Microsoft.AspNetCore.Authorization;
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
+    [Authorize(Roles = "Teacher")]
     public class TeacherController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -72,12 +74,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             {
                 CurrentGroups = groupList,
                 CurrentProjects = projectList,
-                ClassID = projectList.ToArray().First().ClassId,
+                ClassID = studentList.ToArray().First().ClassId,
                 StudentList = studentList
             };
 
             return View(ProjectDTO);
         }
+
         [Route("Teacher/TeacherClass/CreateProject/{id?}")]
         public async Task<IActionResult> CreateProject(int id, ProjectDTO.CreateProjectDTO createProjectDTO)
         {
@@ -103,6 +106,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             //return View("~/Views/Shared/Error.cshtml");
             return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
         }
+
+        /// <summary>
+        /// Lấy tt của group được gửi lên r gửi lên database
+        /// </summary>
+        /// <param name="id"></param> id (index) của lớp nắm group đó
+        /// <param name="createGroupDTO"></param> tt của group đc post lên
+        /// <returns></returns>
         [Route("Teacher/TeacherClass/CreateGroup/{id?}")]
         public async Task<IActionResult> CreateGroup(int id, ProjectDTO.CreateGroupDTO createGroupDTO)
         {
@@ -113,36 +123,60 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             var selectedProject = await _context.Project
                 .Where(p => p.Id == createGroupDTO.ProjectId)
                 .FirstOrDefaultAsync();
-            List<StudentClass> memberList = new List<StudentClass>();
-            foreach(var studentid in createGroupDTO.memberList)
+            if (ModelState.IsValid)
             {
-                var member = await _context.StudentClass
-                                    .Where(sc => sc.StudentId == studentid)
-                                    .FirstOrDefaultAsync();
-                memberList.Add(member);
-            }
-            if(ModelState.IsValid)
-            {
+                //Tạo Group mới dựa vào createGroupDTO
                 Group newGroup = new Group
                 {
                     MOTD = createGroupDTO.MOTD,
                     Project = selectedProject,
-                    Students = memberList,
                     LeaderID = createGroupDTO.LeaderID
-                };                             
-                _context.Group.Add(newGroup);
-                await _context.SaveChangesAsync();
+                };
+
+                //Lấy các StudentCLass từ dãy string trong createGroupDTO.memberList
+                List<StudentClass> memberList = new List<StudentClass>();
+                foreach (var studentid in createGroupDTO.memberList)
+                {
+                    var member = await _context.StudentClass
+                                        .Where(sc => sc.StudentId == studentid)
+                                        .Include(s => s.Student)
+                                        .Include(c => c.Class)
+                                        .FirstOrDefaultAsync();
+
+                    //Check nếu id này là leader thì add vô group
+                    if(studentid == createGroupDTO.LeaderID)
+                        newGroup.LeaderID = studentid;
+
+                    //Đề phòng thôi
+                    if(member != null)
+                    {
+                        member.Group = newGroup;
+                        memberList.Add(member);
+                    }
+                }
+
+                //Bỏ List StudentClass vừa lấy đc vào cái newGroup mới tạo rồi add vào context
+                if(memberList.Count > 0)
+                {
+                    newGroup.Students = memberList;
+                    _context.Add(newGroup);
+                    await _context.SaveChangesAsync();
+                    return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
+                }
+                //TODO: Trả về báo lỗi thiếu info
+                return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
+
             }
+            //TODO: Trả về báo lỗi sai cú pháp
             return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
         }
-
         public async Task<IActionResult> GetDependentOptions(List<string> selectedStudentIds)
         {
-            var dependentOptions = new List<Object>();
+            var dependentOptions = new List<object>();
             foreach (var studentid in selectedStudentIds)
             {
                 var fetchedStudent = await _context.Student
-                                        .Where(s => s.StudentCode == studentid)
+                                        .Where(s => s.Id == studentid)
                                         .FirstOrDefaultAsync();
                 var option = new
                 {
@@ -195,7 +229,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                         //Loop each student in the List
                         foreach (var student in createClassDTO.classDTO.Students)
                         {
-                            //Student? TempStudent = await _context.Student.FirstOrDefaultAsync(e => e.StudentCode == student.StudentCode);
                             //Try to fetch already existing student
                             Student? TempStudent = await _context.Student
                                         .Include(s => s.ClassList)

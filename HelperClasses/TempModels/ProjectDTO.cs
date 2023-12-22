@@ -14,17 +14,16 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         }
         public class  CreateGroupDTO
         {
-            public string Id { get; set; }
             public string MOTD { get; set; }
             public int ProjectId { get; set; }
             public string LeaderID { get; set; }
             public string[] memberList { get; set; }
         }
-        public int ClassID { get; set; }
+        public int? ClassID { get; set; }
         public CreateGroupDTO? createGroupDTO { get; set; }
         public CreateProjectDTO? createProjectDTO { get; set; }
-        public ICollection<Project>? CurrentProjects { get; set; }
-        public ICollection<Group>? CurrentGroups { get; set; }
-        public ICollection<StudentClass>? StudentList{ get; set; }
+        public ICollection<Project>? CurrentProjects { get; set; } = new List<Project>();
+        public ICollection<Group>? CurrentGroups { get; set; } = new List<Group>();
+        public ICollection<StudentClass> StudentList{ get; set; }
     }
 }
