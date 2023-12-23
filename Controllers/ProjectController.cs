@@ -37,25 +37,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             TeacherCode = "Teacher"
         };
 
-        //public async Task<IActionResult> Index(string id)
-        //{
-        //    // Lấy thông tin người dùng đăng nhập
-        //    viewModel = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        //    // Kiểm tra xem người dùng có tồn tại không
-        //    if (viewModel != null)
-        //    {
-        //        ViewData["Teacher"] = viewModel;
-        //        Teacher? currentTeacher = await _context.Teacher
-        //            .Include(t => t.ClassList)
-        //            .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
-        //        CreateClassDTO ClassList = new CreateClassDTO();
-        //        ClassList.ClassListDTO = currentTeacher.ClassList;
-        //        return View(ClassList);
-        //    }
-        //    // Xử lý trường hợp không có người dùng đăng nhập
-        //    return NotFound();
-        //}
-
         //TO-DO:
         //https://stackoverflow.com/questions/37554536/ho-do-i-show-a-button-that-links-to-a-page-only-if-the-user-is-authorized-to-vie
         // Return View for Teacher
@@ -68,13 +49,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 viewModelTeacher = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 ViewData["Teacher"] = viewModelTeacher;
                 //var result = await _context.Class.Where(t => t.Code == id).FirstOrDefaultAsync();
-                var group = await _context.Group.Where(t => t.Id == GroupId)
+                Group? group = await _context.Group.Where(t => t.Id == GroupId)
                                     .Include(p => p.Project)
                                     .Include(s => s.Students)
                                     .ThenInclude(sc => sc.Student)
                                     .FirstOrDefaultAsync();
                 GroupDTO groupDTO = new();
-                StudentClass leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
+                StudentClass? leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
                                             .FirstOrDefault();
 
                 var currentGroup = new GroupDTO.GroupVM
@@ -113,5 +94,17 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
             return View("~/Views/Project/Student.cshtml", result);
         }
+
+        //------------------Actions starts------------------->>
+
+
+        public async Task<IActionResult> CreateTask(Models.Task task)
+        {
+            return View();
+        }
+
+
+        //------------------Actions ends--------------------->>
+
     }
 }

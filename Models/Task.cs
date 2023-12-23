@@ -7,6 +7,7 @@ namespace WebsiteQuanLyLamViecNhom.Models
     {
         [Key]
         public string TaskId { get; set; }
+        public string TaskName { get; set; }
         public int Status { get; set; }
         public string Attachment { get; set; }
         public DateTime DeadLineDate { get; set; }
