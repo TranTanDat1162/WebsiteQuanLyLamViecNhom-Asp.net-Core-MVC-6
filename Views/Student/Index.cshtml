@@ -1,4 +1,6 @@
-﻿@{
+﻿@model WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO
+
+@{
     ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
     Layout = "~/Views/Shared/_StudentLayout.cshtml";
 }
@@ -45,238 +47,47 @@
         </div>
     </div>
 </div>
+@foreach (var item in Model.ClassListDTO)
+{
 <div class="row">
-    <div class="col-lg-6">
-        <div class="card-transparent mb-0 desk-info">
-            <div class="card-body p-0">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
+        <div class="col-lg-6">
+            <div class="card-transparent mb-0 desk-info">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
+                                        <h5 style="font-size: 24px" class="mb-3">
+                                            (@item.Code) @item.SubjectName
+                                        </h5>
+                                        <button type="button" class="btn btn-success mb-3" href="#" data-target="#class-setting-modal" data-toggle="modal">
+                                            <i class="ri-settings-4-fill pr-0"></i>
+                                        </button>
                                     </div>
-                                </div>
-                                <a href="/Project/Student" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
 
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+@*                                                <img style="width: 100px; height: 100px" src="https://drive.google.com/uc?id=@item.Teacher.ImgId&export=download" class="img-fluid avatar-40 rounded-circle" alt=""
+                                                 data-trigger="hover" data-toggle="popover" data-content="@item.Teacher" />
+*@                                            </a>
+                                        </div>
                                     </div>
+                                    <a href="/Project/Student" class="mb-3" style="padding-top: 10px;">
+                                        <button type="button" class="btn btn-primary btn-block">
+                                            Get Access
+                                        </button>
+                                    </a>
                                 </div>
-                                <a href="StudentList" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <a href="StudentList" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <a href="StudentList" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <a href="StudentList" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="card-transparent mb-0 desk-info">
-            <div class="card-body p-0">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <a href="StudentList" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <a href="StudentList" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <a href="StudentList" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <a href="StudentList" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 style="font-size: 24px" class="mb-3">
-                                    (231.ITE1459.B09) Đồ án
-                                </h5>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="iq-media-group">
-                                        <a href="user-profile.html" class="iq-media">
-                                            <img style="width: 100px; height: 100px" src="../assets/images/user/01.jpg" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                 data-trigger="hover" data-toggle="popover" data-content="Hoàng Văn Hiếu" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <a href="StudentList" class="mb-3" style="padding-top: 10px;">
-                                    <button type="button" class="btn btn-primary btn-block">
-                                        Get Access
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+}
 <div id="list" class="item-content animate__animated animate__fadeIn" data-toggle-extra="tab-content">
     <div class="table-responsive rounded bg-white mb-4">
         <table class="table mb-0 table-borderless tbl-server-info tble-min-width">
