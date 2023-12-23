@@ -33,7 +33,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             _userManager = userManager;
             _logger = logger;
         }
-
+        [Route("Teacher")]
         public async Task<IActionResult> Index()
         {
             // Lấy thông tin người dùng đăng nhập
@@ -52,13 +52,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             // Xử lý trường hợp không có người dùng đăng nhập
             return NotFound();
         }
-        [Route("Teacher/TeacherClass/{id}")]
+        [Route("Teacher/{id}")]
         public async Task<IActionResult> TeacherClass(string id)
         {
             ViewData["Teacher"] = viewModel;
 
             var projectList = await _context.Project
                 .Where(t => t.Class.Code == id)
+                .Include(c => c.Class)
                 .ToListAsync();
 
             var studentList = await _context.StudentClass

@@ -1,5 +1,5 @@
-﻿@model WebsiteQuanLyLamViecNhom.Models.Class
-@{
+﻿@model WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.GroupDTO
+@{ 
     Layout = "~/Views/Shared/_ProjectTeacherLayout.cshtml";
 }
 
@@ -1025,7 +1025,8 @@
                         <tr>
                             <td>
                                 <div class="media align-items-center">
-                                    <h6 class="ml-3">Paityn Siphron
+                                    <h6 class="ml-3">
+                                        @Model.GroupViewModel.LeaderName
                                     </h6>
                                     <span class="badge badge-leader">
                                         <i class="ri-vip-crown-fill"></i>
@@ -1034,69 +1035,19 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                <div class="media align-items-center">
-                                    <h6 class="ml-3">Kaylynn Press</h6>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="media align-items-center">
-                                    <h6 class="ml-3">Corey Press</h6>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="media align-items-center">
-                                    <h6 class="ml-3">Zain Carder</h6>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="media align-items-center">
-                                    <h6 class="ml-3">Erin Donin</h6>
-                                </div>
-                            </td>
-
-
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="media align-items-center">
-                                    <h6 class="ml-3">Mira Herwitz</h6>
-                                </div>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="media align-items-center">
-                                    <h6 class="ml-3">Kaiya George</h6>
-                                </div>
-                            </td>
-
-
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="media align-items-center">
-                                    <h6 class="ml-3">Lincoln George</h6>
-                                </div>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="media align-items-center">
-                                    <h6 class="ml-3">Paityn Siphron</h6>
-                                </div>
-                            </td>
-
-                        </tr>
+                        @foreach(var student in Model.GroupViewModel.memberList)
+                        {
+                            if (student.Student.StudentCode != Model.GroupViewModel.LeaderID)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="media align-items-center">
+                                            <h6 class="ml-3">@($"{student.Student.FirstName} {student.Student.LastName}")</h6>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>

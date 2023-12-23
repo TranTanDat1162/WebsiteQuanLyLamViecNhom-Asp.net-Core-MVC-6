@@ -105,11 +105,8 @@
             @foreach (var item in Model.CurrentProjects)
             {
                 <div class="col-lg-4 col-md-6">
-                    <div class="card card-block card-stretch card-height class-hover">
+                    <div class="card card-block card-stretch card-height">
                         <div class="card-body">
-                            <a href="/Project/Index">
-                                <span class="link-spanner"></span>
-                            </a>
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <div id="circle-progress-@item.Id"
                                 class="circle-progress-01 circle-progress circle-progress-primary"
@@ -146,13 +143,16 @@
         @foreach (var item in Model.CurrentGroups)
         {
             <div class="col-lg-6">
-                <div class="card">
+                <div class="card class-hover">
                     <div class="card-body">
+                        <a href="/Teacher/@item.Project.Class.Code/@item.Id">
+                            <span class="link-spanner"></span>
+                        </a>
                         <div class="row">
                             <div class="col-sm-8">
                                 <div class="d-flex align-items-center">
                                     <div id="circle-progress-@item.LeaderID"
-                                         class="circle-progress-01 circle-progress circle-progress-primary"
+                                         class="circle-progress-02 circle-progress circle-progress-primary"
                                          data-min-value="0"
                                          data-max-value="100"
                                          data-value="25"
