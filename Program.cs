@@ -89,8 +89,6 @@ using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>(
     var RoleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var UserManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<WebsiteQuanLyLamViecNhom.Models.BaseApplicationUser>>();
     string[] roleNames = { "Admin", "Teacher", "Student" };
-    IdentityResult roleResult;
-
     foreach (var roleName in roleNames)
     {
         var roleExist = await RoleManager.RoleExistsAsync(roleName);

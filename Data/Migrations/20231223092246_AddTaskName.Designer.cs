@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebsiteQuanLyLamViecNhom.Data;
 
@@ -11,9 +12,10 @@ using WebsiteQuanLyLamViecNhom.Data;
 namespace WebsiteQuanLyLamViecNhom.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231223092246_AddTaskName")]
+    partial class AddTaskName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -431,6 +433,7 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Attachment")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DeadLineDate")
@@ -447,10 +450,10 @@ namespace WebsiteQuanLyLamViecNhom.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<float?>("TaskGradedByLeader")
+                    b.Property<float>("TaskGradedByLeader")
                         .HasColumnType("real");
 
-                    b.Property<float?>("TaskGradedByLecturer")
+                    b.Property<float>("TaskGradedByLecturer")
                         .HasColumnType("real");
 
                     b.Property<string>("TaskName")
