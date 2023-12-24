@@ -47,30 +47,37 @@
         </div>
     </div>
 </div>
-<div class="row">
-    @foreach(var item in Model.ClassListDTO)
-    {
-        <div class="col-lg-6">
-            <div class="card-transparent mb-0 desk-info">
-                <div class="card-body p-0">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
+<div class="row" id="classContainer">
+    <div class="col-lg-12">
+        <div class="card-transparent mb-0 desk-info">
+            <div class="card-body p-0">
+                <div class="row">
+                    @foreach (var item in Model.ClassListDTO)
+                    {
+                        <div class="col-lg-4 class-card">
+                            <div class="card" data-id="my-card">
                                 <div class="card-body">
-                                    <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content" style="max-width:350px;">
                                         <h5 style="font-size: 24px" class="mb-3">
                                             (@item.Code) @item.SubjectName
                                         </h5>
-                                        <button type="button" class="btn btn-success mb-3" href="#" data-target="#class-setting-modal" data-toggle="modal">
-                                            <i class="ri-settings-4-fill pr-0"></i>
-                                        </button>
                                     </div>
-
+                                    <button type="button" class="btn btn-success mb-3" href="#" data-target="#class-setting-modal" data-toggle="modal" style="margin-left: 370px;margin-top: -140px">
+                                        <i class="ri-settings-4-fill pr-0"></i>
+                                    </button>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="iq-media-group">
                                             <a href="#" class="iq-media">
-                                                <img style="width: 100px; height: 100px" src="https://drive.google.com/uc?id=@item.Teacher.ImgId&export=download" class="img-fluid avatar-40 rounded-circle" alt=""
-                                                     data-trigger="hover" data-toggle="popover" data-content="@item.Teacher" />
+                                                @if (item.Teacher.ImgId != null)
+                                                {
+                                                    <img style="margin-top:-30px;width: 100px;height: 100px" src="https://drive.google.com/uc?id=@item.Teacher.ImgId&export=download" class="img-fluid avatar-40 rounded-circle" alt=""
+                                                         data-trigger="hover" data-toggle="popover" data-content="@item.Teacher" />
+                                                }
+                                                else
+                                                {
+                                                    <img style="margin-top:-30px;width: 100px; height: 100px" src="../assets/images/user/1.png" class="img-fluid avatar-40 rounded-circle" alt=""
+                                                         data-trigger="hover" data-toggle="popover" data-content="@item.Teacher" />
+                                                }
                                             </a>
                                         </div>
                                     </div>
@@ -82,11 +89,14 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
-    }
+    </div>
+    <div class="col-lg-12" style="margin-left: 675px;">
+        <button type="button" class="btn btn-primary" id="viewMoreBtn">Xem thêm</button>
+    </div>
 </div>
 <div id="list" class="item-content animate__animated animate__fadeIn" data-toggle-extra="tab-content">
     <div class="table-responsive rounded bg-white mb-4">
@@ -451,7 +461,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group mb-3">
-                            <label for="exampleInputText2" class="h5">Cách giao đề tài *</label>
+                            <label for="exampleInputText02" class="h5">Cách giao đề tài *</label>
                             <select name="type" class="selectpicker form-control" data-style="py-0">
                                 <option>GV giao</option>
                                 <option>SV đăng ký</option>
@@ -494,8 +504,8 @@
             <div class="modal-header d-block text-center pb-3 border-bttom">
                 <h3 class="modal-title" id="exampleModalCenterTitle01">Tạo Lớp mới</h3>
             </div>
-            <form asp-action="CreateClass">
-            <div class="modal-body">
+            <form asp-action="CreateClass" id="create-class-form">
+                <div class="modal-body">
                 <div class="row">
                         <div class="col-lg-6">
                             <div class="row">
@@ -523,7 +533,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
-                                        <label for="exampleInputText2" class="h5">Cách phân nhóm *</label>
+                                        <label for="exampleInputText2" class="h5">Cách phân nhóm </label>
                                         <select asp-for="classDTO.RoleGroup" asp-items="Html.GetEnumSelectList<RoleGroup>()" name="type" class="selectpicker form-control" data-style="py-0">
                                             <option selected="selected" value="">Please select</option>
                                         </select>
@@ -531,7 +541,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
-                                        <label for="exampleInputText2" class="h5">Cách giao đề tài *</label>
+                                        <label for="exampleInputText2" class="h5">Cách giao đề tài </label>
                                         <select asp-for="classDTO.RoleProject" asp-items="Html.GetEnumSelectList<RoleProject>()" name="type" class="selectpicker form-control" data-style="py-0">
                                             <option selected="selected" value="">Please select</option>
                                         </select>
@@ -540,7 +550,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label for="exampleInputText004" class="h5">Ngày mở lớp*</label>
-                                        <input asp-for="classDTO.OpenDate" type="date" class="form-control" id="exampleInputText004" value="">
+                                        <input asp-for="classDTO.OpenDate" type="date" class="form-control" id="exampleInputText0004" value="">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -607,6 +617,7 @@
 </div>
 <!-- Modal list end -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <!-- Import class script start -->
 <script>
@@ -618,6 +629,10 @@
         reader.onload = function (e) {
             var data = e.target.result;
             var workbook = XLSX.read(data, { type: 'binary' });
+            // Cập nhật thời gian thực vào trường Ngày khoá lớp
+            var currentDate = new Date();
+            var formattedDate = currentDate.toISOString().split('T')[0];
+            document.getElementById('exampleInputText0004').value = formattedDate;
 
             // Xử lý mã lớp và môn học
             handleClassCodeAndSubject(workbook);
@@ -690,28 +705,28 @@
 
                 var dobInput = document.createElement("input");
                 dobInput.setAttribute("type", "date"); // Adjust type based on desired format
-                dobInput.setAttribute("name", `classDTO.Students[${rowIndex-1}].DOB`);
+                dobInput.setAttribute("name", `classDTO.Students[${rowIndex - 1}].DOB`);
                 dobInput.setAttribute("style", "all: unset");
                 if (dob) {
                     const dateParts = dob.split("/");
-                    const formattedDob = `${dateParts[1]}/${dateParts[0] - 2 + 3}/${dateParts[2]}`; // mm/dd/yyyy
+                    const formattedDob = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // yyyy-mm-dd
 
                     const dobDate = new Date(formattedDob);
                     dobInput.valueAsNumber = dobDate.getTime();
                 }
-                else{
+                else {
                     const currentDate = new Date();
-                    // const year = currentDate.getFullYear();
-                    // const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
-                    // const day = currentDate.getDate().toString().padStart(2, "0");
-                    // const formattedDob = `${day}/${month}/${year}`;
+                    const year = currentDate.getFullYear();
+                    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+                    const day = currentDate.getDate().toString().padStart(2, "0");
+                    const formattedDob = `${year}-${month}-${day}`;
                     dobInput.valueAsNumber = currentDate.getTime();
                 }
 
                 newCell = newRow.insertCell();
                 newCell.appendChild(dobInput);
             }
-            
+
             startRow++;
         }
 
@@ -764,9 +779,116 @@
         document.getElementById('exampleInputText05').value = semester;
         document.getElementById('exampleInputText03').value = subjectCode;
     }
-    //# sourceURL=ImportClass.js
 </script>
+<script>
+    $(document).ready(function () {
+        // Số lớp hiển thị mặc định
+        var defaultClassCount = 6;
 
+        // Biến để theo dõi trạng thái của nút
+        var isShowingAllClasses = false;
+
+        // Ẩn hoặc hiện nút Xem thêm dựa trên số lượng lớp
+        function toggleViewMoreButton() {
+            var totalClasses = $('.class-card').length;
+
+            if (totalClasses > defaultClassCount) {
+                $('#viewMoreBtn').show();
+            } else {
+                $('#viewMoreBtn').hide();
+            }
+        }
+
+        // Ẩn các lớp thừa đi
+        hideExtraClasses();
+
+        // Xử lý khi nhấn vào nút Xem thêm hoặc Ẩn bớt
+        $('#viewMoreBtn').on('click', function () {
+            toggleExtraClasses();
+        });
+
+        // Hàm ẩn các lớp thừa đi
+        function hideExtraClasses() {
+            $('.class-card:gt(' + (defaultClassCount - 1) + ')').hide();
+            toggleViewMoreButton();
+        }
+
+        // Hàm hiện hoặc ẩn các lớp thừa khi nhấn nút Xem thêm hoặc Ẩn bớt
+        function toggleExtraClasses() {
+            var extraClasses = $('.class-card:gt(' + (defaultClassCount - 1) + ')');
+            extraClasses.slideToggle();
+
+            // Cập nhật trạng thái của biến và văn bản nút
+            isShowingAllClasses = !isShowingAllClasses;
+            var buttonText = isShowingAllClasses ? 'Ẩn bớt' : 'Xem thêm';
+            $('#viewMoreBtn').text(buttonText);
+        }
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Xử lý sự kiện khi form được submit
+        $('#create-class-form').submit(function (event) {
+            // Kiểm tra các trường cần thiết
+            var subjectName = $('#exampleInputText01');
+            var code = $('#exampleInputText02');
+            var openDate = $('#exampleInputText0004');
+            var subjectId = $('#exampleInputText03');
+            var year = $('#exampleInputText04');
+            var semester = $('#exampleInputText05');
+
+            // Kiểm tra xem các trường có bị trống không
+            var isValid = true;
+
+            if (!subjectName.val()) {
+                subjectName.addClass('is-invalid');
+                isValid = false;
+            } else {
+                subjectName.removeClass('is-invalid');
+            }
+
+            if (!code.val()) {
+                code.addClass('is-invalid');
+                isValid = false;
+            } else {
+                code.removeClass('is-invalid');
+            }
+
+            if (!openDate.val()) {
+                openDate.addClass('is-invalid');
+                isValid = false;
+            } else {
+                openDate.removeClass('is-invalid');
+            }
+
+            if (!subjectId.val()) {
+                subjectId.addClass('is-invalid');
+                isValid = false;
+            } else {
+                subjectId.removeClass('is-invalid');
+            }
+
+            if (!year.val()) {
+                year.addClass('is-invalid');
+                isValid = false;
+            } else {
+                year.removeClass('is-invalid');
+            }
+
+            if (!semester.val()) {
+                semester.addClass('is-invalid');
+                isValid = false;
+            } else {
+                semester.removeClass('is-invalid');
+            }
+
+            // Nếu không hợp lệ, ngăn chặn việc submit form và hiển thị thông báo
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 
 
 
