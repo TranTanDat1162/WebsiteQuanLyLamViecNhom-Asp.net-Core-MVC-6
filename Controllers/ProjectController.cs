@@ -117,8 +117,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
                 CurrentClass = group.Project.Class
             };
+
             var taskList = await _context.Task
                                          .Where(p => p.GroupId == group.Id)
+                                         .Include(sc => sc.StudentClass)
+                                         .ThenInclude(s => s.Student)
                                          .ToListAsync();
             if (taskList.Count > 0)
                 currentGroup.Tasks = taskList;
@@ -145,6 +148,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                         .Where(sc => sc.StudentId == studentid)
                                         .Include(s => s.Student)
                                         .Include(g => g.Group)
+                                        .Include(t => t.Tasks)
                                         .Include(c => c.Class)
                                         .FirstOrDefaultAsync();
 
@@ -162,9 +166,16 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     DeadLineDate = createTaskDTO.Deadline,
                     Description = createTaskDTO.Description,
                     Status = Models.TaskStatus.OnGoing,
-                    Group = memberList.FirstOrDefault().Group,
+                    Group = memberList.FirstOrDefault().Group
                 };
+
                 _context.Add(newtask);
+                foreach(var member in memberList)
+                {
+                    member.Tasks.Add(newtask);
+                }
+                _context.UpdateRange(memberList);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("StudentIndex", 
                     new { classCode = memberList.FirstOrDefault().Class.Code });
@@ -173,6 +184,67 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return RedirectToAction("StudentIndex",
                 new { Error = ModelState.ToString() });
         }
+
+        public async Task<IActionResult> UpdateTask(GroupDTO.UpdateTaskDTO updateTaskDTO)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var task = await _context.Task
+                                        .Where(sc => sc.TaskId == updateTaskDTO.TaskID)
+                                        .Include(sc => sc.StudentClass)
+                                            .ThenInclude(s => s.Student)
+                                        .Include(sc => sc.StudentClass)
+                                            .ThenInclude(c => c.Class)
+                                        .FirstOrDefaultAsync();
+
+                List<StudentClass> memberList = task.StudentClass.ToList();
+
+                //Only setting the status for now
+                task.Description = updateTaskDTO.Description;
+                task.Status = Models.TaskStatus.Pending;
+
+                _context.UpdateRange(memberList);
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("StudentIndex",
+                    new { classCode = memberList.FirstOrDefault().Class.Code });
+            }
+            // TODO: Return errors
+            return RedirectToAction("StudentIndex",
+                new { Error = ModelState.ToString() });
+        }
+
+        public async Task<IActionResult> VerifyTask(GroupDTO.UpdateTaskDTO updateTaskDTO)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var task = await _context.Task
+                                        .Where(sc => sc.TaskId == updateTaskDTO.TaskID)
+                                        .Include(sc => sc.StudentClass)
+                                            .ThenInclude(s => s.Student)
+                                        .Include(sc => sc.StudentClass)
+                                            .ThenInclude(c => c.Class)
+                                        .FirstOrDefaultAsync();
+
+                List<StudentClass> memberList = task.StudentClass.ToList();
+
+                //Only setting the status for now
+                task.Description = updateTaskDTO.Description;
+                task.Status = Models.TaskStatus.Complete;
+
+                _context.UpdateRange(memberList);
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("StudentIndex",
+                    new { classCode = memberList.FirstOrDefault().Class.Code });
+            }
+            // TODO: Return errors
+            return RedirectToAction("StudentIndex",
+                new { Error = ModelState.ToString() });
+        }
+
         //------------------Actions ends--------------------->>
 
     }
