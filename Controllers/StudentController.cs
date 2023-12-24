@@ -27,6 +27,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             _logger = logger;
         }
 
+        [Route("Student")]
         public async Task<IActionResult> Index()
         {
             // Lấy thông tin người dùng đăng nhập

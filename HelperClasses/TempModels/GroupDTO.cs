@@ -11,16 +11,18 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string ProjectName { get; set; }
             public string LeaderID { get; set; }
             public string LeaderName { get; set; } = string.Empty;
+            public Class CurrentClass { get; set; }
             public ICollection<StudentClass> memberList { get; set; }
             public ICollection<Models.Task>? Tasks { get; set; } = new List<Models.Task>();
         }
         public class TaskDTO
         {
-            public int TaskName { get; set; }
+            public string TaskName { get; set; }
             public string[] memberList { get; set; }
-            public DateTime? Deadline { get; set; }
+            public DateTime Deadline { get; set; }
             public string Description { get; set; }
         }
+        public TaskDTO createTaskDTO { get; set; }
         public GroupVM GroupViewModel {  get; set; }
 
     }

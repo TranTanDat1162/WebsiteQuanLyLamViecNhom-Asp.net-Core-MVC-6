@@ -7,6 +7,8 @@ using System.Security.Claims;
 using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using WebsiteQuanLyLamViecNhom.Models;
+using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.GroupDTO;
+using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.ProjectDTO;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -35,14 +37,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         static Teacher? viewModelTeacher = new Teacher
         {
             TeacherCode = "Teacher"
-        };
+        };  
 
         //TO-DO:
         //https://stackoverflow.com/questions/37554536/ho-do-i-show-a-button-that-links-to-a-page-only-if-the-user-is-authorized-to-vie
         // Return View for Teacher
-        [Route("Teacher/{id?}/{GroupId?}")]
+        [Route("Teacher/Project/{Class?}/{GroupId?}")]
         [Authorize(Roles = "Teacher")]
-        public async Task<IActionResult> TeacherIndex(string id, string GroupId)
+        public async Task<IActionResult> TeacherIndex(string Class, string GroupId)
         {
             try
             {
@@ -65,8 +67,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     ProjectId = group.ProjectId,
                     ProjectName = group.Project.Name,
                     memberList = group.Students,
-                    LeaderName = leader.Student.LastName + " " + leader.Student.FirstName
-            };
+                    LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
+                    CurrentClass = group.Project.Class
+
+                };
                 var taskList = await _context.Task
                                              .Where(p => p.GroupId == GroupId)
                                              .ToListAsync();
@@ -84,26 +88,91 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         }
 
         // Return View for Student
-        [Route("Project/Student/{id?}")]
+        [Route("Student/Project/{ClassCode?}")]
         [Authorize(Roles = "Student")]
-        public async Task<IActionResult> StudentIndex(string id)
+        public async Task<IActionResult> StudentIndex(string ClassCode)
         {
             viewModelStudent = await _context.Student.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             ViewData["Student"] = viewModelStudent;
-            var result = await _context.Class.Where(t => t.Code == id).FirstOrDefaultAsync();
 
-            return View("~/Views/Project/Student.cshtml", result);
+            Group? group = await _context.Group
+                        .Where(t => t.Project.Class.Code == ClassCode)
+                        .Include(p => p.Project)
+                        .ThenInclude(c => c.Class)
+                        .Include(s => s.Students)
+                        .ThenInclude(sc => sc.Student)
+                        .FirstOrDefaultAsync();
+
+            GroupDTO groupDTO = new();
+            StudentClass? leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
+                                        .FirstOrDefault();
+
+            var currentGroup = new GroupDTO.GroupVM
+            {
+                LeaderID = group.LeaderID,
+                MOTD = group.MOTD,
+                ProjectId = group.ProjectId,
+                ProjectName = group.Project.Name,
+                memberList = group.Students,
+                LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
+                CurrentClass = group.Project.Class
+            };
+            var taskList = await _context.Task
+                                         .Where(p => p.GroupId == group.Id)
+                                         .ToListAsync();
+            if (taskList.Count > 0)
+                currentGroup.Tasks = taskList;
+
+            groupDTO.GroupViewModel = currentGroup;
+
+            return View(groupDTO);
+
         }
 
         //------------------Actions starts------------------->>
 
 
-        public async Task<IActionResult> CreateTask(Models.Task task)
+        public async Task<IActionResult> CreateTask(GroupDTO.TaskDTO createTaskDTO)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+
+                List<StudentClass> memberList = new List<StudentClass>();
+
+                foreach (var studentid in createTaskDTO.memberList)
+                {
+                    var member = await _context.StudentClass
+                                        .Where(sc => sc.StudentId == studentid)
+                                        .Include(s => s.Student)
+                                        .Include(g => g.Group)
+                                        .Include(c => c.Class)
+                                        .FirstOrDefaultAsync();
+
+                    //Đề phòng thôi
+                    if (member != null)
+                    {
+                        memberList.Add(member);
+                    }
+                }
+
+                Models.Task newtask = new Models.Task()
+                {
+                    TaskName = createTaskDTO.TaskName,
+                    StudentClass = memberList,
+                    DeadLineDate = createTaskDTO.Deadline,
+                    Description = createTaskDTO.Description,
+                    Status = Models.TaskStatus.OnGoing,
+                    Group = memberList.FirstOrDefault().Group,
+                };
+                _context.Add(newtask);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("StudentIndex", 
+                    new { classCode = memberList.FirstOrDefault().Class.Code });
+            }
+            // TODO: Return errors
+            return RedirectToAction("StudentIndex",
+                new { Error = ModelState.ToString() });
         }
-
-
         //------------------Actions ends--------------------->>
 
     }

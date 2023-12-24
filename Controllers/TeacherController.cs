@@ -33,7 +33,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             _userManager = userManager;
             _logger = logger;
         }
-        [Route("Teacher")]
+
+        [Route("Teacher/Class")]
         public async Task<IActionResult> Index()
         {
             // Lấy thông tin người dùng đăng nhập
@@ -52,23 +53,24 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             // Xử lý trường hợp không có người dùng đăng nhập
             return NotFound();
         }
-        [Route("Teacher/{id}")]
-        public async Task<IActionResult> TeacherClass(string id)
+
+        [HttpGet("Teacher/{classCode}")]
+        public async Task<IActionResult> TeacherClass(string classCode)
         {
             ViewData["Teacher"] = viewModel;
 
             var projectList = await _context.Project
-                .Where(t => t.Class.Code == id)
+                .Where(t => t.Class.Code == classCode)
                 .Include(c => c.Class)
                 .ToListAsync();
 
             var studentList = await _context.StudentClass
-                .Where(s => s.Class.Code == id)
+                .Where(s => s.Class.Code == classCode)
                 .Include(l => l.Student)
                 .ToListAsync();
 
             var groupList = await _context.Group
-                .Where(t => t.Project.Class.Code == id)
+                .Where(t => t.Project.Class.Code == classCode)
                 .ToListAsync();
 
             ProjectDTO ProjectDTO = new()
@@ -82,7 +84,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return View(ProjectDTO);
         }
 
-        [Route("Teacher/TeacherClass/CreateProject/{id?}")]
         public async Task<IActionResult> CreateProject(int id, ProjectDTO.CreateProjectDTO createProjectDTO)
         {
             var currentclass = await _context.Class
@@ -114,7 +115,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         /// <param name="id"></param> id (index) của lớp nắm group đó
         /// <param name="createGroupDTO"></param> tt của group đc post lên
         /// <returns></returns>
-        [Route("Teacher/TeacherClass/CreateGroup/{id?}")]
         public async Task<IActionResult> CreateGroup(int id, ProjectDTO.CreateGroupDTO createGroupDTO)
         {
             var currentclass = await _context.Class
@@ -162,15 +162,16 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     newGroup.Students = memberList;
                     _context.Add(newGroup);
                     await _context.SaveChangesAsync();
-                    return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
+                    return  RedirectToAction("TeacherClass", new { classCode = currentclass.Code });
                 }
                 //TODO: Trả về báo lỗi thiếu info
-                return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
+                return RedirectToAction("TeacherClass", new { classCode = currentclass.Code });
 
             }
             //TODO: Trả về báo lỗi sai cú pháp
-            return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
+            return RedirectToAction("TeacherClass", new { classCode = currentclass.Code });
         }
+
         public async Task<IActionResult> GetDependentOptions(List<string> selectedStudentIds)
         {
             var dependentOptions = new List<object>();
@@ -189,7 +190,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             }
             return Json(new { data = dependentOptions });
         }
-
 
         public async Task<IActionResult> CreateClass(CreateClassDTO createClassDTO)
         {
