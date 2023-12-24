@@ -707,24 +707,25 @@
                 dobInput.setAttribute("type", "date"); // Adjust type based on desired format
                 dobInput.setAttribute("name", `classDTO.Students[${rowIndex - 1}].DOB`);
                 dobInput.setAttribute("style", "all: unset");
+
                 if (dob) {
                     const dateParts = dob.split("/");
-                    const formattedDob = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // yyyy-mm-dd
+                    const formattedDob = `${dateParts[1]}/${dateParts[0] - 2 + 3}/${dateParts[2]}`; // mm/dd/yyyy
 
                     const dobDate = new Date(formattedDob);
                     dobInput.valueAsNumber = dobDate.getTime();
-                }
-                else {
+                } else {
                     const currentDate = new Date();
                     const year = currentDate.getFullYear();
                     const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
                     const day = currentDate.getDate().toString().padStart(2, "0");
-                    const formattedDob = `${year}-${month}-${day}`;
+                    const formattedDob = `${month}/${day}/${year}`;
                     dobInput.valueAsNumber = currentDate.getTime();
                 }
 
                 newCell = newRow.insertCell();
                 newCell.appendChild(dobInput);
+
             }
 
             startRow++;
@@ -820,11 +821,24 @@
 
             // Cập nhật trạng thái của biến và văn bản nút
             isShowingAllClasses = !isShowingAllClasses;
+            
             var buttonText = isShowingAllClasses ? 'Ẩn bớt' : 'Xem thêm';
             $('#viewMoreBtn').text(buttonText);
         }
+
+        // Ẩn nút Xem thêm khi tìm kiếm
+        $('#search-input').on('input', function () {
+            var searchTerm = $(this).val().trim().toLowerCase();
+
+            if (searchTerm !== '') {
+                $('#viewMoreBtn').hide();
+            } else {
+                toggleViewMoreButton();
+            }
+        });
     });
 </script>
+
 <script>
     $(document).ready(function () {
         // Xử lý sự kiện khi form được submit
@@ -889,6 +903,60 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function () {
+        // Lấy thông báo từ TempData
+        var errorMessage = '@TempData["ErrorMessage"]';
+        var errorMessage = '@Html.Raw(TempData["ErrorMessage"])';
+
+        if (errorMessage) {
+            // Hiển thị thông báo sử dụng thư viện sweetalert2 (hoặc thư viện khác tùy chọn)
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: errorMessage,
+            });
+        }
+    });
+        //# sourceURL=AlertSameClass.js
+
+</script>
+<script>
+    const searchInput = document.querySelector('.search-input');
+    const classContainer = document.getElementById('classContainer');
+    const showMoreButton = document.getElementById('viewMoreBtn'); // Đặt id thực tế của nút "Xem thêm"
+
+    searchInput.addEventListener('keyup', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        const classCards = classContainer.querySelectorAll('.class-card');
+        let visibleCount = 0;
+
+        classCards.forEach(card => {
+            const cardTitle = card.querySelector('.breadcrumb-content h5').textContent.toLowerCase();
+            if (cardTitle.includes(searchTerm)) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Kiểm tra số lượng lớp học hiển thị sau khi tìm kiếm
+        if (visibleCount > 6) {
+            showMoreButton.style.display = 'block';
+        } else {
+            // Kiểm tra xem văn bản tìm kiếm có bị xóa không
+            if (searchTerm === '') {
+                // Nếu bị xóa, hiển thị nút "Xem thêm"
+                showMoreButton.style.display = 'block';
+            } else {
+                // Nếu không bị xóa, ẩn nút "Xem thêm"
+                showMoreButton.style.display = 'none';
+            }
+        }
+    });
+</script>
+
 
 
 

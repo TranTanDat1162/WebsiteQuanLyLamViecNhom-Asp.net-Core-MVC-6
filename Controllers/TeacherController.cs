@@ -310,10 +310,17 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     }
                     catch (Exception ex)
                     {
-                        RedirectToAction("Index", "Teacher", ex.Message);
+                        TempData["ErrorMessage"] = "Đã xảy ra lỗi trong quá trình tạo lớp.";
+                        _logger.LogError(ex, "Error creating class");
+                        return RedirectToAction("Error", "Home");
                     }
                 }
-                return RedirectToAction("Index", "Teacher");
+                else
+                {
+                    // Lớp đã tồn tại, thêm thông báo vào TempData
+                    TempData["ErrorMessage"] = "Lớp đã tồn tại.";
+                    return RedirectToAction("Index", "Teacher");
+                }
             }
             return RedirectToAction("Index", "Teacher", ModelState);
         }
