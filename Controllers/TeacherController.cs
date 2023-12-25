@@ -10,6 +10,7 @@ using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using NuGet.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     [Authorize(Roles = "Teacher")]
@@ -108,6 +109,41 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             //return View("~/Views/Shared/Error.cshtml");
             return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
         }
+
+        public async Task<IActionResult> UpdateProject(int id, ProjectDTO.UpdateProjectDTO updateProjectDTO)
+        {
+            var currentProject = await _context.Project
+                .Where(t => t.Id == id)
+                .Include(c => c.Class)
+                .FirstOrDefaultAsync();
+
+            if (currentProject != null && ModelState.IsValid)
+            {
+
+                currentProject.Name = updateProjectDTO.Name;
+                currentProject.Deadline = updateProjectDTO.Deadline;
+                currentProject.Requirements = updateProjectDTO.Requirement;
+
+                if (updateProjectDTO.Attachment != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    byte[] data = uploadHelper.ConvertToByteArray(updateProjectDTO.Attachment);
+                    var fileID =
+                    gDriveServices.UploadFile(currentProject.Class.Code + currentProject.Id.ToString(), data, "1HN1IZIiLErNA_JX3ze2DC8lUvWmGWg-T");
+                }
+
+                _context.Update(currentProject);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("New project has been created {Project}",
+                    new { projectId = currentProject.Id, code = currentProject.Name, Class = currentProject.ClassId });
+            }
+            //TODO: create a dynamic error view
+            //return View("~/Views/Shared/Error.cshtml");
+            return RedirectToAction("TeacherClass", new { classCode = currentProject.Class.Code });
+        }
+
 
         /// <summary>
         /// Lấy tt của group được gửi lên r gửi lên database
