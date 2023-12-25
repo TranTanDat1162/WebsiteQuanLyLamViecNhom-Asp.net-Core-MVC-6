@@ -32,6 +32,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         {
             // Lấy thông tin người dùng đăng nhập
             viewModel = await _context.Student.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
             // Kiểm tra xem người dùng có tồn tại không
             if (viewModel != null)
             {
