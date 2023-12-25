@@ -140,11 +140,14 @@
                                                             @task.TaskName
                                                         </h5>
                                                         <div class="media align-items-center">
-                                                            <div class="btn bg-body mr-3">
-                                                                <i class="ri-align-justify mr-2"></i>5/10
-                                                            </div>
+                                                            @if (@task.TaskGradedByLeader != 0)
+                                                            {
+                                                                <div class="btn text-success bg-success-light mr-3">
+                                                                    <i class="ri-thumb-up-line mr-2"></i>@task.TaskGradedByLeader /10
+                                                                </div>
+                                                            }
                                                             <div class="btn bg-body">
-                                                                <i class="ri-survey-line mr-2"></i>3
+                                                                <i class="ri-pass-valid-line mr-2"></i>5/10
                                                             </div>
                                                         </div>
                                                     </div>
@@ -185,10 +188,11 @@
                                                                            class="h5">Thành viên phụ trách</label>
                                                                     <select name="type"
                                                                             class="selectpicker form-control"
-                                                                            data-style="py-0">
+                                                                            data-style="py-0"
+                                                                            multiple>
                                                                         @foreach (var member in task.StudentClass)
                                                                         {
-                                                                            <option>@member.Student.FirstName</option>
+                                                                            <option disabled selected>@member.Student.FirstName</option>
                                                                         }
                                                                     </select>
                                                                 </div>
@@ -231,6 +235,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="form-group">
+                                                        <label class="h5" for="scoreGrade">Chấm điểm</label>
+                                                        <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                                            <p><output id="value"></output></p>
+                                                        </div>
+                                                        <input asp-for="updateTaskDTO.Grade" type="range" min="0" max="10" step="0.25" class="custom-range" id="scoreGrade">
+                                                    </div>
                                                 }
                                                 <div class="form-group mb-3">
                                                     <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
@@ -241,6 +252,7 @@
                                                                for="inputGroupFile002">Upload media</label>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group mb-0 ">
                                                     <div class="row">
                                                         <div class="col-lg-12">
@@ -322,10 +334,11 @@
                                                                                class="h5">Thành viên phụ trách</label>
                                                                         <select name="type"
                                                                                 class="selectpicker form-control"
-                                                                                data-style="py-0">
+                                                                                data-style="py-0"
+                                                                                multiple>
                                                                             @foreach (var member in task.StudentClass)
                                                                             {
-                                                                                <option>@member.Student.FirstName</option>
+                                                                                <option disabled selected>@member.Student.FirstName</option>
                                                                             }
                                                                         </select>
                                                                     </div>
@@ -502,3 +515,11 @@
     </div>
 </div>
 <!--Model List end-->
+<script>
+    const value = document.querySelector("#value");
+    const input = document.querySelector("#scoreGrade");
+    value.textContent = input.value;
+    input.addEventListener("input", (event) => {
+        value.textContent = event.target.value;
+    });
+</script>

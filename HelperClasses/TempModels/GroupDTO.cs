@@ -26,6 +26,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         {
             public string TaskID { get; set; }
             public string Description { get; set; }
+            public float? Grade { get; set; }
         }
         public UpdateTaskDTO updateTaskDTO { get; set; }
         public TaskDTO createTaskDTO { get; set; }

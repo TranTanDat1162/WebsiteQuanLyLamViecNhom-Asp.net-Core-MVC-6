@@ -232,6 +232,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
                 //Only setting the status for now
                 task.Description = updateTaskDTO.Description;
+                task.TaskGradedByLeader = updateTaskDTO.Grade;
                 task.Status = Models.TaskStatus.Complete;
 
                 _context.UpdateRange(memberList);
