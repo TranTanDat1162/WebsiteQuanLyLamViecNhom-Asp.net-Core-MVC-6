@@ -37,6 +37,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         [Route("Teacher/Class")]
         public async Task<IActionResult> Index()
         {
+
             // Lấy thông tin người dùng đăng nhập
             viewModel = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             // Kiểm tra xem người dùng có tồn tại không

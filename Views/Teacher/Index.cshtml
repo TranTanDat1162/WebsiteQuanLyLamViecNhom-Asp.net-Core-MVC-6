@@ -10,10 +10,10 @@
                     <h5>Danh sách lớp</h5>
                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                         <div class="dropdown status-dropdown mr-3">
-                            <div class="dropdown-toggle" id="dropdownMenuButton03" data-toggle="dropdown" aria-expanded="false">
+                            <div class="dropdown-toggle" id="semesterDropdown" data-toggle="dropdown" aria-expanded="false">
                                 <div class="btn bg-body"><span class="h6">Học kỳ 1A</span><i class="ri-arrow-down-s-line ml-2 mr-0"></i></div>
                             </div>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton03" style="">
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="semesterDropdown" style="">
                                 <a class="dropdown-item" href="#">Học kỳ 1A</a>
                                 <a class="dropdown-item" href="#">Học kỳ 1B</a>
                                 <a class="dropdown-item" href="#">Học kỳ 2A</a>
@@ -22,10 +22,10 @@
                             </div>
                         </div>
                         <div class="dropdown status-dropdown mr-3">
-                            <div class="dropdown-toggle" id="dropdownMenuButton03" data-toggle="dropdown" aria-expanded="false">
+                            <div class="dropdown-toggle" id="yearDropdown" data-toggle="dropdown" aria-expanded="false">
                                 <div class="btn bg-body"><span class="h6">Năm học 2020-2021</span><i class="ri-arrow-down-s-line ml-2 mr-0"></i></div>
                             </div>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton03" style="">
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="yearDropdown" style="">
                                 <a class="dropdown-item" href="#">Năm học 2020-2021</a>
                                 <a class="dropdown-item" href="#">Năm học 2021-2022</a>
                                 <a class="dropdown-item" href="#">Năm học 2022-2023</a>
@@ -34,8 +34,8 @@
                         </div>
                         <div class="iq-search-bar device-search" style="padding-right: 15px;">
                             <form action="#" class="searchbox">
-                                <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                                <input type="text" class="text search-input" placeholder="Search here...">
+                                <p class="search-link"><i class="ri-search-line"></i></p>
+                                <input type="text" class="text search-input" placeholder="Tìm kiếm">
                             </form>
                         </div>
                         <div class="pl-3 btn-new border-left">
@@ -825,17 +825,6 @@
             var buttonText = isShowingAllClasses ? 'Ẩn bớt' : 'Xem thêm';
             $('#viewMoreBtn').text(buttonText);
         }
-
-        // Ẩn nút Xem thêm khi tìm kiếm
-        $('#search-input').on('input', function () {
-            var searchTerm = $(this).val().trim().toLowerCase();
-
-            if (searchTerm !== '') {
-                $('#viewMoreBtn').hide();
-            } else {
-                toggleViewMoreButton();
-            }
-        });
     });
 </script>
 
@@ -918,16 +907,17 @@
             });
         }
     });
-        //# sourceURL=AlertSameClass.js
-
 </script>
 <script>
     const searchInput = document.querySelector('.search-input');
     const classContainer = document.getElementById('classContainer');
     const showMoreButton = document.getElementById('viewMoreBtn'); // Đặt id thực tế của nút "Xem thêm"
 
-    searchInput.addEventListener('keyup', () => {
-        const searchTerm = searchInput.value.toLowerCase();
+    // Biến để theo dõi trạng thái của nút
+    let isShowingAllClasses = false;
+
+    searchInput.addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
         const classCards = classContainer.querySelectorAll('.class-card');
         let visibleCount = 0;
 
@@ -944,19 +934,33 @@
         // Kiểm tra số lượng lớp học hiển thị sau khi tìm kiếm
         if (visibleCount > 6) {
             showMoreButton.style.display = 'block';
-        } else {
+
             // Kiểm tra xem văn bản tìm kiếm có bị xóa không
             if (searchTerm === '') {
-                // Nếu bị xóa, hiển thị nút "Xem thêm"
-                showMoreButton.style.display = 'block';
-            } else {
-                // Nếu không bị xóa, ẩn nút "Xem thêm"
-                showMoreButton.style.display = 'none';
+                // Nếu bị xóa, tự động thực hiện chức năng "Xem thêm"
+                handleViewMore();
             }
+        } else {
+            // Ẩn nút "Xem thêm" khi không có kết quả tìm kiếm
+            showMoreButton.style.display = 'none';
         }
     });
-</script>
+    function handleViewMore() {
+        // Cập nhật trạng thái của nút và thực hiện chức năng tương ứng
+        isShowingAllClasses = !isShowingAllClasses;
+        var buttonText = isShowingAllClasses ? 'Xem thêm' : 'Ẩn bớt';
+        $('#viewMoreBtn').text(buttonText);
 
+        // Thực hiện chức năng tương ứng với trạng thái mới
+        if (isShowingAllClasses) {
+            // Nếu đang hiển thị tất cả, ẩn các lớp thừa đi
+            $('.class-card:gt(5)').hide();
+        } else {
+            // Nếu không hiển thị tất cả, hiện thêm lớp thừa
+            $('.class-card:gt(5)').show();
+        }
+    }
+</script>
 
 
 
