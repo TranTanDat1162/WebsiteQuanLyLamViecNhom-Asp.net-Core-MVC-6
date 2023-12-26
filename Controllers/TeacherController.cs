@@ -107,7 +107,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             }
             //TODO: create a dynamic error view
             //return View("~/Views/Shared/Error.cshtml");
-            return RedirectToRoute(new { controller = "Teacher", action = "TeacherClass", id = currentclass.Code });
+            return RedirectToRoute(new { controller = "Teacher", action = currentclass.Code});
         }
 
         /// <summary>
