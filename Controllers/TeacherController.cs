@@ -10,6 +10,9 @@ using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using NuGet.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
+using Newtonsoft.Json;
+using System.Net.Mail;
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     [Authorize(Roles = "Teacher")]
@@ -79,9 +82,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 CurrentGroups = groupList,
                 CurrentProjects = projectList,
                 ClassID = studentList.ToArray().First().ClassId,
-                StudentList = studentList
+                StudentList = studentList                
             };
-
+            
+            
             return View(ProjectDTO);
         }
 
@@ -109,6 +113,56 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             //return View("~/Views/Shared/Error.cshtml");
             return RedirectToRoute(new { controller = "Teacher", action = currentclass.Code});
         }
+
+        public async Task<IActionResult> UpdateProject(int id, ProjectDTO.UpdateProjectDTO updateProjectDTO)
+        {
+            var currentProject = await _context.Project
+                .Where(t => t.Id == id)
+                .Include(c => c.Class)
+                .FirstOrDefaultAsync();
+
+            if (currentProject != null && ModelState.IsValid)
+            {
+
+                currentProject.Name = updateProjectDTO.Name;
+                currentProject.Deadline = updateProjectDTO.Deadline;
+                currentProject.Requirements = updateProjectDTO.Requirement;
+
+                if (updateProjectDTO.Attachments != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    List<List<string>> uploadFiles = new List<List<string>>();
+                    int i = 0;
+
+                    foreach(var attachment in updateProjectDTO.Attachments)
+                    {
+                        byte[] data = uploadHelper.ConvertToByteArray(attachment);
+
+                        var fileID =
+                        gDriveServices.UploadFile(currentProject.Class.Code+attachment.FileName, data, "1HN1IZIiLErNA_JX3ze2DC8lUvWmGWg-T");
+
+                        var downloadlink = gDriveServices
+                            .GetDownloadLink((string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID)));
+
+                        if(downloadlink != null)
+                            uploadFiles.Add(new List<string> { downloadlink, attachment.FileName });
+                    }
+                    currentProject.fileIDJSON = JsonConvert.SerializeObject(uploadFiles);
+
+                }
+
+                _context.Update(currentProject);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("New project has been created {Project}",
+                    new { projectId = currentProject.Id, code = currentProject.Name, Class = currentProject.ClassId });
+            }
+            //TODO: create a dynamic error view
+            //return View("~/Views/Shared/Error.cshtml");
+                return RedirectToAction("TeacherClass", new { classCode = currentProject.Class.Code });
+        }
+
 
         /// <summary>
         /// Lấy tt của group được gửi lên r gửi lên database

@@ -99,7 +99,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
         /// 1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP: Teacher profile picture
         /// 
         /// <returns>A string the the file's ID which can be used for loading the pic</returns>
-        public string? UploadFile(string fileName, byte[] data, string destinationFolderId)
+        public Object UploadFile(string fileName, byte[] data, string destinationFolderId)
         {
             Google.Apis.Drive.v3.Data.File uploadedFile = null;
 
@@ -124,24 +124,30 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
                 var existingFile = _driveClient.Files.List().Execute().Files.FirstOrDefault(f => f.Name == fileName);
                 if (existingFile != null)
                 {
-                    // If a file with the same name exists, update it
-                    FilesResource.UpdateMediaUpload updateRequest = _driveClient.Files.Update(metadata, existingFile.Id, stream, mimetype);
-                    updateRequest.Fields = "id";
-                    updateRequest.Upload();
+                    // If a file with the same name exists, delete then remake it
+                    FilesResource.DeleteRequest deleteRequest = _driveClient.Files.Delete(existingFile.Id);
+                    deleteRequest.Fields = "*";
+                    deleteRequest.Execute();
 
-                    uploadedFile = updateRequest.ResponseBody;
+                    FilesResource.CreateMediaUpload createRequest = _driveClient.Files.Create(metadata, stream, mimetype);
+                    createRequest.Fields = "*";
+                    createRequest.Upload();
+
+                    uploadedFile = createRequest.ResponseBody;
+                    return new { FileId = uploadedFile?.Id, Updated = true, FileName = fileName };
                 }
                 else
                 {
                     FilesResource.CreateMediaUpload createRequest = _driveClient.Files.Create(metadata, stream, mimetype);
-                    createRequest.Fields = "id";
+                    createRequest.Fields = "*";
                     createRequest.Upload();
 
                     uploadedFile = createRequest.ResponseBody;
+                    return new {FileId = uploadedFile?.Id, Updated = false };
                 }
             }
 
-            return uploadedFile?.Id;
+            return new { FileId = uploadedFile?.Id, Updated = false };
         }
         //Returns a download link that can be use by <img src="link"/>
         public string? GetDownloadLink(string fileId)
@@ -153,12 +159,23 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
             if (_driveClient != null && !string.IsNullOrWhiteSpace(fileId))
             {
                 FilesResource.GetRequest getRequest = _driveClient.Files.Get(fileId);
-                getRequest.Fields = "webContentLink";
+                getRequest.Fields = "webContentLink, mimeType"; // Request both webContentLink and mimeType
 
                 fileResponse = getRequest.Execute();
             }
 
-            return fileResponse?.WebContentLink;
+            string downloadLink = "no file attached";
+
+            if (fileResponse != null)
+            {
+                // Extract extension from mimeType
+                string extension = fileResponse?.MimeType?.Split('/')[1];
+
+                // Construct download link with extension
+                downloadLink = fileResponse?.WebContentLink + "?e=" + extension;
+            }
+
+            return downloadLink;
         }
     }
 }

@@ -105,8 +105,19 @@
             @foreach (var item in Model.CurrentProjects)
             {
                 <div class="col-lg-4 col-md-6">
-                    <div class="card card-block card-stretch card-height">
+                    <div class="card card-block card-stretch card-height class-hover">
                         <div class="card-body">
+                            <a href="#" onclick="showProjectDetail(this)"
+                                        data-target="#project-detail-modal" data-toggle="modal"
+                                        data-project-name="@item.Name"
+                                        data-project-requirement="@item.Requirements"
+                                        data-project-deadline="@item.Deadline.ToString("yyyy-MM-dd")"
+                                        data-project-id="@item.Id"
+                                        data-project-attachment="@item.fileIDJSON"
+                                        >
+                                <span class="link-spanner"></span>
+                            </a>
+
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <div id="circle-progress-@item.Id"
                                 class="circle-progress-01 circle-progress circle-progress-primary"
@@ -158,7 +169,7 @@
                                          data-value="25"
                                          data-type="percent"></div>
                                     <div class="ml-3">
-                                        <h5 class="mb-1">@($"{item.Project.Name} {item.LeaderID}")</h5>
+                                        <h5 class="mb-1">@($"{item.Project.Name} {item.LeaderID}")</h5  
                                         <p class="mb-0">
                                             @item.MOTD
                                         </p>
@@ -181,7 +192,6 @@
                     </div>
                 </div>
             </div>
-
         }
     </div>
 </div>
@@ -303,6 +313,62 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" role="dialog" aria-modal="true" id="project-detail-modal">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-block text-center pb-3 border-bttom">
+                <h3 class="modal-title" id="exampleModalCenterTitle01">Cập nhật Project</h3>
+            </div>
+            <form asp-action="UpdateProject" asp-controller="Teacher" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" name="id" id="updateProjectDTO_id" />
+                        <div class="col-lg-12">
+                            <div class="form-group mb-3">
+                                <label for="exampleInputText01" class="h5">Tên Project</label>
+                                <input asp-for="updateProjectDTO.Name" type="text" class="form-control" id="updateProjectDTO_name" placeholder="Project Name">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group mb-3">
+                                <label for="exampleInputText2" class="h5">Yêu cầu</label>
+                                <input asp-for="updateProjectDTO.Requirement" type="text" class="form-control" id="updateProjectDTO_require" placeholder="Placeholder">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group mb-3">
+                                <label for="exampleInputText004" class="h5">Ngày kết thúc</label>
+                                <input asp-for="updateProjectDTO.Deadline" type="date" class="form-control" id="updateProjectDTO_deadline">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group mb-0" id="updateProjectDTO_attachments">
+                                <label for="exampleInputText01" class="h5">Các tệp cũ</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group mb-0">
+                                <label for="exampleInputText01" class="h5">Đính kèm tệp mới</label>
+                                <div class="custom-file">
+                                    <input asp-for="updateProjectDTO.Attachments" type="file" class="custom-file-input" id="updateProjectDTO_attachment" multiple >
+                                    <label class="custom-file-label" for="inputGroupFile003">Upload media</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                <input type="submit" value="Cập nhật" class="btn btn-primary mr-3" />
+                                <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal list end -->
 <script>
     // Summary: Khi Teacher chọn ds thành viên của group thì 
@@ -316,7 +382,7 @@
         fetchDependentOptions(selectedStudentIds);
     });
 
-    // Dựa vào element <select>, Lấy element <option>
+    // Dựa vào element select, Lấy element option
     // được chọn và trả về value của từng option đó 
     // dưới dạng array String.
     function getSelectValues(select) {
@@ -375,5 +441,56 @@
         });
     }
 
+    function showProjectDetail(project) {
+        let pName = project.getAttribute("data-project-name");
+        let pRequirement = project.getAttribute("data-project-requirement");
+        let pDeadline = project.getAttribute("data-project-deadline");
+        let pId = project.getAttribute("data-project-id");
+
+        let pAttachments = project.getAttribute("data-project-attachment")
+
+        document.getElementById("updateProjectDTO_name").value = pName;
+        document.getElementById("updateProjectDTO_require").value = pRequirement;
+        document.getElementById("updateProjectDTO_deadline").value = pDeadline;
+        document.getElementById("updateProjectDTO_id").value = pId;
+
+        if(pAttachments != null){
+            let pAttachmentList = JSON.parse(pAttachments);
+
+            const attachmentsContainer = document.getElementById("updateProjectDTO_attachments");
+            while (attachmentsContainer.children.length > 1) {
+                attachmentsContainer.removeChild(attachmentsContainer.lastChild);
+            }
+
+            // Create the heading element with the link
+            const heading = document.createElement("h5");
+            heading.classList.add("pl-2", "mb-3");
+            heading.textContent = "";
+
+            for (let i = 0; i < pAttachmentList.length; i++) {
+                let attachment = pAttachmentList[i];
+
+                // Access download link and file name separately
+                const downloadLink = attachment[0]; // First element holds the link
+                const fileName = attachment[1];    // Second element holds the name
+
+                // Create the "New" badge
+                const badge = document.createElement("a");
+                badge.classList.add("badge", "badge-info", "mr-2");
+                badge.textContent = fileName;
+
+                // Append the badge to the heading
+                heading.appendChild(badge);
+
+                // Add downloadlink to a tag
+                badge.href = downloadLink;
+
+                // Append the <a> element to the container
+                attachmentsContainer.appendChild(heading);
+
+            }
+        }
+    }
     //# sourceURL=UpdateLeaderSelect.js
+
 </script>

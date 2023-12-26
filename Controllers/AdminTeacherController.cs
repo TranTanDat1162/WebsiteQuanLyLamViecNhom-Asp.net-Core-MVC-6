@@ -126,7 +126,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     var fileID =
                     gDriveServices.UploadFile(autogenTeacherId, data, "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
 
-                    teacher.ImgId = fileID;
+                    
+                    teacher.ImgId = (string)(fileID?.GetType().GetProperty("uploadedFile?.Id")?.GetValue(fileID));
                 }
 
                 //_context.Add(teacher);
