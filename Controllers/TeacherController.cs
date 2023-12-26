@@ -11,6 +11,8 @@ using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using NuGet.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
+using Newtonsoft.Json;
+using System.Net.Mail;
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     [Authorize(Roles = "Teacher")]
@@ -79,9 +81,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 CurrentGroups = groupList,
                 CurrentProjects = projectList,
                 ClassID = studentList.ToArray().First().ClassId,
-                StudentList = studentList
+                StudentList = studentList                
             };
-
+            
+            
             return View(ProjectDTO);
         }
 
@@ -124,14 +127,29 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 currentProject.Deadline = updateProjectDTO.Deadline;
                 currentProject.Requirements = updateProjectDTO.Requirement;
 
-                if (updateProjectDTO.Attachment != null)
+                if (updateProjectDTO.Attachments != null)
                 {
                     GDriveServices gDriveServices = new GDriveServices();
                     UploadHelper uploadHelper = new UploadHelper();
 
-                    byte[] data = uploadHelper.ConvertToByteArray(updateProjectDTO.Attachment);
-                    var fileID =
-                    gDriveServices.UploadFile(currentProject.Class.Code + currentProject.Id.ToString(), data, "1HN1IZIiLErNA_JX3ze2DC8lUvWmGWg-T");
+                    List<List<string>> uploadFiles = new List<List<string>>();
+                    int i = 0;
+
+                    foreach(var attachment in updateProjectDTO.Attachments)
+                    {
+                        byte[] data = uploadHelper.ConvertToByteArray(attachment);
+
+                        var fileID =
+                        gDriveServices.UploadFile(currentProject.Class.Code+attachment.FileName, data, "1HN1IZIiLErNA_JX3ze2DC8lUvWmGWg-T");
+
+                        var downloadlink = gDriveServices
+                            .GetDownloadLink((string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID)));
+
+                        if(downloadlink != null)
+                            uploadFiles.Add(new List<string> { downloadlink, attachment.FileName });
+                    }
+                    currentProject.fileIDJSON = JsonConvert.SerializeObject(uploadFiles);
+
                 }
 
                 _context.Update(currentProject);
@@ -141,7 +159,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             }
             //TODO: create a dynamic error view
             //return View("~/Views/Shared/Error.cshtml");
-            return RedirectToAction("TeacherClass", new { classCode = currentProject.Class.Code });
+                return RedirectToAction("TeacherClass", new { classCode = currentProject.Class.Code });
         }
 
 

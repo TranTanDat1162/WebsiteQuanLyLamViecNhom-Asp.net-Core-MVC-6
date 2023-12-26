@@ -14,10 +14,11 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         }
         public class UpdateProjectDTO
         {
+            public int Id { get; set; }
             public string? Name { get; set; }
             public string? Requirement { get; set; }
             public DateTime Deadline { get; set; }
-            public IFormFile? Attachment { get; set; }
+            public IList<IFormFile>? Attachments { get; set; }
 
         }
         public class  CreateGroupDTO
