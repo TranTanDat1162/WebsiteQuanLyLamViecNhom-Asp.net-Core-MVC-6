@@ -186,9 +186,11 @@
                 int taskcounter = 0;
                 foreach (var task in Model.GroupViewModel.Tasks)
                 {
-                    taskcounter++;
-                    if(task.TaskGradedByLeader !=null)
+                    if(task.TaskGradedByLeader != null)
+                    {
+                        taskcounter++;
                         sumOfTaskGradedByLeader += task.TaskGradedByLeader;
+                    }
                 }
                 float? avgScoreByLeader = sumOfTaskGradedByLeader / taskcounter;
             }
