@@ -249,8 +249,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 new { Error = ModelState.ToString() });
         }
 
-        public async Task<IActionResult> GradeGroup(GroupDTO.UpdateTaskDTO gradeGroupDTO)
+        public async Task<IActionResult> GradeGroup(GroupDTO.GradeTaskDTO gradeGroupDTO)
         {
+            if (ModelState.IsValid)
+            {
+                
+                return View(gradeGroupDTO);
+            }
             return View(gradeGroupDTO);
         }
 

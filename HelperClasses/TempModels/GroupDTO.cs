@@ -31,12 +31,11 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         }
         public class GradeTaskDTO
         {
-            public string TaskID { get; set; }
-            public string Description { get; set; }
-            public float? Grade { get; set; }
+            public string? TaskID { get; set; }
+            public string? Description { get; set; }
+            public float Grade { get; set; }
         }
         public GradeTaskDTO gradeTaskDTO { get; set; }
-
         public UpdateTaskDTO updateTaskDTO { get; set; }
         public TaskDTO createTaskDTO { get; set; }
         public GroupVM GroupViewModel {  get; set; }
