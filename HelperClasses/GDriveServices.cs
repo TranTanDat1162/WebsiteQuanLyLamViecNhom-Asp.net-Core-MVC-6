@@ -143,7 +143,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses
                     createRequest.Upload();
 
                     uploadedFile = createRequest.ResponseBody;
-                    return new {FileId = uploadedFile?.Id, Updated = false };
+                    return new {FileId = uploadedFile?.Id, Updated = false, FileName = fileName };
                 }
             }
 

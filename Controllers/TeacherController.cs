@@ -152,7 +152,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     currentProject.fileIDJSON = JsonConvert.SerializeObject(uploadFiles);
 
                 }
-
                 _context.Update(currentProject);
                 await _context.SaveChangesAsync();
                 _logger.LogInformation("New project has been created {Project}",
