@@ -57,7 +57,7 @@
                     @foreach(var task in Model.GroupViewModel.Tasks){
                         var uniqueId = $"Edit{uniqueIdCounter++}";
                         <div class="col-lg-12">
-                            <div class="card card-widget task-card">
+                            <div class="card card-widget task-card" data-status="@((int)task.Status)">
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
