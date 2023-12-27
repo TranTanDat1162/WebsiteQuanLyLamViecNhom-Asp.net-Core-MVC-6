@@ -53,6 +53,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 //var result = await _context.Class.Where(t => t.Code == id).FirstOrDefaultAsync();
                 Group? group = await _context.Group.Where(t => t.Id == GroupId)
                                     .Include(p => p.Project)
+                                    .ThenInclude(c => c.Class)
                                     .Include(s => s.Students)
                                     .ThenInclude(sc => sc.Student)
                                     .FirstOrDefaultAsync();
@@ -68,12 +69,16 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     ProjectName = group.Project.Name,
                     memberList = group.Students,
                     LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
-                    CurrentClass = group.Project.Class
+                    CurrentClass = group.Project.Class,
+                    ProjectAttachmentsJSON = group.Project.fileIDJSON,
+                    GroupID = group.Id
 
                 };
                 var taskList = await _context.Task
-                                             .Where(p => p.GroupId == GroupId)
-                                             .ToListAsync();
+                        .Where(p => p.GroupId == GroupId)
+                        .Include(sc => sc.StudentClass)
+                        .ThenInclude(s => s.Student)
+                        .ToListAsync();
                 if (taskList.Count > 0)
                     currentGroup.Tasks = taskList;
 
@@ -115,7 +120,9 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 ProjectName = group.Project.Name,
                 memberList = group.Students,
                 LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
-                CurrentClass = group.Project.Class
+                CurrentClass = group.Project.Class,
+                ProjectAttachmentsJSON = group.Project.fileIDJSON,
+                GroupID = group.Id
             };
 
             var taskList = await _context.Task
@@ -244,6 +251,30 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             // TODO: Return errors
             return RedirectToAction("StudentIndex",
                 new { Error = ModelState.ToString() });
+        }
+
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> GradeGroup(GroupDTO.GradeGroupDTO gradeGroupDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                float totalscore = (float)((gradeGroupDTO.TeacherGrade * 0.9) + (gradeGroupDTO.LeaderAGVGrade * 0.1));
+                var memberList = await _context.Group.Where(id => id.Id == gradeGroupDTO.GroupID)
+                                                .Include(s => s.Students)
+                                                .ThenInclude(c => c.Class)
+                                                .Select(s => s.Students)
+                                                .FirstOrDefaultAsync();
+                _context.UpdateRange(memberList);
+
+                foreach (var member in memberList)
+                {
+                    member.Score = totalscore;
+                }
+                await _context.SaveChangesAsync();
+                return RedirectToAction("TeacherIndex",
+                    new { Class = memberList.FirstOrDefault().Class.Code, GroupId = memberList.FirstOrDefault().GroupID });
+            }
+            return View(gradeGroupDTO);
         }
 
         //------------------Actions ends--------------------->>
