@@ -201,7 +201,7 @@
                         <input asp-for="gradeGroupDTO.TeacherGrade" type="text" class="form-control" aria-label="Totalscore" data-listener-added_3fb1fa63="true">
                         <div class="input-group-append">
                             <span class="input-group-text">ĐTB:</span>
-                            <span class="input-group-text">@sumOfTaskGradedByLeader</span>
+                            <span class="input-group-text">@string.Format("{0:0.00}", avgScoreByLeader)</span>
                             <input asp-for="gradeGroupDTO.LeaderAGVGrade" value="@avgScoreByLeader" hidden>
                             <input asp-for="gradeGroupDTO.GroupID" value="@Model.GroupViewModel.GroupID" hidden>
                             <button type="submit" class="btn btn-primary">
