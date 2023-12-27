@@ -268,6 +268,25 @@
     </div>
     <!--Member List start-->
     <div class="col-lg-4">
+        <form asp-action="GradeGroup">
+            <div class="card">
+                <div class="card-body">
+                    <div class="input-group">
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text">Nhập điểm:</span>
+                        </div>
+                        <input asp-for="gradeTaskDTO.Grade" type="text" class="form-control" aria-label="Totalscore" data-listener-added_3fb1fa63="true">
+                        <div class="input-group-append">
+                            <span class="input-group-text">ĐTB:</span>
+                            <span class="input-group-text">5.5</span>
+                            <button type="button" class="btn btn-primary">
+                                <i class="ri-send-plane-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
         <div id="list" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
             <div class="table-responsive rounded bg-white mb-4">
                 <table class="table mb-0 table-borderless tbl-server-info">

@@ -83,7 +83,7 @@
                             if(data.StudentCode == Model.GroupViewModel.LeaderID)
                             {
                                 <a href="#" class="btn btn-primary" data-target="#new-task-modal"
-                                   data-toggle="modal">New Task</a>
+                                    data-toggle="modal">New Task</a>
                             }
                         }
                     </div>
@@ -106,7 +106,16 @@
                         </div>
                     </div>
                     <div class="col-sm-4 text-sm-right mt-3 mt-sm-0">
-                        <button type="button" class="btn btn-outline-primary mt-2"><i class="ri-download-2-line"></i>Download</button>
+                        <button type="button" class="btn mt-2 btn-outline-primary"
+                                id="download-links"
+                                data-project-attachment="@Model.GroupViewModel.ProjectAttachmentsJSON">
+                            Attachments
+
+                            <span class="badge badge-primary ml-2">
+                                <i class="ri-download-2-line pd-1"></i>
+                                <a class="pd-1" id="num-of-attachment-badge"> </a>
+                            </span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -516,10 +525,39 @@
 </div>
 <!--Model List end-->
 <script>
+    //Xử lý output của thanh tính điểm của leader
     const value = document.querySelector("#value");
     const input = document.querySelector("#scoreGrade");
     value.textContent = input.value;
     input.addEventListener("input", (event) => {
         value.textContent = event.target.value;
     });
+
+    //--------------------------------------------------
+
+    window.addEventListener("load", function () {
+        const projectButton = document.querySelector("button[data-project-attachment]"); // Get the button element
+        getProjectAttachments(projectButton); // Call the function with the button element
+    });
+
+    function getProjectAttachments(project) {
+        let pAttachments = project.getAttribute("data-project-attachment")
+        if (pAttachments != null) {
+            let pAttachmentList = JSON.parse(pAttachments);
+
+            let badgeContainer = document.getElementById("num-of-attachment-badge")
+            badgeContainer.innerHTML = pAttachmentList.length;
+
+            for (let i = 0; i < pAttachmentList.length; i++) {
+                let attachment = pAttachmentList[i];
+
+                // Access download link and file name separately
+                const downloadLink = attachment[0]; // First element holds the link
+
+            }
+
+        }
+    }
+    //# sourceURL=Attachmentbadge.js
+
 </script>
