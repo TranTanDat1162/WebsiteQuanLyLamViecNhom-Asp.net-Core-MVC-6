@@ -21,17 +21,27 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="dropdown status-dropdown mr-3">
-                            <div class="form-group mb-0">
-                                <select class="form-control" id="yearDropdown" style="height:40px">
-                                    <option selected="selected" value="">Năm học </option>
-                                    <option value="2020-2021">Năm học 2020-2021</option>
-                                    <option value="2021-2022">Năm học 2021-2022</option>
-                                    <option value="2022-2023">Năm học 2022-2023</option>
-                                    <option value="2023-2024">Năm học 2023-2024</option>
-                                </select>
-                            </div>
-                        </div>
+                       <div class="dropdown status-dropdown mr-3">
+    <div class="form-group mb-0">
+        <select class="form-control" id="yearDropdown" style="height:40px">
+            <option selected="selected" value="">Năm học </option>
+            @{
+                // Tạo một Set để theo dõi các giá trị đã thêm vào spinner
+                var addedYears = new HashSet<string>();
+                
+                foreach (var item in Model.ClassListDTO)
+                {
+                    // Kiểm tra xem giá trị đã được thêm vào spinner chưa
+                    if (addedYears.Add($"{item.Year} - {item.Year + 1}"))
+                    {
+                        // Nếu chưa, thêm giá trị vào spinner
+                        <option value="@($"{item.Year} - {item.Year + 1}")">Năm học @($"{item.Year} - {item.Year + 1}")</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+</div>
                         <div class="iq-search-bar device-search" style="padding-right: 15px;">
                             <form action="#" class="searchbox">
                                 <p class="search-link"><i class="ri-search-line"></i></p>
@@ -61,12 +71,12 @@
                                         <h5 style="font-size: 24px" class="mb-3">
                                             (@item.Code) @item.SubjectName
                                         </h5>
-@*                                        <a data-semester="@item.Semester">
+                                        <a hidden data-semester="@item.Semester">
                                             @item.Semester
                                         </a>
-                                        <a  data-year="@($"{item.Year} - {item.Year + 1}")">
+                                        <a hidden data-year="@($"{item.Year} - {item.Year + 1}")">
                                             @($"{item.Year} - {item.Year + 1}")
-                                        </a>*@
+                                        </a>
 
                                     </div>
                                     <button type="button" class="btn btn-success mb-3" href="#" data-target="#class-setting-modal" data-toggle="modal" style="margin-left: 370px;margin-top: -140px">
@@ -968,29 +978,41 @@
         }
     }
 </script>
-<!-- Đoạn mã JavaScript để lọc dữ liệu khi giá trị của spinner thay đổi -->
 <script>
     // Lắng nghe sự kiện thay đổi giá trị của spinner Học kỳ
     document.getElementById('semesterDropdown').addEventListener('change', function () {
         filterClasses();
     });
+
+    // Lắng nghe sự kiện thay đổi giá trị của spinner Năm học
     document.getElementById('yearDropdown').addEventListener('change', function () {
         filterClasses();
     });
+
     // Hàm thực hiện lọc lớp học dựa trên giá trị của spinner Học kỳ
     function filterClasses() {
         var selectedSemester = document.getElementById('semesterDropdown').value;
+        var selectedYear = document.getElementById('yearDropdown').value;
 
         // Lặp qua tất cả các thẻ lớp học
         document.querySelectorAll('.class-card').forEach(function (card) {
             var semester = card.querySelector('[data-semester]').getAttribute('data-semester');
+            var year = card.querySelector('[data-year]').getAttribute('data-year');
 
             // Kiểm tra xem lớp có khớp với giá trị đã chọn hay không
-            var isMatch = semester.toLowerCase().trim() === selectedSemester.toLowerCase().trim() || selectedSemester === '';
+            var isSemesterMatch = semester.toLowerCase().trim() === selectedSemester.toLowerCase().trim() || selectedSemester === '';
+            var isYearMatch = year.toLowerCase().trim() === selectedYear.toLowerCase().trim() || selectedYear === '';
 
             // Ẩn/hiện lớp tùy thuộc vào việc có khớp hay không
-            card.style.display = isMatch ? 'block' : 'none';
+            card.style.display = isSemesterMatch && isYearMatch ? 'block' : 'none';
         });
+
+        // Lấy số lượng các lớp hiển thị dựa trên dữ liệu data-semester và data-year
+        var visibleClassCount = document.querySelectorAll('.class-card[data-semester="' + selectedSemester + '"][data-year="' + selectedYear + '"]').length;
+
+        // Ẩn/hiện nút Xem thêm dựa trên số lượng lớp hiển thị
+        var viewMoreBtn = document.getElementById('viewMoreBtn');
+        viewMoreBtn.style.display = visibleClassCount > 6 ? 'block' : 'none';
     }
 
 </script>

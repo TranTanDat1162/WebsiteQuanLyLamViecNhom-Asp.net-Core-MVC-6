@@ -64,91 +64,87 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
+                    @{
+                        int uniqueIdCounter = 1;
+                    }
                     @foreach(var task in Model.GroupViewModel.Tasks){
-                        <div class="col-lg-12">
+                        var uniqueId = $"Edit{uniqueIdCounter++}";
+                            <div class="col-lg-12">
                             <div class="card card-widget task-card">
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <div class="custom-control custom-task custom-checkbox custom-control-inline">
                                                 <input type="checkbox" class="custom-control-input"
-                                                       id="customCheck01" />
+                                                       id="@task.TaskId" />
                                                 <label class="custom-control-label"
-                                                       for="customCheck01"></label>
+                                                       for="@task.TaskId"></label>
                                             </div>
                                             <div>
                                                 <h5 class="mb-2">
                                                     @task.TaskName
                                                 </h5>
                                                 <div class="media align-items-center">
-                                                    <div class="btn bg-body mr-3">
-                                                        <i class="ri-align-justify mr-2"></i>5/10
-                                                    </div>
-                                                    <div class="btn bg-body">
-                                                        <i class="ri-survey-line mr-2"></i>3
-                                                    </div>
+                                                    @if (@task.TaskGradedByLeader != 0)
+                                                    {
+                                                        <div class="btn text-success bg-success-light mr-3">
+                                                            <i class="ri-thumb-up-line mr-2"></i>@task.TaskGradedByLeader /10
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="media align-items-center mt-md-0 mt-3">
-                                            <a href="#" class="btn bg-secondary-light mr-3">Design</a>
-                                            <a class="btn bg-secondary-light" data-toggle="collapse"
-                                               href="#collapseEdit1" role="button" aria-expanded="false"
-                                               aria-controls="collapseEdit1">
+                                            @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                                            {
+                                                <a class="btn bg-warning-light mr-3" id="btnOnPending">Chờ duyệt</a>
+                                            }
+                                            @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
+                                            {
+                                                <a class="btn bg-secondary-light mr-3" id="btnOnGoing">Đang làm</a>
+                                            }
+                                            @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
+                                            {
+                                                <a class="btn bg-success-light mr-3" id="btnsuccess">Hoàn thành</a>
+                                            }
+                                            <a class="btn bg-primary-light" data-toggle="collapse"
+                                               href="#@uniqueId"
+                                               role="button" aria-expanded="false"
+                                               aria-controls="@uniqueId">
                                                 <i class="ri-edit-box-line m-0"></i>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="collapse" id="collapseEdit1">
+                            <div class="collapse" id="@uniqueId">
                                 <div class="card card-list task-card">
-                                    <div class="card-header d-flex align-items-center justify-content-between px-0 mx-3">
-                                        <div class="header-title">
-                                            <div class="custom-control custom-checkbox custom-control-inline">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="customCheck05" />
-                                                <label class="custom-control-label h5"
-                                                       for="customCheck05">Mark as done</label>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <a href="#" class="btn bg-secondary-light">Design</a>
-                                        </div>
-                                    </div>
                                     <div class="card-body">
-                                        <div class="form-group mb-3 position-relative">
-                                            <input type="text" class="form-control bg-white"
-                                                   placeholder="Design landing page of webkit" />
-                                            <a href="#" class="task-edit task-simple-edit text-body">
-                                                <i class="ri-edit-box-line"></i>
-                                            </a>
-                                        </div>
                                         <div class="card mb-3">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <div class="form-group mb-0">
                                                             <label for="exampleInputText2"
-                                                                   class="h5">Memebers</label>
+                                                                   class="h5">Thành viên phụ trách</label>
                                                             <select name="type"
                                                                     class="selectpicker form-control"
-                                                                    data-style="py-0" multiple>
-                                                                <option>Memebers</option>
-                                                                <option>Kianna Septimus</option>
-                                                                <option>Jaxson Herwitz</option>
-                                                                <option>Ryan Schleifer</option>
+                                                                    data-style="py-0"
+                                                                    multiple>
+                                                                @foreach (var member in task.StudentClass)
+                                                                {
+                                                                    <option disabled selected>@member.Student.FirstName</option>
+                                                                }
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group mb-0">
-                                                            <label for="exampleInputText3" class="h5">
-                                                                Due
-                                                                Dates*
+                                                            <label for="exampleInputText4" class="h5">
+                                                                Hạn chót
                                                             </label>
-                                                            <input type="date" class="form-control"
-                                                                   id="exampleInputText3" value="" />
+                                                            <input disabled type="date" class="form-control"
+                                                                   id="exampleInputText4" value="@task.DeadLineDate.ToString("yyyy-MM-dd")">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -158,102 +154,27 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-6">
-                                                        <h5 class="mb-2">Description</h5>
-                                                        <p class="mb-0">
-                                                            Amet minim mollit non deserunt ullamco est
-                                                            sit aliqua dolor do amet sint. Velit
-                                                            officia consequat duis enim velit mollit.
-                                                            Exercitation veniam consequat sunt nostrud
-                                                            amet.
+                                                        <h5 class="mb-2">Ghi chú</h5>
+                                                        <p class="mb-0" style="word-wrap: break-word;width: 800px;">
+                                                            @task.Description
                                                         </p>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <h5 class="mb-2">Checklist</h5>
-                                                        <div class="row">
-                                                            <div class="col-lg-6">
-                                                                <div class="custom-control custom-checkbox custom-control-inline mr-0">
-                                                                    <input type="checkbox"
-                                                                           class="custom-control-input"
-                                                                           id="customCheck1" />
-                                                                    <label class="custom-control-label mb-1"
-                                                                           for="customCheck1">
-                                                                        Design mobile
-                                                                        version
-                                                                    </label>
-                                                                </div>
-                                                                <div class="custom-control custom-checkbox custom-control-inline mr-0">
-                                                                    <input type="checkbox"
-                                                                           class="custom-control-input"
-                                                                           id="customCheck02" />
-                                                                    <label class="custom-control-label mb-1"
-                                                                           for="customCheck02">
-                                                                        Use images of
-                                                                        unsplash.com
-                                                                    </label>
-                                                                </div>
-                                                                <div class="custom-control custom-checkbox custom-control-inline mr-0">
-                                                                    <input type="checkbox"
-                                                                           class="custom-control-input"
-                                                                           id="customCheck3" />
-                                                                    <label class="custom-control-label"
-                                                                           for="customCheck3">
-                                                                        Vector images of
-                                                                        small size.
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <div class="custom-control custom-checkbox custom-control-inline mr-0">
-                                                                    <input type="checkbox"
-                                                                           class="custom-control-input"
-                                                                           id="customCheck04" />
-                                                                    <label class="custom-control-label mb-1"
-                                                                           for="customCheck04">
-                                                                        Design mobile
-                                                                        version of landing
-                                                                        page
-                                                                    </label>
-                                                                </div>
-                                                                <div class="custom-control custom-checkbox custom-control-inline mr-0">
-                                                                    <input type="checkbox"
-                                                                           class="custom-control-input"
-                                                                           id="customCheck5" />
-                                                                    <label class="custom-control-label mb-1"
-                                                                           for="customCheck5">
-                                                                        Use images of
-                                                                        unsplash.com
-                                                                    </label>
-                                                                </div>
-                                                                <div class="custom-control custom-checkbox custom-control-inline mr-0">
-                                                                    <input type="checkbox"
-                                                                           class="custom-control-input"
-                                                                           id="customCheck06" />
-                                                                    <label class="custom-control-label"
-                                                                           for="customCheck06">
-                                                                        Vector images of
-                                                                        small
-                                                                        size..
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group mb-0">
-                                            <label for="exampleInputText01" class="h5">Attachments</label>
+                                        <div class="form-group mb-3">
+                                            <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input"
-                                                       id="inputGroupFile001" />
+                                                       id="inputGroupFile002" />
                                                 <label class="custom-file-label"
-                                                       for="inputGroupFile001">Upload media</label>
+                                                       for="inputGroupFile002">Upload media</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            </div>
                     }    
                     @if (Model.GroupViewModel.Tasks.Count == 0)
                     {

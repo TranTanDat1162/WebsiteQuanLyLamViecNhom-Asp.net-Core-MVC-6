@@ -74,6 +74,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 };
                 var taskList = await _context.Task
                                              .Where(p => p.GroupId == GroupId)
+                                                                                    .Include(sc => sc.StudentClass)
+                                         .ThenInclude(s => s.Student)
                                              .ToListAsync();
                 if (taskList.Count > 0)
                     currentGroup.Tasks = taskList;
