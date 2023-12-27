@@ -14,26 +14,13 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
                     <h5>@Model.GroupViewModel.ProjectName</h5>
                     <div class="d-flex flex-wrap align-items-center">
-                        <div class="dropdown dropdown-project mr-3">
-                            <div class="dropdown-toggle" id="dropdownMenuButton03"
-                                 data-toggle="dropdown">
-                                <div class="btn bg-body">
-                                    <span class="h6">Project :</span> webkit Project<i class="ri-arrow-down-s-line ml-2 mr-0"></i>
-                                </div>
-                            </div>
-                            <div class="dropdown-menu dropdown-menu-right"
-                                 aria-labelledby="dropdownMenuButton03">
-                                <a class="dropdown-item" href="#">
-                                    <i class="ri-mic-line mr-2"></i>In
-                                    Progress
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="ri-attachment-line mr-2"></i>Priority
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="ri-file-copy-line mr-2"></i>Category
-                                </a>
-                            </div>
+                        <div class="form-group mt-0 mb-0">
+                            <select class="custom-select" id="projectFilter" style="height:40px">
+                                <option value="all" selected>Tất cả</option>
+                                <option value="@WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending">Chờ duyệt</option>
+                                <option value="@WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing">Đang làm</option>
+                                <option value="@WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete">Hoàn thành</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -54,9 +41,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4 text-sm-right mt-3 mt-sm-0">
-                        <button type="button" class="btn btn-outline-primary mt-2"><i class="ri-download-2-line"></i>Download</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -69,17 +53,11 @@
                     }
                     @foreach(var task in Model.GroupViewModel.Tasks){
                         var uniqueId = $"Edit{uniqueIdCounter++}";
-                            <div class="col-lg-12">
+                        <div class="col-lg-12 task-card @task.Status.ToString().ToLower()">
                             <div class="card card-widget task-card">
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <div class="custom-control custom-task custom-checkbox custom-control-inline">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="@task.TaskId" />
-                                                <label class="custom-control-label"
-                                                       for="@task.TaskId"></label>
-                                            </div>
                                             <div>
                                                 <h5 class="mb-2">
                                                     @task.TaskName
@@ -97,15 +75,15 @@
                                         <div class="media align-items-center mt-md-0 mt-3">
                                             @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
                                             {
-                                                <a class="btn bg-warning-light mr-3" id="btnOnPending">Chờ duyệt</a>
+                                                <a class="btn bg-warning-light mr-3" id="btnOnPending" data-status="@((int)WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)">Chờ duyệt</a>
                                             }
                                             @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
                                             {
-                                                <a class="btn bg-secondary-light mr-3" id="btnOnGoing">Đang làm</a>
+                                                <a class="btn bg-secondary-light mr-3" id="btnOnGoing" data-status="@((int)WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)">Đang làm</a>
                                             }
                                             @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
                                             {
-                                                <a class="btn bg-success-light mr-3" id="btnsuccess">Hoàn thành</a>
+                                                <a class="btn bg-success-light mr-3" id="btnsuccess" data-status="@((int)WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)e">Hoàn thành</a>
                                             }
                                             <a class="btn bg-primary-light" data-toggle="collapse"
                                                href="#@uniqueId"
@@ -247,5 +225,39 @@
         </div>
     </div>
     <!--Member List end -->
-
 </div>
+<script>
+    // Xử lý sự kiện khi giá trị của dropdown thay đổi
+    document.getElementById('projectFilter').addEventListener('change', function () {
+        // Lấy giá trị của dropdown
+        var selectedStatus = this.value;
+
+        // Lặp qua tất cả các card để ẩn/hiện tùy thuộc vào giá trị của dropdown
+        var allCards = document.querySelectorAll('.task-card');
+        for (var i = 0; i < allCards.length; i++) {
+            var card = allCards[i];
+
+            // Lấy giá trị data-status của từng card
+            var cardStatus = card.getAttribute('data-status') || 'all';
+
+            // Ẩn hoặc hiện card tùy thuộc vào giá trị của dropdown
+            switch (selectedStatus) {
+                case 'all':
+                    card.style.display = 'block';
+                    break;
+                case '@((int)WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)':
+                    card.style.display = cardStatus === '@((int)WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)' ? 'block' : 'none';
+                    break;
+                case '@((int)WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)':
+                    card.style.display = cardStatus === '@((int)WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)' ? 'block' : 'none';
+                    break;
+                case '@((int)WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)':
+                    card.style.display = cardStatus === '@((int)WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)' ? 'block' : 'none';
+                    break;
+                default:
+                    card.style.display = 'none';
+                    break;
+            }
+        }
+    });
+</script>
