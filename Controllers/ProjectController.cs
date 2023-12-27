@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Security.Claims;
 using WebsiteQuanLyLamViecNhom.Data;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using WebsiteQuanLyLamViecNhom.Models;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.GroupDTO;
@@ -57,6 +59,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                     .Include(s => s.Students)
                                     .ThenInclude(sc => sc.Student)
                                     .FirstOrDefaultAsync();
+
                 GroupDTO groupDTO = new();
                 StudentClass? leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
                                             .FirstOrDefault();
@@ -72,13 +75,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     CurrentClass = group.Project.Class,
                     ProjectAttachmentsJSON = group.Project.fileIDJSON,
                     GroupID = group.Id
-
                 };
+
                 var taskList = await _context.Task
                         .Where(p => p.GroupId == GroupId)
                         .Include(sc => sc.StudentClass)
                         .ThenInclude(s => s.Student)
                         .ToListAsync();
+
                 if (taskList.Count > 0)
                     currentGroup.Tasks = taskList;
 
@@ -212,6 +216,30 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 task.Status = Models.TaskStatus.Pending;
 
                 _context.UpdateRange(memberList);
+
+                if (updateTaskDTO.Attachments != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    List<List<string>> uploadFiles = new List<List<string>>();
+
+                    foreach (var attachment in updateTaskDTO.Attachments)
+                    {
+                        byte[] data = uploadHelper.ConvertToByteArray(attachment);
+
+                        var fileID =
+                        gDriveServices.UploadFile(task.TaskId + attachment.FileName, data, "1eY_PYFOhlkXoi76uwXgxfjWJrRo6YC_K");
+
+                        var downloadlink = gDriveServices
+                            .GetDownloadLink((string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID)));
+
+                        if (downloadlink != null)
+                            uploadFiles.Add(new List<string> { downloadlink, attachment.FileName });
+                    }
+                    task.AttachmentLinksJson = JsonConvert.SerializeObject(uploadFiles);
+
+                }
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("StudentIndex",

@@ -29,6 +29,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string TaskID { get; set; }
             public string Description { get; set; }
             public float? Grade { get; set; }
+            public IList<IFormFile>? Attachments { get; set; }
         }
         public class GradeGroupDTO
         {
