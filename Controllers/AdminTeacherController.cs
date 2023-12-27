@@ -126,7 +126,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     var fileID =
                     gDriveServices.UploadFile(autogenTeacherId, data, "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
 
-                    teacher.ImgId = fileID;
+                    
+                    teacher.ImgId = (string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID));
                 }
 
                 //_context.Add(teacher);
@@ -144,7 +145,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                     _logger.LogInformation("Problems here!." + ModelState.ToString());
                 }
-                return View("LecturerList", teacher);
+                return RedirectToAction("LecturerList", "AdminTeacher");
             }
             return RedirectToAction("LecturerList", "AdminTeacher");
         }

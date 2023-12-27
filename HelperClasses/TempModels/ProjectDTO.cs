@@ -12,6 +12,15 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public DateTime Deadline { get; set; }
 
         }
+        public class UpdateProjectDTO
+        {
+            public int Id { get; set; }
+            public string? Name { get; set; }
+            public string? Requirement { get; set; }
+            public DateTime Deadline { get; set; }
+            public IList<IFormFile>? Attachments { get; set; }
+
+        }
         public class  CreateGroupDTO
         {
             public string MOTD { get; set; }
@@ -22,6 +31,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         public int? ClassID { get; set; }
         public CreateGroupDTO? createGroupDTO { get; set; }
         public CreateProjectDTO? createProjectDTO { get; set; }
+        public UpdateProjectDTO? updateProjectDTO { get; set; }
         public ICollection<Project>? CurrentProjects { get; set; } = new List<Project>();
         public ICollection<Group>? CurrentGroups { get; set; } = new List<Group>();
         public ICollection<StudentClass> StudentList{ get; set; }
