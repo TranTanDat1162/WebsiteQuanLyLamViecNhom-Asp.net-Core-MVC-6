@@ -68,7 +68,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     ProjectName = group.Project.Name,
                     memberList = group.Students,
                     LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
-                    CurrentClass = group.Project.Class
+                    CurrentClass = group.Project.Class,
+                    ProjectAttachmentsJSON = group.Project.fileIDJSON
 
                 };
                 var taskList = await _context.Task
@@ -117,7 +118,9 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 ProjectName = group.Project.Name,
                 memberList = group.Students,
                 LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
-                CurrentClass = group.Project.Class
+                CurrentClass = group.Project.Class,
+                ProjectAttachmentsJSON = group.Project.fileIDJSON
+
             };
 
             var taskList = await _context.Task
@@ -246,6 +249,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             // TODO: Return errors
             return RedirectToAction("StudentIndex",
                 new { Error = ModelState.ToString() });
+        }
+
+        public async Task<IActionResult> GradeGroup(GroupDTO.UpdateTaskDTO gradeGroupDTO)
+        {
+            return View(gradeGroupDTO);
         }
 
         //------------------Actions ends--------------------->>
