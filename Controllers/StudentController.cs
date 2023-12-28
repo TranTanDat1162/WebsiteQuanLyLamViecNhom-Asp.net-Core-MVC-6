@@ -40,7 +40,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 Student? currentStudent = await _context.Student
                     .Include(t => t.ClassList)
                     .ThenInclude(t => t.Class)
+                    .ThenInclude(t => t.Teacher)
                     .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                //Teacher? currentTeacher = await _context.Teacher
+                //    .Include(t => t.ClassList)
+                //    .ThenInclude(t => t.ClassGroup)
+                //    .FirstOrDefaultAsync(t => t.Id == User.FindFirst(ClaimTypes.NameIdentifier));
+
                 CreateClassDTO ClassList = new CreateClassDTO();
                 foreach(var studentClass in currentStudent.ClassList)
                 {

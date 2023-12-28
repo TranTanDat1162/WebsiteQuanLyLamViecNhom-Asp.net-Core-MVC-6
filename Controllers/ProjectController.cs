@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Security.Claims;
 using WebsiteQuanLyLamViecNhom.Data;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using WebsiteQuanLyLamViecNhom.Models;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.GroupDTO;
@@ -53,9 +55,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 //var result = await _context.Class.Where(t => t.Code == id).FirstOrDefaultAsync();
                 Group? group = await _context.Group.Where(t => t.Id == GroupId)
                                     .Include(p => p.Project)
+                                    .ThenInclude(c => c.Class)
                                     .Include(s => s.Students)
                                     .ThenInclude(sc => sc.Student)
                                     .FirstOrDefaultAsync();
+
                 GroupDTO groupDTO = new();
                 StudentClass? leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
                                             .FirstOrDefault();
@@ -69,14 +73,16 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     memberList = group.Students,
                     LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
                     CurrentClass = group.Project.Class,
-                    ProjectAttachmentsJSON = group.Project.fileIDJSON
-
+                    ProjectAttachmentsJSON = group.Project.fileIDJSON,
+                    GroupID = group.Id
                 };
+
                 var taskList = await _context.Task
-                                             .Where(p => p.GroupId == GroupId)
-                                                                                    .Include(sc => sc.StudentClass)
-                                         .ThenInclude(s => s.Student)
-                                             .ToListAsync();
+                        .Where(p => p.GroupId == GroupId)
+                        .Include(sc => sc.StudentClass)
+                        .ThenInclude(s => s.Student)
+                        .ToListAsync();
+
                 if (taskList.Count > 0)
                     currentGroup.Tasks = taskList;
 
@@ -119,8 +125,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 memberList = group.Students,
                 LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
                 CurrentClass = group.Project.Class,
-                ProjectAttachmentsJSON = group.Project.fileIDJSON
-
+                ProjectAttachmentsJSON = group.Project.fileIDJSON,
+                GroupID = group.Id
             };
 
             var taskList = await _context.Task
@@ -211,6 +217,30 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
                 _context.UpdateRange(memberList);
 
+                if (updateTaskDTO.Attachments != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    List<List<string>> uploadFiles = new List<List<string>>();
+
+                    foreach (var attachment in updateTaskDTO.Attachments)
+                    {
+                        byte[] data = uploadHelper.ConvertToByteArray(attachment);
+
+                        var fileID =
+                        gDriveServices.UploadFile(task.TaskId + attachment.FileName, data, "1eY_PYFOhlkXoi76uwXgxfjWJrRo6YC_K");
+
+                        var downloadlink = gDriveServices
+                            .GetDownloadLink((string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID)));
+
+                        if (downloadlink != null)
+                            uploadFiles.Add(new List<string> { downloadlink, attachment.FileName });
+                    }
+                    task.AttachmentLinksJson = JsonConvert.SerializeObject(uploadFiles);
+
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("StudentIndex",
                     new { classCode = memberList.FirstOrDefault().Class.Code });
@@ -251,8 +281,27 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 new { Error = ModelState.ToString() });
         }
 
-        public async Task<IActionResult> GradeGroup(GroupDTO.UpdateTaskDTO gradeGroupDTO)
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> GradeGroup(GroupDTO.GradeGroupDTO gradeGroupDTO)
         {
+            if (ModelState.IsValid)
+            {
+                float totalscore = (float)((gradeGroupDTO.TeacherGrade * 0.9) + (gradeGroupDTO.LeaderAGVGrade * 0.1));
+                var memberList = await _context.Group.Where(id => id.Id == gradeGroupDTO.GroupID)
+                                                .Include(s => s.Students)
+                                                .ThenInclude(c => c.Class)
+                                                .Select(s => s.Students)
+                                                .FirstOrDefaultAsync();
+                _context.UpdateRange(memberList);
+
+                foreach (var member in memberList)
+                {
+                    member.Score = totalscore;
+                }
+                await _context.SaveChangesAsync();
+                return RedirectToAction("TeacherIndex",
+                    new { Class = memberList.FirstOrDefault().Class.Code, GroupId = memberList.FirstOrDefault().GroupID });
+            }
             return View(gradeGroupDTO);
         }
 

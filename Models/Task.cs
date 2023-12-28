@@ -21,6 +21,7 @@ namespace WebsiteQuanLyLamViecNhom.Models
         public float? TaskGradedByLeader { get; set; }
         public float? TaskGradedByLecturer { get; set; }
         public string GroupId { get; set; }
+        public string? AttachmentLinksJson { get; set; }
         public virtual Group Group { get; set; }
         public virtual ICollection<StudentClass> StudentClass { get; set; }
         public string Description { get; set; }

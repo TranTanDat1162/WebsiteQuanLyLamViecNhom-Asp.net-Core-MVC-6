@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
-                    <h5>@Model.GroupViewModel.ProjectName</h5>
+                    <h5>@($"({Model.GroupViewModel.CurrentClass.Code}) {Model.GroupViewModel.CurrentClass.SubjectName}")</h5>
                     <div class="d-flex flex-wrap align-items-center">
                         <div class="form-group mt-0 mb-0">
                             <select class="custom-select" id="projectFilter" style="height:40px">
@@ -38,8 +38,18 @@
                         <div class="row align-items-center">
                             <div class="col-md-9">
                                 <div class="mt-3 mt-md-0">
-                                    <h5 class="mb-1">Cloud Service Theme</h5>
-                                    <p class="mb-0">Exclusively for cloud-based/ Startup theme.</p>
+                                    <h5 class="mb-1">
+                                        @Model.GroupViewModel.ProjectName
+                                        @{
+                                            var firstScore = Model.GroupViewModel.memberList.FirstOrDefault()?.Score; // Get the score once
+                                            if (firstScore != null)
+                                            {
+                                                var badgeClass = firstScore < 3 ? "badge-danger" : firstScore < 6 ? "badge-warning" : "badge-success";
+                                                <span class="badge @badgeClass ml-2">@firstScore Đ</span>
+                                            }
+                                        }
+                                    </h5>
+                                    <p class="mb-0">@Model.GroupViewModel.MOTD</p>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +76,7 @@
                                                     @task.TaskName
                                                 </h5>
                                                 <div class="media align-items-center">
-                                                    @if (@task.TaskGradedByLeader != 0)
+                                                    @if (@task.TaskGradedByLeader != null)
                                                     {
                                                         <div class="btn text-success bg-success-light mr-3">
                                                             <i class="ri-thumb-up-line mr-2"></i>@task.TaskGradedByLeader /10
@@ -171,17 +181,32 @@
     <!--Member List start-->
     <div class="col-lg-4">
         <form asp-action="GradeGroup">
+            @{
+                float? sumOfTaskGradedByLeader = 0;
+                int taskcounter = 0;
+                foreach (var task in Model.GroupViewModel.Tasks)
+                {
+                    if(task.TaskGradedByLeader != null)
+                    {
+                        taskcounter++;
+                        sumOfTaskGradedByLeader += task.TaskGradedByLeader;
+                    }
+                }
+                float? avgScoreByLeader = sumOfTaskGradedByLeader / taskcounter;
+            }
             <div class="card">
                 <div class="card-body">
-                    <div class="input-group">
+                    <div class="input-group pt-1 pb-1">
                         <div class="input-group-prepend ">
                             <span class="input-group-text">Nhập điểm:</span>
                         </div>
-                        <input asp-for="gradeTaskDTO.Grade" type="text" class="form-control" aria-label="Totalscore" data-listener-added_3fb1fa63="true">
+                        <input asp-for="gradeGroupDTO.TeacherGrade" type="text" class="form-control" aria-label="Totalscore" data-listener-added_3fb1fa63="true">
                         <div class="input-group-append">
                             <span class="input-group-text">ĐTB:</span>
-                            <span class="input-group-text">5.5</span>
-                            <button type="button" class="btn btn-primary">
+                            <span class="input-group-text">@string.Format("{0:0.00}", avgScoreByLeader)</span>
+                            <input asp-for="gradeGroupDTO.LeaderAGVGrade" value="@avgScoreByLeader" hidden>
+                            <input asp-for="gradeGroupDTO.GroupID" value="@Model.GroupViewModel.GroupID" hidden>
+                            <button type="submit" class="btn btn-primary">
                                 <i class="ri-send-plane-fill"></i>
                             </button>
                         </div>

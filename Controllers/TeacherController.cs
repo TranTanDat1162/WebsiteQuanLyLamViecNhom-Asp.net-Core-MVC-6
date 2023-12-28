@@ -89,6 +89,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return View(ProjectDTO);
         }
 
+
+        //------------------Actions starts------------------->>
+
+
         public async Task<IActionResult> CreateProject(int id, ProjectDTO.CreateProjectDTO createProjectDTO)
         {
             var currentclass = await _context.Class
@@ -134,7 +138,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     UploadHelper uploadHelper = new UploadHelper();
 
                     List<List<string>> uploadFiles = new List<List<string>>();
-                    int i = 0;
 
                     foreach(var attachment in updateProjectDTO.Attachments)
                     {
