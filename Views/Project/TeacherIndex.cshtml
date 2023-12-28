@@ -17,9 +17,6 @@
                         <div class="form-group mt-0 mb-0">
                             <select class="custom-select" id="projectFilter" style="height:40px">
                                 <option value="all" selected>Tất cả</option>
-@*                                <option value="@WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending">Chờ duyệt</option>
-                                <option value="@WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing">Đang làm</option>
-                                <option value="@WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete">Hoàn thành</option>*@
                                 <option value="Pending">Chờ duyệt</option>
                                 <option value="OnGoing">Đang làm</option>
                                 <option value="Complete">Hoàn thành</option>
@@ -78,9 +75,24 @@
                                                 <div class="media align-items-center">
                                                     @if (@task.TaskGradedByLeader != null)
                                                     {
-                                                        <div class="btn text-success bg-success-light mr-3">
-                                                            <i class="ri-thumb-up-line mr-2"></i>@task.TaskGradedByLeader /10
-                                                        </div>
+                                                        @if (task.TaskGradedByLeader < 5)
+                                                        {
+                                                            <div class="btn text-success bg-secondary-light mr-3">
+                                                                <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
+                                                            </div>
+                                                        }
+                                                        else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
+                                                        {
+                                                            <div class="btn text-success bg-warning-light mr-3">
+                                                                <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
+                                                            </div>
+                                                        }
+                                                        else if (task.TaskGradedByLeader >= 8)
+                                                        {
+                                                            <div class="btn text-success bg-success-light mr-3">
+                                                                <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
+                                                            </div>
+                                                        }
                                                     }
                                                 </div>
                                             </div>
