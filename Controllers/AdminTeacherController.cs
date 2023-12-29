@@ -1,5 +1,6 @@
 ﻿using Diacritics.Extensions;
 using Google.Apis.Drive.v3.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminTeacherController : Controller
     {
         private readonly ApplicationDbContext _context;

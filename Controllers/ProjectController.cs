@@ -145,7 +145,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
         //------------------Actions starts------------------->>
 
-
         public async Task<IActionResult> CreateTask(GroupDTO.TaskDTO createTaskDTO)
         {
             if (ModelState.IsValid)

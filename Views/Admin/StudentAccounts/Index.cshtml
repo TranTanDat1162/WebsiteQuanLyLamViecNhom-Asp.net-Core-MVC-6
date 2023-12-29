@@ -53,7 +53,14 @@
                                     @Html.DisplayFor(modelItem => item.LastName) @Html.DisplayFor(modelItem => item.FirstName)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Email)
+                                    @if(item.Email != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    }
+                                    else
+                                    {
+                                        <h6>NaN</h6>
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DOB)
