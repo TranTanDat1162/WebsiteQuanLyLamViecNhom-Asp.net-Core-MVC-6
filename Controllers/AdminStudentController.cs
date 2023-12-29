@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebsiteQuanLyLamViecNhom.Data;
@@ -7,6 +8,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminStudentController : Controller
     {
         private readonly ApplicationDbContext _context;

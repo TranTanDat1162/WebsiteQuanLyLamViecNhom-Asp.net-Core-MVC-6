@@ -89,10 +89,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return View(ProjectDTO);
         }
 
-
         //------------------Actions starts------------------->>
 
-
+        /// <summary>
+        /// Tạo project dựa vào createProjectDTO
+        /// </summary>
+        /// <param name="id"></param> khoá chính của Lớp
+        /// <param name="createProjectDTO"></param> gồm: Name, Requirements, Deadline, ClassId, Class
+        /// <returns></returns>
         public async Task<IActionResult> CreateProject(int id, ProjectDTO.CreateProjectDTO createProjectDTO)
         {
             var currentclass = await _context.Class
@@ -118,6 +122,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return RedirectToRoute(new { controller = "Teacher", action = currentclass.Code});
         }
 
+        /// <summary>
+        /// Cập nhất thông tin và tải tệp đính kèm của project lên
+        /// </summary>
+        /// <param name="id"></param> Khoá chính của Project
+        /// <param name="updateProjectDTO"></param> gồm: Name, Requirements, Deadline, Attachments
+        /// <returns></returns>
         public async Task<IActionResult> UpdateProject(int id, ProjectDTO.UpdateProjectDTO updateProjectDTO)
         {
             var currentProject = await _context.Project
@@ -164,7 +174,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             //return View("~/Views/Shared/Error.cshtml");
                 return RedirectToAction("TeacherClass", new { classCode = currentProject.Class.Code });
         }
-
 
         /// <summary>
         /// Lấy tt của group được gửi lên r gửi lên database
@@ -229,6 +238,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return RedirectToAction("TeacherClass", new { classCode = currentclass.Code });
         }
 
+        /// <summary>
+        /// API xử lý việc chỉ trả lại những sinh viên được 
+        /// chọn làm thành viên của group để cho ô dropdown
+        /// chọn leader của nhóm
+        /// </summary>
+        /// <param name="selectedStudentIds"></param> Id của những student được chọn
+        /// <returns></returns>
         public async Task<IActionResult> GetDependentOptions(List<string> selectedStudentIds)
         {
             var dependentOptions = new List<object>();
@@ -248,6 +264,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return Json(new { data = dependentOptions });
         }
 
+        /// <summary>
+        /// Tạo Lớp dựa vào createCLassDTO
+        /// Tạo tài khoản sinh viên của lớp đó
+        /// </summary>
+        /// <param name="createClassDTO"></param> thông tin dựa vào Excel
+        /// <returns></returns>
         public async Task<IActionResult> CreateClass(CreateClassDTO createClassDTO)
         {
             createClassDTO.classDTO.Students.RemoveAt(createClassDTO.classDTO.Students.Count - 1);
@@ -381,5 +403,18 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             }
             return RedirectToAction("Index", "Teacher", ModelState);
         }
+
+        public async Task<IActionResult> UpdateClass()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> VerifyProject()
+        {
+            return View();
+        }
+
+        //------------------Actions ends------------------->>
+
     }
 }
