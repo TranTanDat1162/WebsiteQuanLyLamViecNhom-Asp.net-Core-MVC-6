@@ -33,7 +33,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
         static Student? viewModelStudent = new Student
         {
-            StudentCode = "Student"
+            StudentCode = "Student",
+            Id = null 
         };
 
         static Teacher? viewModelTeacher = new Teacher
@@ -126,7 +127,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
                 CurrentClass = group.Project.Class,
                 ProjectAttachmentsJSON = group.Project.fileIDJSON,
-                GroupID = group.Id
+                GroupID = group.Id,
+                CurrentUser = viewModelStudent.Id
             };
 
             var taskList = await _context.Task
