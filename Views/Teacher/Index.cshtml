@@ -22,26 +22,26 @@
                             </div>
                         </div>
                        <div class="dropdown status-dropdown mr-3">
-    <div class="form-group mb-0">
-        <select class="form-control" id="yearDropdown" style="height:40px">
-            <option selected="selected" value="">Năm học </option>
-            @{
-                // Tạo một Set để theo dõi các giá trị đã thêm vào spinner
-                var addedYears = new HashSet<string>();
+                            <div class="form-group mb-0">
+                                <select class="form-control" id="yearDropdown" style="height:40px">
+                                    <option selected="selected" value="">Năm học </option>
+                                    @{
+                                        // Tạo một Set để theo dõi các giá trị đã thêm vào spinner
+                                        var addedYears = new HashSet<string>();
                 
-                foreach (var item in Model.ClassListDTO)
-                {
-                    // Kiểm tra xem giá trị đã được thêm vào spinner chưa
-                    if (addedYears.Add($"{item.Year} - {item.Year + 1}"))
-                    {
-                        // Nếu chưa, thêm giá trị vào spinner
-                        <option value="@($"{item.Year} - {item.Year + 1}")">Năm học @($"{item.Year} - {item.Year + 1}")</option>
-                    }
-                }
-            }
-        </select>
-    </div>
-</div>
+                                        foreach (var item in Model.ClassListDTO)
+                                        {
+                                            // Kiểm tra xem giá trị đã được thêm vào spinner chưa
+                                            if (addedYears.Add($"{item.Year} - {item.Year + 1}"))
+                                            {
+                                                // Nếu chưa, thêm giá trị vào spinner
+                                                <option value="@($"{item.Year} - {item.Year + 1}")">Năm học @($"{item.Year} - {item.Year + 1}")</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
                         <div class="iq-search-bar device-search" style="padding-right: 15px;">
                             <form action="#" class="searchbox">
                                 <p class="search-link"><i class="ri-search-line"></i></p>

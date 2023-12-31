@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
 using Newtonsoft.Json;
 using System.Net.Mail;
+using Microsoft.AspNetCore.SignalR.Client;
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     [Authorize(Roles = "Teacher")]
@@ -22,11 +23,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         private readonly UserManager<Models.BaseApplicationUser> _userManager;
         private readonly ILogger<TeacherController> _logger;
 
-
         static Teacher? viewModel = new Teacher
         {
             TeacherCode = "Teacher",
-            ImgId = null
+            ImgId = null,
+            FirstName = null,
+            LastName =null
         };
 
 
@@ -40,7 +42,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         [Route("Teacher/Class")]
         public async Task<IActionResult> Index()
         {
-
             // Lấy thông tin người dùng đăng nhập
             viewModel = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             // Kiểm tra xem người dùng có tồn tại không
@@ -79,13 +80,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
             ProjectDTO ProjectDTO = new()
             {
+                TeacherName = viewModel.LastName + " " + viewModel.FirstName,
+                TeacherId = projectList.First().Class.TeacherId,
                 CurrentGroups = groupList,
                 CurrentProjects = projectList,
                 ClassID = studentList.ToArray().First().ClassId,
                 StudentList = studentList                
             };
-            
-            
+                
             return View(ProjectDTO);
         }
 

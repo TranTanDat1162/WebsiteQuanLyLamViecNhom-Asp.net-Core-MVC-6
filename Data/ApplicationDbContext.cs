@@ -18,5 +18,7 @@ namespace WebsiteQuanLyLamViecNhom.Data
         public DbSet<Student>? Student  { get; set; }
         public DbSet<Teacher>? Teacher { get; set; }
         public DbSet<Admin>? Admin { get; set; }
+        public DbSet<Message>? Messages { get; set; }
+
     }
 }   
