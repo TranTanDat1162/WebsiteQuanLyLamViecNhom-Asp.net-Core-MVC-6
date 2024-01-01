@@ -20,6 +20,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
     public class TeacherController : Controller
     {
         private readonly ApplicationDbContext _context;
+        // Retrieve the Identity of user
         private readonly UserManager<Models.BaseApplicationUser> _userManager;
         private readonly ILogger<TeacherController> _logger;
 
@@ -43,16 +44,17 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         public async Task<IActionResult> Index()
         {
             // Lấy thông tin người dùng đăng nhập
-            viewModel = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            // Teacher có public ICollection<Class>? ClassList { get; set; } là kiểu phức tạp
+            // Nên phải .Include(t => t.ClassList) thì mới lấy được danh sách lớp
+            viewModel = await _context.Teacher
+                            .Include(t => t.ClassList)
+                            .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
             // Kiểm tra xem người dùng có tồn tại không
             if (viewModel != null)
             {
                 ViewData["Teacher"] = viewModel;
-                Teacher? currentTeacher = await _context.Teacher
-                    .Include(t => t.ClassList)
-                    .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
                 CreateClassDTO ClassList = new CreateClassDTO();
-                ClassList.ClassListDTO = currentTeacher.ClassList;
+                ClassList.ClassListDTO = viewModel.ClassList;
                 return View(ClassList);
             }
             // Xử lý trường hợp không có người dùng đăng nhập
@@ -274,6 +276,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         /// <returns></returns>
         public async Task<IActionResult> CreateClass(CreateClassDTO createClassDTO)
         {
+            // Vấn đề trong javascript khi import lớp (giả sử 42 đứa nhưng đứa 43 là rỗng)
+            // Nên thêm dòng này
             createClassDTO.classDTO.Students.RemoveAt(createClassDTO.classDTO.Students.Count - 1);
             //TODO: Still missing some condition and the condition below is rubbishly workable
             if (ModelState.IsValid)
@@ -314,7 +318,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                             //Try to fetch already existing student
                             Student? TempStudent = await _context.Student
                                         .Include(s => s.ClassList)
-                                        .ThenInclude(c => c.Class)
+                                            .ThenInclude(c => c.Class)
                                         .FirstOrDefaultAsync(e => e.StudentCode == student.StudentCode);
                             //Create an account for student if not already exist
                             if (TempStudent == null)
@@ -360,18 +364,13 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                 _logger.LogInformation("Student already exist... updating classlist.",
                                     new { studentId = TempStudent.Id, username = TempStudent.UserName });
 
-                                if (TempStudent.ClassList == null)
-                                {
-                                    TempStudent.ClassList = new List<StudentClass>();
-                                }
-
                                 //var existingEntry = TempStudent.ClassList.FirstOrDefault(c => c.Class.Code == newClass.Code);
 
                                 //if(existingEntry == null)
                                 //{
                                 var newStudentClass = new StudentClass
                                 {
-                                    StudentId = TempStudent.Id,
+                                    //StudentId = TempStudent.Id,
                                     Class = newClass,
                                     Student = TempStudent,
                                 };
