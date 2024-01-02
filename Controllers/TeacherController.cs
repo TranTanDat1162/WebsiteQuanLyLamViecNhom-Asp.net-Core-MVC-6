@@ -88,14 +88,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
             ProjectDTO ProjectDTO = new()
             {
-                TeacherName = viewModel.LastName + " " + viewModel.FirstName,
-                TeacherId = projectList.First().Class.TeacherId,
+                TeacherName = viewModel?.LastName + " " + viewModel?.FirstName,
+                TeacherId = projectList.FirstOrDefault()?.Class.TeacherId,
                 CurrentGroups = groupList,
                 CurrentProjects = projectList,
-                ClassID = studentList.ToArray().First().ClassId,
+                ClassID = studentList.ToArray().FirstOrDefault()?.ClassId,
                 StudentList = studentList,
                 crumbs = new List<List<string>>()
-                {
+                {   
                     new List<string>() { "/Teacher/Class", "Home" },
                     new List<string>() { "/Teacher/"+ classCode, classCode }
                 }

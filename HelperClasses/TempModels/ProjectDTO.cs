@@ -21,12 +21,12 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public IList<IFormFile>? Attachments { get; set; }
 
         }
-        public class  CreateGroupDTO
+        public class CreateGroupDTO
         {
-            public string MOTD { get; set; }
+            public string? MOTD { get; set; }
             public int ProjectId { get; set; }
-            public string LeaderID { get; set; }
-            public string[] memberList { get; set; }
+            public string? LeaderID { get; set; }
+            public string[]? memberList { get; set; }
         }
         public int? ClassID { get; set; }
         public string? TeacherName { get; set; }
@@ -36,8 +36,8 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         public UpdateProjectDTO? updateProjectDTO { get; set; }
         public ICollection<Project>? CurrentProjects { get; set; } = new List<Project>();
         public ICollection<Group>? CurrentGroups { get; set; } = new List<Group>();
-        public ICollection<StudentClass> StudentList{ get; set; }
-        public List<List<string>> crumbs { get; set; }
+        public ICollection<StudentClass>? StudentList{ get; set; }
+        public List<List<string>>? crumbs { get; set; }
 
     }
 }

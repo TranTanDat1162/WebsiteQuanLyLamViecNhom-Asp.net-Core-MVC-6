@@ -27,23 +27,23 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         }
         public class UpdateTaskDTO
         {
-            public string TaskID { get; set; }
-            public string Description { get; set; }
+            public string? TaskID { get; set; }
+            public string? Description { get; set; }
             public float? Grade { get; set; }
             public IList<IFormFile>? Attachments { get; set; }
         }
         public class GradeGroupDTO
         {
-            public string GroupID { get; set; }
+            public string? GroupID { get; set; }
             public string? Description { get; set; }
             public float TeacherGrade { get; set; }
             public float LeaderAGVGrade { get; set; }
         }
-        public GradeGroupDTO gradeGroupDTO { get; set; }
-        public UpdateTaskDTO updateTaskDTO { get; set; }
-        public TaskDTO createTaskDTO { get; set; }
-        public GroupVM GroupViewModel {  get; set; }
-        public List<List<string>> crumbs { get; set; }
+        public GradeGroupDTO? gradeGroupDTO { get; set; }
+        public UpdateTaskDTO? updateTaskDTO { get; set; }
+        public TaskDTO? createTaskDTO { get; set; }
+        public GroupVM? GroupViewModel {  get; set; }
+        public List<List<string>>? crumbs { get; set; }
 
     }
 }

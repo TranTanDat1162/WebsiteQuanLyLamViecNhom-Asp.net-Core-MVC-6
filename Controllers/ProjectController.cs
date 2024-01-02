@@ -57,9 +57,9 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 //var result = await _context.Class.Where(t => t.Code == id).FirstOrDefaultAsync();
                 Group? group = await _context.Group.Where(t => t.Id == GroupId)
                                     .Include(p => p.Project)
-                                    .ThenInclude(c => c.Class)
+                                        .ThenInclude(c => c.Class)
                                     .Include(s => s.Students)
-                                    .ThenInclude(sc => sc.Student)
+                                        .ThenInclude(sc => sc.Student)
                                     .FirstOrDefaultAsync();
 
                 GroupDTO groupDTO = new();

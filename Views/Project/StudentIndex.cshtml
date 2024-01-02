@@ -57,33 +57,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="dropdown dropdown-project mr-3">
-                            <div class="dropdown-toggle" id="dropdownMenuButton03"
-                                 data-toggle="dropdown">
-                                <div class="btn bg-body">
-                                    <span class="h6">Project :</span> webkit Project<i class="ri-arrow-down-s-line ml-2 mr-0"></i>
-                                </div>
-                            </div>
-                            <div class="dropdown-menu dropdown-menu-right"
-                                 aria-labelledby="dropdownMenuButton03">
-                                <a class="dropdown-item" href="#">
-                                    <i class="ri-mic-line mr-2"></i>In
-                                    Progress
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="ri-attachment-line mr-2"></i>Priority
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="ri-file-copy-line mr-2"></i>Category
-                                </a>
-                            </div>
-                        </div>
                         @{
                             var data = (Student)ViewData["Student"];
                             if(data.StudentCode == Model.GroupViewModel.LeaderID)
                             {
                                 <a href="#" class="btn btn-primary" data-target="#new-task-modal"
-                                    data-toggle="modal">New Task</a>
+                                    data-toggle="modal">Tạo công việc</a>
                             }
                         }
                     </div>
@@ -445,140 +424,11 @@
                                 </form>
 
                             }
-@*                             }
-                            else
-                            {
-                                <form asp-action="UpdateTask" asp-controller="Project">
-                                        <div class="card card-widget task-card">
-
-                                            <div class="card-body">
-                                                <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                                    <div class="d-flex align-items-center">
-                                                        <div>
-                                                            <h5 class="mb-2">
-                                                                @task.TaskName
-                                                            </h5>
-                                                            <div class="media align-items-center">
-                                                                <div class="btn bg-body mr-3">
-                                                                    <i class="ri-align-justify mr-2"></i>5/10
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="media align-items-center mt-md-0 mt-3">
-                                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
-                                                        {
-                                                            <a class="btn bg-warning-light mr-3" id="btnOnPending">Chờ duyệt</a>
-                                                        }
-                                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                        {
-                                                            <a class="btn bg-secondary-light mr-3" id="btnOnGoing">Đang làm</a>
-                                                        }
-                                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
-                                                        {
-                                                            <a class="btn bg-success-light mr-3" id="btnsuccess">Hoàn thành</a>
-                                                        }
-                                                        <a class="btn bg-primary-light" data-toggle="collapse"
-                                                           href="#@uniqueId"
-                                                           role="button" aria-expanded="false"
-                                                           aria-controls="@uniqueId">
-                                                            <i class="ri-edit-box-line m-0"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="collapse" id="@uniqueId">
-                                            <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
-                                            <div class="card card-list task-card">
-                                                <div class="card-body">
-                                                    <div class="card mb-3">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-lg-6">
-                                                                    <div class="form-group mb-0">
-                                                                        <label for="exampleInputText2"
-                                                                               class="h5">Thành viên phụ trách</label>
-                                                                        <select name="type"
-                                                                                class="selectpicker form-control"
-                                                                                data-style="py-0"
-                                                                                multiple>
-                                                                            @foreach (var member in task.StudentClass)
-                                                                            {
-                                                                                <option disabled selected>@member.Student.FirstName</option>
-                                                                            }
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-6">
-                                                                    <div class="form-group mb-0">
-                                                                        <label for="exampleInputText4" class="h5">
-                                                                            Hạn chót
-                                                                        </label>
-                                                                        <input type="date" class="form-control"
-                                                                               id="exampleInputText4" value="@task.DeadLineDate.ToString("yyyy-MM-dd")">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card mb-3">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-lg-6">
-                                                                    <h5 class="mb-2">Ghi chú</h5>
-                                                                    <p class="mb-0" style="word-wrap: break-word;width: 800px;">
-                                                                        @task.Description
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card mb-3">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-lg-12">
-                                                                    <h5 class="mb-2">Ghi chú bài nộp</h5>
-                                                                    <div class="form-group mb-3">
-                                                                        <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group mb-3">
-                                                        <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input"
-                                                                   id="inputGroupFile002" />
-                                                            <label class="custom-file-label"
-                                                                   for="inputGroupFile002">Upload media</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group mb-0 ">
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
-                                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                                    {
-                                                                        <input type="submit" value="Nộp" class="btn btn-primary btn-lg" id="btnDone">
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                </form>
-                            } *@
                         </div>
                     }
                     @if (Model.GroupViewModel.Tasks.Count == 0)
                     {
-                        <h5>
-                            TODO: decorate when theres no Task
-                        </h5>
+
                     }
                 </div>
             </div>
@@ -592,7 +442,7 @@
                 <table class="table mb-0 table-borderless tbl-server-info">
                     <tbody>
                         <div class="card-body">
-                            <h5 class="md-3">Members List</h5>
+                            <h5 class="md-3">Danh sách thành viên</h5>
                         </div>
                         <tr>
                             <td>
@@ -602,7 +452,7 @@
                                     </h6>
                                     <span class="badge badge-leader">
                                         <i class="ri-vip-crown-fill"></i>
-                                        Leader
+                                        Trưởng nhóm
                                     </span>
                                 </div>
                             </td>
