@@ -254,6 +254,8 @@
     </div>
     <!--Member List end -->
 </div>
+<script type="text/javascript" src="/assets/js/customizer.js"></script>
+
 <script>
     // Xử lý sự kiện khi giá trị của dropdown thay đổi
     document.getElementById('projectFilter').addEventListener('change', function () {
@@ -288,4 +290,7 @@
             }
         }
     });
+
+    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
+    generateBreadcrumbs(breadcrumbData);
 </script>

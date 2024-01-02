@@ -477,6 +477,9 @@
         var buttonText = isShowingAllClasses ? 'Ẩn bớt' : 'Xem thêm';
         $('#viewMoreBtn').text(buttonText);
     }
+    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
+    generateBreadcrumbs(breadcrumbData);
+
 </script>
 
 

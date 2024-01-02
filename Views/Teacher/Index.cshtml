@@ -978,6 +978,7 @@
         }
     }
 </script>
+<script type="text/javascript" src="/assets/js/customizer.js"></script>
 <script>
     // Lắng nghe sự kiện thay đổi giá trị của spinner Học kỳ
     document.getElementById('semesterDropdown').addEventListener('change', function () {
@@ -1014,6 +1015,10 @@
         var viewMoreBtn = document.getElementById('viewMoreBtn');
         viewMoreBtn.style.display = visibleClassCount > 6 ? 'block' : 'none';
     }
+
+    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
+    generateBreadcrumbs(breadcrumbData);
+    //# sourceURL=TeacherIndex.js
 
 </script>
 

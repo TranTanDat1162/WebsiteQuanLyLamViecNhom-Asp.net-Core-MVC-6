@@ -43,6 +43,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         public UpdateTaskDTO updateTaskDTO { get; set; }
         public TaskDTO createTaskDTO { get; set; }
         public GroupVM GroupViewModel {  get; set; }
+        public List<List<string>> crumbs { get; set; }
 
     }
 }

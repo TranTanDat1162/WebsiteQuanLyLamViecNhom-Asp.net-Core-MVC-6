@@ -37,5 +37,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         public ICollection<Project>? CurrentProjects { get; set; } = new List<Project>();
         public ICollection<Group>? CurrentGroups { get; set; } = new List<Group>();
         public ICollection<StudentClass> StudentList{ get; set; }
+        public List<List<string>> crumbs { get; set; }
+
     }
 }

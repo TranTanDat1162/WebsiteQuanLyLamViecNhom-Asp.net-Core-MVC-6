@@ -7,7 +7,8 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
+                <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content"
+                    data-breadcrumbitems="">
                     <h5> Projects</h5>
                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                         <div class="dropdown status-dropdown mr-3">
@@ -413,6 +414,7 @@
 </div>
  *@
 <!-- Modal list end -->
+<script type="text/javascript" src="/assets/js/customizer.js"></script>
 <script>
     // Summary: Khi Teacher chọn ds thành viên của group thì 
     // dropdown list cho việc chọn Leader sẽ populated 
@@ -445,7 +447,7 @@
 
     // Dựa vào array String vừa lấy được, Tạo request cho server
     // dưới dạng JSON và nhận họ tên + id của student và tạo element
-    // <option> cho từng student đó
+    // option cho từng student đó
     // RequestBody: 
     //  {
     //      "selectedStudentIds": ["student1Id", "student2Id", "student3Id"]
@@ -534,6 +536,9 @@
             }
         }
     }
+
+    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
+    generateBreadcrumbs(breadcrumbData);
     //# sourceURL=UpdateLeaderSelect.js
 
 </script>

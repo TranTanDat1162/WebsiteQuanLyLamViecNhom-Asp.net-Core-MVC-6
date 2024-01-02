@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using WebsiteQuanLyLamViecNhom.Data;
+using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using WebsiteQuanLyLamViecNhom.Models;
@@ -17,7 +18,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
     public class ProjectController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<BaseApplicationUser> _userManager;
+        private readonly UserManager<Models.BaseApplicationUser> _userManager;
 
         static Teacher? viewModel = new Teacher
         {
@@ -25,7 +26,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             ImgId = null
         };
 
-        public ProjectController(ApplicationDbContext context, UserManager<BaseApplicationUser> userManager)
+        public ProjectController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -75,7 +76,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
                     CurrentClass = group.Project.Class,
                     ProjectAttachmentsJSON = group.Project.fileIDJSON,
-                    GroupID = group.Id
+                    GroupID = group.Id,
                 };
 
                 var taskList = await _context.Task
@@ -88,7 +89,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     currentGroup.Tasks = taskList;
 
                 groupDTO.GroupViewModel = currentGroup;
-
+                groupDTO.crumbs = new List<List<string>>()
+                    {
+                        new List<string>() { "/Teacher/Class", "Home" },
+                        new List<string>() { "/Teacher/"+ Class, Class  },
+                        new List<string>() { "/Teacher/Project/" + GroupId + "/" + GroupId, GroupId }
+                    };
                 return View(groupDTO);
             }
             catch (Exception ex)
@@ -140,7 +146,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 currentGroup.Tasks = taskList;
 
             groupDTO.GroupViewModel = currentGroup;
-
+            groupDTO.crumbs = new List<List<string>>()
+                {
+                    new List<string>() { "/Student", "Home" },
+                    new List<string>() { "/Student/Project/" + ClassCode, ClassCode }
+                };
             return View(groupDTO);
 
         }

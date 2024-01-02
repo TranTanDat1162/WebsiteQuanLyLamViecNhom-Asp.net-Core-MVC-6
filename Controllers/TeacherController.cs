@@ -14,6 +14,8 @@ using WebsiteQuanLyLamViecNhom.HelperClasses;
 using Newtonsoft.Json;
 using System.Net.Mail;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.CodeAnalysis;
+using Project = WebsiteQuanLyLamViecNhom.Models.Project;
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     [Authorize(Roles = "Teacher")]
@@ -54,6 +56,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             {
                 ViewData["Teacher"] = viewModel;
                 CreateClassDTO ClassList = new CreateClassDTO();
+                ClassList.crumbs = new List<List<string>>()
+                {
+                    new List<string>() { "/Teacher/Class", "Home" },
+                };
                 ClassList.ClassListDTO = viewModel.ClassList;
                 return View(ClassList);
             }
@@ -87,7 +93,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 CurrentGroups = groupList,
                 CurrentProjects = projectList,
                 ClassID = studentList.ToArray().First().ClassId,
-                StudentList = studentList                
+                StudentList = studentList,
+                crumbs = new List<List<string>>()
+                {
+                    new List<string>() { "/Teacher/Class", "Home" },
+                    new List<string>() { "/Teacher/"+ classCode, classCode }
+                }
             };
                 
             return View(ProjectDTO);

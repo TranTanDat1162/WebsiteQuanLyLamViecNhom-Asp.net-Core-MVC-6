@@ -728,6 +728,8 @@
 </div>
 
 <!--Model List end-->
+<script type="text/javascript" src="/assets/js/customizer.js"></script>
+
 <script>
     //Xử lý output của thanh tính điểm của leader
     document.querySelectorAll(".form-grade").forEach(function (formGroup) {
@@ -838,6 +840,9 @@
         var element = document.getElementById("yourDivID");
         element.scrollTop = element.scrollHeight;
     }
+
+    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
+    generateBreadcrumbs(breadcrumbData);
         //# sourceURL=Attachmentbadge.js
 </script>
 

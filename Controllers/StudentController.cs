@@ -6,6 +6,7 @@ using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Models;
+using WebsiteQuanLyLamViecNhom.Data.Migrations;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -53,16 +54,20 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 {
                     ClassList.ClassListDTO.Add(studentClass.Class);
                 }
+                ClassList.crumbs = new List<List<string>>()
+                    {
+                        new List<string>() { "/Student", "Home" }
+                    };
                 return View(ClassList);
             }
 
             // Xử lý trường hợp không có người dùng đăng nhập
             return NotFound();
         }
-
         public IActionResult ProjectDetail()
         {
             return View();
         }
+
     }
 }
