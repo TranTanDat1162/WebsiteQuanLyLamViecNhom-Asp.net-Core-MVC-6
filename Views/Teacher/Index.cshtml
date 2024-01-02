@@ -758,7 +758,8 @@
         var groupCell = workbook.Sheets[workbook.SheetNames[0]]['J5'];
 
         // Tạo mã lớp
-        var year = new Date().getFullYear().toString().substr(-2); // Lấy hai chữ số cuối cùng của năm hiện tại
+        var yearMatch = semesterCell.v.match(/\d{4}/);
+        var year = yearMatch ? yearMatch[0].slice(-2) : ''; // Lấy hai chữ số cuối cùng của năm hiện tại
         var semester = semesterCell ? semesterCell.v.match(/\d+/)[0] : '';
         var subjectCode = subjectCell ? subjectCell.v.match(/\(([^)]+)\)/)[1] : '';
         var groupCode = groupCell ? groupCell.v : '';
@@ -797,6 +798,7 @@
         document.getElementById('exampleInputText05').value = semester;
         document.getElementById('exampleInputText03').value = subjectCode;
     }
+    //# sourceURL=ImportClass.js
 </script>
 <script>
     $(document).ready(function () {
