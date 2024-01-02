@@ -14,6 +14,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string GroupID { get; set; }
             public string LeaderName { get; set; } = string.Empty;
             public Class CurrentClass { get; set; }
+            public string CurrentUser {  get; set; }
             public ICollection<StudentClass> memberList { get; set; }
             public ICollection<Models.Task>? Tasks { get; set; } = new List<Models.Task>();
         }

@@ -29,6 +29,8 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string[] memberList { get; set; }
         }
         public int? ClassID { get; set; }
+        public string? TeacherName { get; set; }
+        public string? TeacherId { get; set; }
         public CreateGroupDTO? createGroupDTO { get; set; }
         public CreateProjectDTO? createProjectDTO { get; set; }
         public UpdateProjectDTO? updateProjectDTO { get; set; }

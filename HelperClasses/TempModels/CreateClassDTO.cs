@@ -4,7 +4,6 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
 {
     public class CreateClassDTO
     {
-        public ClassDTO classDTO { get; set; }
         public class StudentDTO
         {
             public string StudentCode { get; set; }
@@ -26,6 +25,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public List<StudentDTO> Students{ get; set; }
 
         }
+        public ClassDTO classDTO { get; set; }
         public ICollection<Class>? ClassListDTO { get; set; } = new List<Class>();
     }
 

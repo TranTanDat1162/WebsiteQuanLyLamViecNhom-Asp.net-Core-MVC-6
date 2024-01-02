@@ -5,10 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using WebsiteQuanLyLamViecNhom;
 using WebsiteQuanLyLamViecNhom.Data;
+using WebsiteQuanLyLamViecNhom.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSignalR();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -80,6 +83,7 @@ app.MapControllerRoute(
     pattern: "{controller=Account}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+app.MapHub<ClassNotification>("/chatHub");
 //----------------------------------------------------
 //https://stackoverflow.com/questions/42471866/how-to-create-roles-in-asp-net-core-and-assign-them-to-users/42472760#42472760
 //initializing custom roles 
