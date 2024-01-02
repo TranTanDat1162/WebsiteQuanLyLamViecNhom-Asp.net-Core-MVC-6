@@ -353,15 +353,6 @@
                 <div class="row">
                     <div class="col-lg-12 ">
                         <div class="card">
-                            <div class="card-body" id="messagesList">
-                                <div class="form-label-group">  
-                                    <p disabled class="form-control"></p> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-12 ">
-                        <div class="card">
                             <div class="card-body" id="notificationCardBody">
                                 <div class="form-label-group">
                                     <input hidden type="text" id="userInput" value="@Model.TeacherId"/>
@@ -542,3 +533,23 @@
 <!-- Script list -->
 <script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/assets/js/chat.js"></script>
+<!-- Sử dụng CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('sendButton').addEventListener('click', function () {
+        // Lấy giá trị từ textarea
+        var message = document.getElementById('messageInput').value;
+
+        // Gửi thông báo hoặc thực hiện các xử lý khác ở đây
+
+        // Đóng modal
+        $('#new-notification-modal').modal('hide');
+
+        // Hiển thị thông báo thành công với SweetAlert
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: 'Đã gửi thông báo thành công.',
+        });
+    });
+</script>
