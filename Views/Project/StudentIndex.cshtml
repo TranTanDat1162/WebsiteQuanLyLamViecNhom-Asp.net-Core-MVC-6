@@ -120,8 +120,7 @@
                     {
                         var uniqueId = $"Edit{uniqueIdCounter++}";
                         <div class="col-lg-12">
-                            @if (data.StudentCode == Model.GroupViewModel.LeaderID 
-                            && task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                            @if (data.StudentCode == Model.GroupViewModel.LeaderID && task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
                             {
                                 <form asp-action="VerifyTask" asp-controller="Project">
                                     <div class="card card-widget task-card" data-status="@((int)task.Status)">
