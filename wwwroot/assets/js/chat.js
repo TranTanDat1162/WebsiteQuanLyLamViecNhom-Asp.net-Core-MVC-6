@@ -5,26 +5,30 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 //Disable the send button until connection is established.
 document.getElementById("sendButton").disabled = true;
 
-connection.on("ReceiveMessage", function (user, message) {
+connection.on("ReceiveMessage", function (user, message, userId) {
     var messageContainer = document.createElement("div");  // Use a div for flexibility
 
     var username = document.createElement("div");
-    username.classList.add("chat-user", "line-height");
+    username.classList.add("chat-user", "line-height");  // Style the username
     username.textContent = user + ":";
 
     var messageText = document.createElement("span");
-    messageText.classList.add("chat-content", "rounded", "bg-primary", "text-white", "p-2", "border-0", "mt-0");
+    messageText.classList.add("chat-content");  // Style the message content
     messageText.textContent = message;
+    messageText.classList.add("rounded", "bg-primary", "text-white", "p-2","border-0","mt-0");  // Adjust classes as needed
 
     // Xác định hướng tin nhắn dựa trên người dùng
     var test = document.getElementById("userInput").value;
-    var isOwnMessage = (user === document.getElementById("userInput").value);  // Thay thế "yourUsername" bằng tên người dùng của bạn
-    var messageClasses = "rounded bg-primary text-white p-2 border-0 mt-0";
+    var isOwnMessage = (userId === document.getElementById("userInput").value);  // Thay thế "yourUsername" bằng tên người dùng của bạn
+    var messageClasses = ["rounded", "bg-primary", "text-white", "p-2", "border-0", "mt-0"];
+
     if (!isOwnMessage) {
-        messageClasses += " float-right";  // Thêm class "float-right" cho tin nhắn của người khác
+        messageClasses += "float-right";  // Thêm class "float-right" cho tin nhắn của người khác
     }
 
-    messageText.classList.add(messageClasses);
+    for (const classname of messageClasses) {
+        messageText.classList.add(classname);
+    }
     messageContainer.appendChild(username);
     messageContainer.appendChild(messageText);
 
@@ -146,7 +150,7 @@ connection.start().then(function () {
         return console.error(err.toString());
     });
 
-    var studentId = document.getElementById("studentInput").value;
+    var studentId = document.getElementById("studentIn  put").value;
 
     if (studentId != null) {
         connection.invoke("GetClassNotification", studentId).catch(function (err) {
