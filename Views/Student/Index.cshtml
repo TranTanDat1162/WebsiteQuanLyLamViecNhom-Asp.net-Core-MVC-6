@@ -13,42 +13,32 @@
                     <h5>Danh sách lớp</h5>
                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                         <div class="dropdown status-dropdown mr-3">
-                            <div class="form-group mb-0">
-                                <select class="form-control" id="semesterDropdown" style="height:40px">
-                                    <option selected="selected" value="">Học kỳ</option>
-                                    <option value="1A">Học kỳ 1A</option>
-                                    <option value="1B">Học kỳ 1B</option>
-                                    <option value="2A">Học kỳ 2A</option>
-                                    <option value="2B">Học kỳ 2B</option>
-                                    <option value="3">Học kỳ 3</option>
-                                </select>
+                            <div class="dropdown-toggle" id="dropdownMenuButton03" data-toggle="dropdown" aria-expanded="false">
+                                <div class="btn bg-body"><span class="h6">Học kỳ 1A</span><i class="ri-arrow-down-s-line ml-2 mr-0"></i></div>
+                            </div>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton03" style="">
+                                <a class="dropdown-item" href="#">Học kỳ 1A</a>
+                                <a class="dropdown-item" href="#">Học kỳ 1B</a>
+                                <a class="dropdown-item" href="#">Học kỳ 2A</a>
+                                <a class="dropdown-item" href="#">Học kỳ 2B</a>
+                                <a class="dropdown-item" href="#">Học kỳ 3</a>
                             </div>
                         </div>
                         <div class="dropdown status-dropdown mr-3">
-                            <div class="form-group mb-0">
-                                <select class="form-control" id="yearDropdown" style="height:40px">
-                                    <option selected="selected" value="">Năm học </option>
-                                    @{
-                                        // Tạo một Set để theo dõi các giá trị đã thêm vào spinner
-                                        var addedYears = new HashSet<string>();
-
-                                        foreach (var item in Model.ClassListDTO)
-                                        {
-                                            // Kiểm tra xem giá trị đã được thêm vào spinner chưa
-                                            if (addedYears.Add($"{item.Year} - {item.Year + 1}"))
-                                            {
-                                            // Nếu chưa, thêm giá trị vào spinner
-                                                <option value="@($"{item.Year} - {item.Year + 1}")">Năm học @($"{item.Year} - {item.Year + 1}")</option>
-                                            }
-                                        }
-                                    }
-                                </select>
+                            <div class="dropdown-toggle" id="dropdownMenuButton03" data-toggle="dropdown" aria-expanded="false">
+                                <div class="btn bg-body"><span class="h6">Năm học 2020-2021</span><i class="ri-arrow-down-s-line ml-2 mr-0"></i></div>
+                            </div>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton03" style="">
+                                <a class="dropdown-item" href="#">Năm học 2020-2021</a>
+                                <a class="dropdown-item" href="#">Năm học 2021-2022</a>
+                                <a class="dropdown-item" href="#">Năm học 2022-2023</a>
+                                <a class="dropdown-item" href="#">Năm học 2023-2024</a>
                             </div>
                         </div>
                         <div class="iq-search-bar device-search" style="padding-right: 15px;">
                             <form action="#" class="searchbox">
-                                <p class="search-link"><i class="ri-search-line"></i></p>
-                                <input type="text" class="text search-input" placeholder="Tìm kiếm">
+                                <a class="search-link" href="#"><i class="ri-search-line"></i></a>
+                                <input type="text" class="text search-input" placeholder="Search here...">
                             </form>
                         </div>
                     </div>
@@ -65,7 +55,7 @@
                     <div class="row">
                     @foreach (var item in Model.StudentClassListDTO)
                     {
-                        <div class="col-lg-4 class-card">
+                        <div class="col-lg-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
@@ -152,97 +142,6 @@
     const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
     generateBreadcrumbs(breadcrumbData);
 
-</script>
-<script>
-    // Lắng nghe sự kiện thay đổi giá trị của spinner Học kỳ
-    document.getElementById('semesterDropdown').addEventListener('change', function () {
-        filterClasses();
-    });
-
-    // Lắng nghe sự kiện thay đổi giá trị của spinner Năm học
-    document.getElementById('yearDropdown').addEventListener('change', function () {
-        filterClasses();
-    });
-
-    // Hàm thực hiện lọc lớp học dựa trên giá trị của spinner Học kỳ
-    function filterClasses() {
-        var selectedSemester = document.getElementById('semesterDropdown').value;
-        var selectedYear = document.getElementById('yearDropdown').value;
-
-        // Lặp qua tất cả các thẻ lớp học
-        document.querySelectorAll('.class-card').forEach(function (card) {
-            var semester = card.querySelector('[data-semester]').getAttribute('data-semester');
-            var year = card.querySelector('[data-year]').getAttribute('data-year');
-
-            // Kiểm tra xem lớp có khớp với giá trị đã chọn hay không
-            var isSemesterMatch = semester.toLowerCase().trim() === selectedSemester.toLowerCase().trim() || selectedSemester === '';
-            var isYearMatch = year.toLowerCase().trim() === selectedYear.toLowerCase().trim() || selectedYear === '';
-
-            // Ẩn/hiện lớp tùy thuộc vào việc có khớp hay không
-            card.style.display = isSemesterMatch && isYearMatch ? 'block' : 'none';
-        });
-
-        // Lấy số lượng các lớp hiển thị dựa trên dữ liệu data-semester và data-year
-        var visibleClassCount = document.querySelectorAll('.class-card[data-semester="' + selectedSemester + '"][data-year="' + selectedYear + '"]').length;
-
-        // Ẩn/hiện nút Xem thêm dựa trên số lượng lớp hiển thị
-        var viewMoreBtn = document.getElementById('viewMoreBtn');
-        viewMoreBtn.style.display = visibleClassCount > 6 ? 'block' : 'none';
-    }
-
-</script>
-<script>
-    if (typeof isShowingAllClasses === 'undefined') {
-        var isShowingAllClasses = false;
-    }
-    const searchInput = document.querySelector('.search-input');
-    const classContainer = document.getElementById('classContainer');
-    const showMoreButton = document.getElementById('viewMoreBtn'); // Đặt id thực tế của nút "Xem thêm"
-
-    searchInput.addEventListener('input', function () {
-        const searchTerm = this.value.toLowerCase();
-        const classCards = classContainer.querySelectorAll('.class-card');
-        let visibleCount = 0;
-
-        classCards.forEach(card => {
-            const cardTitle = card.querySelector('.breadcrumb-content h5').textContent.toLowerCase();
-            if (cardTitle.includes(searchTerm)) {
-                card.style.display = 'block';
-                visibleCount++;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        // Kiểm tra số lượng lớp học hiển thị sau khi tìm kiếm
-        if (visibleCount > 6) {
-            showMoreButton.style.display = 'block';
-
-            // Kiểm tra xem văn bản tìm kiếm có bị xóa không
-            if (searchTerm === '') {
-                // Nếu bị xóa, tự động thực hiện chức năng "Xem thêm"
-                handleViewMore();
-            }
-        } else {
-            // Ẩn nút "Xem thêm" khi không có kết quả tìm kiếm
-            showMoreButton.style.display = 'none';
-        }
-    });
-    function handleViewMore() {
-        // Cập nhật trạng thái của nút và thực hiện chức năng tương ứng
-        isShowingAllClasses = !isShowingAllClasses;
-        var buttonText = isShowingAllClasses ? 'Xem thêm' : 'Ẩn bớt';
-        $('#viewMoreBtn').text(buttonText);
-
-        // Thực hiện chức năng tương ứng với trạng thái mới
-        if (isShowingAllClasses) {
-            // Nếu đang hiển thị tất cả, ẩn các lớp thừa đi
-            $('.class-card:gt(5)').hide();
-        } else {
-            // Nếu không hiển thị tất cả, hiện thêm lớp thừa
-            $('.class-card:gt(5)').show();
-        }
-    }
 </script>
 
 
