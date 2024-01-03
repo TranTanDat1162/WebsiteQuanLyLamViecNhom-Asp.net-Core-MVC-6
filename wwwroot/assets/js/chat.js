@@ -6,14 +6,32 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message) {
-    var li = document.createElement("li");
-    li.classList.add("line-height", "font-size-13","pb-2");
-    document.getElementById("messagesList").appendChild(li);
-    // We can assign user-supplied strings to an element's textContent because it
-    // is not interpreted as markup. If you're assigning in any other way, you 
-    // should be aware of possible script injection concerns.
-    li.textContent = `${user}: ${message}`;
-    updateScroll()
+    var messageContainer = document.createElement("div");  // Use a div for flexibility
+
+    var username = document.createElement("div");
+    username.classList.add("chat-user", "line-height");  // Style the username
+    username.textContent = user + ":";
+
+    var messageText = document.createElement("span");
+    messageText.classList.add("chat-content");  // Style the message content
+    messageText.textContent = message;
+    messageText.classList.add("rounded", "bg-primary", "text-white", "p-2","border-0","mt-0");  // Adjust classes as needed
+
+    // Xác định hướng tin nhắn dựa trên người dùng
+    var test = document.getElementById("userInput").value;
+    var isOwnMessage = (user === document.getElementById("userInput").value);  // Thay thế "yourUsername" bằng tên người dùng của bạn
+    var messageClasses = "rounded bg-primary text-white p-2 border-0 mt-0";
+    if (!isOwnMessage) {
+        messageClasses += " float-right";  // Thêm class "float-right" cho tin nhắn của người khác
+    }
+
+    messageText.classList.add(messageClasses);
+    messageContainer.appendChild(username);
+    messageContainer.appendChild(messageText);
+
+    document.getElementById("messagesList").appendChild(messageContainer);
+
+    updateScroll();
 });
 
 connection.on("ReceiveNotification", function (user, message, imgId, timestamp) {

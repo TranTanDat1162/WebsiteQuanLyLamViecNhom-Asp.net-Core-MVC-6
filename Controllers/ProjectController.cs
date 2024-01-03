@@ -74,6 +74,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     memberList = group.Students,
                     LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
                     CurrentClass = group.Project.Class,
+                    CurrentUser = viewModelTeacher.UserName,
                     ProjectAttachmentsJSON = group.Project.fileIDJSON,
                     GroupID = group.Id
                 };
