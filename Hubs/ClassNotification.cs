@@ -25,7 +25,7 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
         {
             //return this.serviceProvider.GetRequiredService<IDatabaseManager
             var User = await _context.Users.FindAsync(userId);
-            await Clients.Group(roomId).SendAsync("ReceiveMessage", User.LastName + " " + User.FirstName, message);
+            await Clients.Group(roomId).SendAsync("ReceiveMessage", User.LastName + " " + User.FirstName, message, userId);
 
             if (User != null)
             {
@@ -54,7 +54,7 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
             foreach (var line in chatLog)
             {
                 await Clients.Group(RoomId).SendAsync("ReceiveMessage"
-                    , line.User.LastName + " " + line.User.FirstName, line.MessageLine);
+                    , line.User.LastName + " " + line.User.FirstName, line.MessageLine,line.User.Id);
             }
         }
         public async Task GetClassNotification(string studentId)
@@ -84,8 +84,6 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
         public async Task AddToGroup(string RoomId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, RoomId);
-
-            await Clients.Group(RoomId).SendAsync("ReceiveMessage", $"{Context.ConnectionId}"," has joined the group {RoomId}.");
         }
     }
 }
