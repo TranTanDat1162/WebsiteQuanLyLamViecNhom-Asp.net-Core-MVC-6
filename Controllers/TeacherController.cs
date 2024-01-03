@@ -83,7 +83,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             ProjectDTO ProjectDTO = new()
             {
                 TeacherName = viewModel.LastName + " " + viewModel.FirstName,
-                TeacherId = projectList.First().Class.TeacherId,
+                TeacherId = viewModel.Id,
                 CurrentGroups = groupList,
                 CurrentProjects = projectList,
                 ClassID = studentList.ToArray().First().ClassId,

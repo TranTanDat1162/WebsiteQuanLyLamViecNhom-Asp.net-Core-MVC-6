@@ -6,29 +6,24 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message, userId) {
-    var messageContainer = document.createElement("div");  // Use a div for flexibility
+    var messageContainer = document.createElement("div");
+    messageContainer.style.clear = "both";
 
     var username = document.createElement("div");
-    username.classList.add("chat-user", "line-height");  // Style the username
+    username.classList.add("chat-user", "line-height");
     username.textContent = user + ":";
 
     var messageText = document.createElement("span");
-    messageText.classList.add("chat-content");  // Style the message content
+    messageText.classList.add("chat-content", "rounded", "bg-primary", "text-white", "p-2", "border-0", "mt-0");
     messageText.textContent = message;
-    messageText.classList.add("rounded", "bg-primary", "text-white", "p-2","border-0","mt-0");  // Adjust classes as needed
 
     // Xác định hướng tin nhắn dựa trên người dùng
     var test = document.getElementById("userInput").value;
-    var isOwnMessage = (userId === document.getElementById("userInput").value);  // Thay thế "yourUsername" bằng tên người dùng của bạn
-    var messageClasses = ["rounded", "bg-primary", "text-white", "p-2", "border-0", "mt-0"];
+    var isOwnMessage = (userId === document.getElementById("userInput").value);
 
-    if (!isOwnMessage) {
-        messageClasses += "float-right";  // Thêm class "float-right" cho tin nhắn của người khác
-    }
-
-    for (const classname of messageClasses) {
-        messageText.classList.add(classname);
-    }
+        // Thêm hoặc xóa class "float-right" tùy thuộc vào điều kiện
+    messageContainer.classList.toggle("text-right", isOwnMessage);
+    messageText.classList.toggle("bg-dark-light", !isOwnMessage);  // Nếu không phải tin nhắn của người gửi thì thêm màu nền
     messageContainer.appendChild(username);
     messageContainer.appendChild(messageText);
 
@@ -150,7 +145,7 @@ connection.start().then(function () {
         return console.error(err.toString());
     });
 
-    var studentId = document.getElementById("studentIn  put").value;
+    var studentId = document.getElementById("studentInput").value;
 
     if (studentId != null) {
         connection.invoke("GetClassNotification", studentId).catch(function (err) {
