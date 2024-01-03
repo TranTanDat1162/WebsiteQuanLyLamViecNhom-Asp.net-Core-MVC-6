@@ -6,8 +6,7 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message, userId) {
-    var messageContainer = document.createElement("div");
-    messageContainer.style.clear = "both";
+    var messageContainer = document.createElement("div");  // Use a div for flexibility
 
     var username = document.createElement("div");
     username.classList.add("chat-user", "line-height");
@@ -19,11 +18,16 @@ connection.on("ReceiveMessage", function (user, message, userId) {
 
     // Xác định hướng tin nhắn dựa trên người dùng
     var test = document.getElementById("userInput").value;
-    var isOwnMessage = (userId === document.getElementById("userInput").value);
+    var isOwnMessage = (userId === document.getElementById("userInput").value);  // Thay thế "yourUsername" bằng tên người dùng của bạn
+    var messageClasses = ["rounded", "bg-primary", "text-white", "p-2", "border-0", "mt-0"];
 
-        // Thêm hoặc xóa class "float-right" tùy thuộc vào điều kiện
-    messageContainer.classList.toggle("text-right", isOwnMessage);
-    messageText.classList.toggle("bg-dark-light", !isOwnMessage);  // Nếu không phải tin nhắn của người gửi thì thêm màu nền
+    if (!isOwnMessage) {
+        messageClasses += "float-right";  // Thêm class "float-right" cho tin nhắn của người khác
+    }
+
+    for (const classname of messageClasses) {
+        messageText.classList.add(classname);
+    }
     messageContainer.appendChild(username);
     messageContainer.appendChild(messageText);
 
