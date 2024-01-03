@@ -200,7 +200,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("StudentIndex", 
-                    new { classCode = memberList.FirstOrDefault().Class.Code });
+                    new { classCode = memberList.FirstOrDefault().Class.Code, GroupId= newtask.GroupId });
             }
             // TODO: Return errors
             return RedirectToAction("StudentIndex",
