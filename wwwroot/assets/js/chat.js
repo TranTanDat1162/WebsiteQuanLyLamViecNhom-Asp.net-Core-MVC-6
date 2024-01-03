@@ -7,7 +7,6 @@ document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message, userId) {
     var messageContainer = document.createElement("div");
-    messageContainer.style.clear = "both";
 
     var username = document.createElement("div");
     username.classList.add("chat-user", "line-height");
