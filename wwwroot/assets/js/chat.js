@@ -5,43 +5,52 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 //Disable the send button until connection is established.
 document.getElementById("sendButton").disabled = true;
 
-connection.on("ReceiveMessage", function (user, message) {
-    var li = document.createElement("li");
-    li.classList.add("line-height", "font-size-13","pb-2");
-    document.getElementById("messagesList").appendChild(li);
-    // We can assign user-supplied strings to an element's textContent because it
-    // is not interpreted as markup. If you're assigning in any other way, you 
-    // should be aware of possible script injection concerns.
-    li.textContent = `${user}: ${message}`;
-    updateScroll()
+connection.on("ReceiveMessage", function (user, message, userId) {
+    var messageContainer = document.createElement("div");
+    messageContainer.style.clear = "both";
+
+    var username = document.createElement("div");
+    username.classList.add("chat-user", "line-height");
+    username.textContent = user + ":";
+
+    var messageText = document.createElement("span");
+    messageText.classList.add("chat-content", "rounded", "bg-primary", "text-white", "p-2", "border-0", "mt-0");
+    messageText.textContent = message;
+
+    // Xác định hướng tin nhắn dựa trên người dùng
+    var test = document.getElementById("userInput").value;
+    var isOwnMessage = (userId === document.getElementById("userInput").value);
+
+        // Thêm hoặc xóa class "float-right" tùy thuộc vào điều kiện
+    messageContainer.classList.toggle("text-right", isOwnMessage);
+    messageText.classList.toggle("bg-dark-light", !isOwnMessage);  // Nếu không phải tin nhắn của người gửi thì thêm màu nền
+    messageContainer.appendChild(username);
+    messageContainer.appendChild(messageText);
+
+    document.getElementById("messagesList").appendChild(messageContainer);
+
+    updateScroll();
 });
 
 connection.on("ReceiveNotification", function (user, message, imgId, timestamp) {
-
-    // Create the link element within the notification
+    // Tạo phần hiển thị thông báo
     var notificationLink = document.createElement("a");
-    notificationLink.href = "#"; // Adjust the link URL if needed
+    notificationLink.href = "#"; // Điều chỉnh URL nếu cần
     notificationLink.classList.add("iq-sub-card");
 
-    // Create the media card element
     var mediaCard = document.createElement("div");
     mediaCard.classList.add("media", "align-items-center", "cust-card", "py-3", "border-bottom", "pr-2", "pl-2");
 
-    // Create the image container
     var imgContainer = document.createElement("div");
-
-    // Create the image element
     var img = document.createElement("img");
     img.classList.add("avatar-50", "rounded-small");
     img.src = `https://drive.google.com/uc?id=${imgId}&export=download`;
     img.alt = "01";
     imgContainer.appendChild(img);
 
-    // Create the media body container
     var mediaBody = document.createElement("div");
     mediaBody.classList.add("media-body", "ml-3");
 
-    // Create the header with name and timestamp
     var headerDiv = document.createElement("div");
     headerDiv.classList.add("d-flex", "align-items-center", "justify-content-between");
 
@@ -57,25 +66,70 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
     headerDiv.appendChild(headerName);
     headerDiv.appendChild(headerTimestamp);
 
-    // Create the message element
     var messageElement = document.createElement("small");
     messageElement.textContent = message;
+    messageElement.classList.add("mb-0");
+
+    // Giới hạn ký tự cho nội dung
+    var maxMessageLength = 10;
+    var displayedMessage = message.length > maxMessageLength
+        ? message.substring(0, maxMessageLength) + "..."
+        : message;
+
+    var messageElement = document.createElement("small");
+    messageElement.textContent = displayedMessage;
     messageElement.classList.add("mb-0");
 
     mediaBody.appendChild(headerDiv);
     mediaBody.appendChild(messageElement);
 
-    // Append elements to their respective containers
     mediaCard.appendChild(imgContainer);
     mediaCard.appendChild(mediaBody);
     notificationLink.appendChild(mediaCard);
 
-    // Append the notification to the messages list
-    var notifyblock = document.getElementById("notification-block");
+    // Thêm sự kiện nhấp chuột để hiển thị nội dung đầy đủ khi cần
+    notificationLink.addEventListener("click", function (event) {
+        // Ngăn chặn sự kiện click mặc định để tránh chuyển hướng
+        event.preventDefault();
 
-    notifyblock.appendChild(notificationLink);
+        // Tạo phần tử popup bên trái
+        var popup = document.createElement("div");
+        popup.classList.add("popup", "position-absolute", "bg-white", "p-3", "shadow", "rounded", "mr-5");
+        popup.textContent = message;
+        popup.style.maxWidth = "500px";
+        popup.style.wordWrap = "break-word";
+        // Hiển thị toàn bộ nội dung
 
-    // Update the scroll
+        // Đặt vị trí của popup bên trái của media card
+        var rect = notificationLink.getBoundingClientRect();
+        popup.style.top = rect.top + "px";
+        popup.style.left = rect.left - popup.offsetWidth - 10 + "px";
+
+        // Thêm popup vào body
+        document.body.appendChild(popup);
+
+        // Thêm sự kiện click để đóng popup khi click ra ngoài
+        var closeButton = document.createElement("button");
+        closeButton.textContent = "Đóng";
+        closeButton.classList.add("btn", "btn-secondary", "position-absolute", "bottom-0", "right-0", "mb-2", "ml-2");
+        closeButton.addEventListener("click", function () {
+            popup.remove();
+        });
+
+        // Thêm nút đóng vào popup
+        popup.appendChild(closeButton);
+        popup.appendChild(document.createElement("br")); // Thêm dòng mới để tạo khoảng cách giữa nút đóng và nội dung
+
+        // Thêm popup vào body
+        document.body.appendChild(popup);
+
+    });
+
+    // Thêm thông báo vào block thông báo
+    var notifyBlock = document.getElementById("notification-block");
+    notifyBlock.appendChild(notificationLink);
+
+    // Cập nhật thanh cuộn
     updateScroll();
 });
 

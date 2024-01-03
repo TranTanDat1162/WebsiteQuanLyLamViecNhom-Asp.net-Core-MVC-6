@@ -15,48 +15,16 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
                     <h5>@($"({Model.GroupViewModel.CurrentClass.Code}) {Model.GroupViewModel.CurrentClass.SubjectName}")</h5>
                     <div class="d-flex flex-wrap align-items-center">
-                        <div class="nav-item nav-icon nav-item-icon dropdown">
-                            <a href="#" class="search-toggle dropdown-toggle mr-2" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                    </path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                                <span class="bg-primary"></span>
-                            </a>
-                            <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton2" id="notification-list">
-                                <div class="card shadow-none m-0">
-                                    <div class="card-body p-0 ">
-                                        <div class="cust-title p-3">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h5 class="mb-0">Thông báo từ Giảng viên hướng dẫn</h5>
-                                                <a class="badge badge-primary badge-card" href="#">0</a>
-                                            </div>
-                                        </div>
-                                        <div class="px-3 pt-0 pb-0 sub-card">
-                                            <a href="#" class="iq-sub-card" data-target="#show-notification-modal"
-                                               data-toggle="modal">
-                                                <div class="media align-items-center cust-card py-3 border-bottom">
-                                                    <div class="">
-                                                        <img class="avatar-50 rounded-small" src="../assets/images/user/01.jpg" alt="01">
-                                                    </div>
-                                                    <div class="media-body ml-3">
-                                                        <div class="d-flex align-items-center justify-content-between">
-                                                            <h6 class="mb-0">Emma Watson</h6>
-                                                            <small class="text-dark"><b style="margin-left: 23px;">1m ago</b></small>
-                                                        </div>
-                                                        <small class="mb-0">View notification of this Leacture</small>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <a class="right-ic btn btn-primary btn-block position-relative p-2" href="#" role="button">
-                                            View All
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="d-flex flex-wrap align-items-center">
+                        <div class="form-group mt-0 mb-0 mr-2">
+                            <select class="custom-select" id="projectFilter" style="height:40px">
+                                <option value="all" selected>Tất cả</option>
+                                <option value="Pending">Chờ duyệt</option>
+                                <option value="OnGoing">Đang làm</option>
+                                <option value="Complete">Hoàn thành</option>
+                            </select>
                         </div>
+                    </div>
                         @{
                             var data = (Student)ViewData["Student"];
                             if(data.StudentCode == Model.GroupViewModel.LeaderID)
@@ -111,11 +79,10 @@
                     {
                         var uniqueId = $"Edit{uniqueIdCounter++}";
                         <div class="col-lg-12">
-                            @if (data.StudentCode == Model.GroupViewModel.LeaderID 
-                            && task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                            @if (data.StudentCode == Model.GroupViewModel.LeaderID && task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
                             {
                                 <form asp-action="VerifyTask" asp-controller="Project">
-                                    <div class="card card-widget task-card">
+                                    <div class="card card-widget task-card" data-status="@((int)task.Status)">
                                         <div class="card-body">
                                             <div class="d-flex flex-wrap align-items-center justify-content-between">
                                                 <div class="d-flex align-items-center">
@@ -126,33 +93,49 @@
                                                         <div class="media align-items-center">
                                                             @if (@task.TaskGradedByLeader != null)
                                                             {
-                                                                <div class="btn text-success bg-success-light mr-3">
-                                                                    <i class="ri-thumb-up-line mr-2"></i>@task.TaskGradedByLeader /10
-                                                                </div>
+                                                                @if (task.TaskGradedByLeader < 5)
+                                                                {
+                                                                    <div class="btn text-success bg-secondary-light mr-3">
+                                                                        <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
+                                                                    </div>
+                                                                }
+                                                                else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
+                                                                {
+                                                                    <div class="btn text-success bg-warning-light mr-3">
+                                                                        <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
+                                                                    </div>
+                                                                }
+                                                                else if (task.TaskGradedByLeader >= 8)
+                                                                {
+                                                                    <div class="btn text-success bg-success-light mr-3">
+                                                                        <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
+                                                                    </div>
+                                                                }
                                                             }
+
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="media align-items-center mt-md-0 mt-3">
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
-                                                    {
-                                                        <a class="btn bg-warning-light mr-3" id="btnOnPending">Chờ duyệt</a>
-                                                    }
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                    {
-                                                        <a class="btn bg-secondary-light mr-3" id="btnOnGoing">Đang làm</a>
-                                                    }
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
-                                                    {
-                                                        <a class="btn bg-success-light mr-3" id="btnsuccess">Hoàn thành</a>
-                                                    }
-                                                    <a class="btn bg-primary-light" data-toggle="collapse"
-                                                    href="#@uniqueId"
-                                                    role="button" aria-expanded="false"
-                                                    aria-controls="@uniqueId">
-                                                        <i class="ri-edit-box-line m-0"></i>
-                                                    </a>
-                                                </div>
+                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                                                {
+                                                    <a class="btn bg-warning-light mr-3" id="btnOnPending" data-status="1">Chờ duyệt</a>
+                                                }
+                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
+                                                {
+                                                    <a class="btn bg-secondary-light mr-3" id="btnOnGoing" data-status="0">Đang làm</a>
+                                                }
+                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
+                                                {
+                                                    <a class="btn bg-success-light mr-3" id="btnsuccess" data-status="2">Hoàn thành</a>
+                                                }
+                                            <a class="btn bg-primary-light" data-toggle="collapse"
+                                               href="#@uniqueId"
+                                               role="button" aria-expanded="false"
+                                               aria-controls="@uniqueId">
+                                                <i class="ri-edit-box-line m-0"></i>
+                                            </a>
+                                        </div>
                                             </div>
                                         </div>
                                     </div>
@@ -283,7 +266,7 @@
                             else
                             {
                                 <form asp-action="UpdateTask" asp-controller="Project" enctype="multipart/form-data">
-                                    <div class="card card-widget task-card">
+                                    <div class="card card-widget task-card" data-status="@((int)task.Status)">
                                         <div class="card-body">
                                             <div class="d-flex flex-wrap align-items-center justify-content-between">
                                                 <div class="d-flex align-items-center">
@@ -294,30 +277,46 @@
                                                         <div class="media align-items-center">
                                                             @if (@task.TaskGradedByLeader != null)
                                                             {
-                                                                <div class="btn text-success bg-success-light mr-3">
-                                                                    <i class="ri-thumb-up-line mr-2"></i>@task.TaskGradedByLeader /10
-                                                                </div>
+                                                                @if (task.TaskGradedByLeader < 5)
+                                                                {
+                                                                    <div class="btn text-success bg-secondary-light mr-3">
+                                                                        <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
+                                                                    </div>
+                                                                }
+                                                                else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
+                                                                {
+                                                                    <div class="btn text-success bg-warning-light mr-3">
+                                                                        <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
+                                                                    </div>
+                                                                }
+                                                                else if (task.TaskGradedByLeader >= 8)
+                                                                {
+                                                                    <div class="btn text-success bg-success-light mr-3">
+                                                                        <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
+                                                                    </div>
+                                                                }
                                                             }
+
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="media align-items-center mt-md-0 mt-3">
                                                     @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
                                                     {
-                                                        <a class="btn bg-warning-light mr-3" id="btnOnPending">Chờ duyệt</a>
+                                                        <a class="btn bg-warning-light mr-3" id="btnOnPending" data-status="1">Chờ duyệt</a>
                                                     }
                                                     @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
                                                     {
-                                                        <a class="btn bg-secondary-light mr-3" id="btnOnGoing">Đang làm</a>
+                                                        <a class="btn bg-secondary-light mr-3" id="btnOnGoing" data-status="0">Đang làm</a>
                                                     }
                                                     @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
                                                     {
-                                                        <a class="btn bg-success-light mr-3" id="btnsuccess">Hoàn thành</a>
+                                                        <a class="btn bg-success-light mr-3" id="btnsuccess" data-status="2">Hoàn thành</a>
                                                     }
                                                     <a class="btn bg-primary-light" data-toggle="collapse"
-                                                        href="#@uniqueId"
-                                                        role="button" aria-expanded="false"
-                                                        aria-controls="@uniqueId">
+                                                       href="#@uniqueId"
+                                                       role="button" aria-expanded="false"
+                                                       aria-controls="@uniqueId">
                                                         <i class="ri-edit-box-line m-0"></i>
                                                     </a>
                                                 </div>
@@ -498,7 +497,7 @@
                     </div>
                     <div class="col-2 ">
                         <div class="d-flex flex-wrap align-items-ceter justify-content-center">
-                            <div class="btn btn-outline-info mr-3 ri-send-plane-2-line" id="sendButton">
+                            <div class="btn btn-outline-info mr-3 mt-3 ri-send-plane-2-line" id="sendButton">
                             </div>
                         </div>
                     </div>
@@ -697,7 +696,43 @@
 
     const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
     generateBreadcrumbs(breadcrumbData);
+    }   
         //# sourceURL=Attachmentbadge.js
+</script>
+<script>
+    // Xử lý sự kiện khi giá trị của dropdown thay đổi
+    document.getElementById('projectFilter').addEventListener('change', function () {
+        // Lấy giá trị của dropdown
+        var selectedStatus = document.getElementById('projectFilter').value;
+
+        // Lặp qua tất cả các card để ẩn/hiện tùy thuộc vào giá trị của dropdown
+        var allCards = document.querySelectorAll('.task-card');
+        for (var i = 0; i < allCards.length; i++) {
+            var card = allCards[i];
+
+            // Lấy giá trị data-status của từng card
+            var cardStatus = card.getAttribute('data-status');
+
+            // Ẩn hoặc hiện card tùy thuộc vào giá trị của dropdown
+            switch (selectedStatus) {
+                case 'all':
+                    card.style.display = 'block';
+                    break;
+                case 'Pending':
+                    card.style.display = cardStatus === '1' ? 'block' : 'none';
+                    break;
+                case 'OnGoing':
+                    card.style.display = cardStatus === '0' ? 'block' : 'none';
+                    break;
+                case 'Complete':
+                    card.style.display = cardStatus === '2' ? 'block' : 'none';
+                    break;
+                default:
+                    card.style.display = 'none';
+                    break;
+            }
+        }
+    });
 </script>
 
 <script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
