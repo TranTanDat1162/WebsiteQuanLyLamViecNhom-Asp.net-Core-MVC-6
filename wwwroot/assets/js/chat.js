@@ -5,7 +5,7 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 //Disable the send button until connection is established.
 document.getElementById("sendButton").disabled = true;
 
-connection.on("ReceiveMessage", function (user, message) {
+connection.on("ReceiveMessage", function (user, message, userId) {
     var messageContainer = document.createElement("div");  // Use a div for flexibility
 
     var username = document.createElement("div");
@@ -17,6 +17,18 @@ connection.on("ReceiveMessage", function (user, message) {
     messageText.textContent = message;
     messageText.classList.add("rounded", "bg-primary", "text-white", "p-2","border-0","mt-0");  // Adjust classes as needed
 
+    // Xác định hướng tin nhắn dựa trên người dùng
+    var test = document.getElementById("userInput").value;
+    var isOwnMessage = (userId === document.getElementById("userInput").value);  // Thay thế "yourUsername" bằng tên người dùng của bạn
+    var messageClasses = ["rounded", "bg-primary", "text-white", "p-2", "border-0", "mt-0"];
+
+    if (!isOwnMessage) {
+        messageClasses += "float-right";  // Thêm class "float-right" cho tin nhắn của người khác
+    }
+
+    for (const classname of messageClasses) {
+        messageText.classList.add(classname);
+    }
     messageContainer.appendChild(username);
     messageContainer.appendChild(messageText);
 
