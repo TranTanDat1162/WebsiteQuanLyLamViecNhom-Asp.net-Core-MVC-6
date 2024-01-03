@@ -17,15 +17,6 @@ connection.on("ReceiveMessage", function (user, message) {
     messageText.textContent = message;
     messageText.classList.add("rounded", "bg-primary", "text-white", "p-2","border-0","mt-0");  // Adjust classes as needed
 
-    // Xác định hướng tin nhắn dựa trên người dùng
-    var test = document.getElementById("userInput").value;
-    var isOwnMessage = (user === document.getElementById("userInput").value);  // Thay thế "yourUsername" bằng tên người dùng của bạn
-    var messageClasses = "rounded bg-primary text-white p-2 border-0 mt-0";
-    if (!isOwnMessage) {
-        messageClasses += " float-right";  // Thêm class "float-right" cho tin nhắn của người khác
-    }
-
-    messageText.classList.add(messageClasses);
     messageContainer.appendChild(username);
     messageContainer.appendChild(messageText);
 
@@ -147,7 +138,7 @@ connection.start().then(function () {
         return console.error(err.toString());
     });
 
-    var studentId = document.getElementById("studentInput").value;
+    var studentId = document.getElementById("studentIn  put").value;
 
     if (studentId != null) {
         connection.invoke("GetClassNotification", studentId).catch(function (err) {
