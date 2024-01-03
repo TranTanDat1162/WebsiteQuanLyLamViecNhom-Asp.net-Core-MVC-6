@@ -72,11 +72,11 @@
                                         <h5 style="font-size: 24px" class="mb-3">
                                             (@item.Class.Code) @item.Class.SubjectName
                                         </h5>
-                                        <a hidden data-semester="@item.Semester">
-                                            @item.Semester
+                                        <a hidden data-semester="@item.Class.Semester">
+                                            @item.Class.Semester
                                         </a>
-                                        <a hidden data-year="@($"{item.Year} - {item.Year + 1}")">
-                                            @($"{item.Year} - {item.Year + 1}")
+                                        <a hidden data-year="@($"{item.Class.Year} - {item.Class.Year + 1}")">
+                                            @($"{item.Class.Year} - {item.Class.Year + 1}")
                                         </a>
                                     </div>
 
