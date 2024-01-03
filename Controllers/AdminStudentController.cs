@@ -70,7 +70,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         {
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
             //var teacher = await _context.Teacher.FindAsync(id);
-            var student = await _context.Student.Where(x => x.StudentCode.Contains(id)).FirstOrDefaultAsync();
+            var student = await _context.Student.Where(x => x.Id.Contains(id)).FirstOrDefaultAsync();
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
             if (student == null)
             {
