@@ -20,7 +20,6 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
         {
             _context = context;
         }
-
         public async Task SendMessage(string userId,string roomId, string message)
         {
             //return this.serviceProvider.GetRequiredService<IDatabaseManager

@@ -104,15 +104,15 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         }
 
         // Return View for Student
-        [Route("Student/Project/{ClassCode?}")]
+        [Route("Student/Project/{ClassCode?}/{GroupId?}")]
         [Authorize(Roles = "Student")]
-        public async Task<IActionResult> StudentIndex(string ClassCode)
+        public async Task<IActionResult> StudentIndex(string ClassCode, string GroupId)
         {
             viewModelStudent = await _context.Student.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             ViewData["Student"] = viewModelStudent;
 
             Group? group = await _context.Group
-                        .Where(t => t.Project.Class.Code == ClassCode)
+                        .Where(t => t.Id == GroupId)
                         .Include(p => p.Project)
                         .ThenInclude(c => c.Class)
                         .Include(s => s.Students)

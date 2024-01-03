@@ -40,24 +40,29 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 ViewData["Student"] = viewModel;
                 Student? currentStudent = await _context.Student
                     .Include(t => t.ClassList)
-                    .ThenInclude(t => t.Class)
-                    .ThenInclude(t => t.Teacher)
+                        .ThenInclude(t => t.Class)
+                            .ThenInclude(t => t.Teacher)
                     .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                //Teacher? currentTeacher = await _context.Teacher
-                //    .Include(t => t.ClassList)
-                //    .ThenInclude(t => t.ClassGroup)
-                //    .FirstOrDefaultAsync(t => t.Id == User.FindFirst(ClaimTypes.NameIdentifier));
-
                 CreateClassDTO ClassList = new CreateClassDTO();
-                foreach(var studentClass in currentStudent.ClassList)
-                {
-                    ClassList.ClassListDTO.Add(studentClass.Class);
-                }
-                ClassList.crumbs = new List<List<string>>()
+                if (currentStudent != null) {
+                    var currentClasses = await _context.StudentClass
+                        .Where(s => s.StudentId == currentStudent.Id)
+                        .Include(t => t.Class)
+                        .ToListAsync();
+
+                    foreach (var studentClass in currentClasses)
+                    {
+                        ClassList.StudentClassListDTO.Add(studentClass);
+                    }
+                    ClassList.crumbs = new List<List<string>>()
                     {
                         new List<string>() { "/Student", "Home" }
                     };
+                    return View(ClassList);
+
+                }
+
                 return View(ClassList);
             }
 
