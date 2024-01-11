@@ -43,7 +43,7 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
     var imgContainer = document.createElement("div");
     var img = document.createElement("img");
     img.classList.add("avatar-50", "rounded-small");
-    img.src = `https://drive.google.com/uc?id=${imgId}&export=download`;
+    img.src = `https://lh3.google.com/d/${imgId}=w250-h238-p-k-rw-v1-nu-iv1`;
     img.alt = "01";
     imgContainer.appendChild(img);
 
@@ -70,7 +70,7 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
     messageElement.classList.add("mb-0");
 
     // Giới hạn ký tự cho nội dung
-    var maxMessageLength = 10;
+    var maxMessageLength = 20;
     var displayedMessage = message.length > maxMessageLength
         ? message.substring(0, maxMessageLength) + "..."
         : message;
