@@ -117,21 +117,23 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             var currentclass = await _context.Class
                 .Where(t => t.Id == id)
                 .FirstOrDefaultAsync();
+
             if (ModelState.IsValid)
             {
                 Project newProject = new Project
-                {
+                {   
                     Name = createProjectDTO.Name,
                     Requirements = createProjectDTO.Requirement,
                     Deadline = createProjectDTO.Deadline,
                     ClassId = id,
                     Class = currentclass
                 };
+
                 _context.Add(newProject);
                 await _context.SaveChangesAsync();
                 _logger.LogInformation("New project has been created {Project}",
                     new { projectId = newProject.Id, code = newProject.Name, Class = newProject.ClassId });
-            }
+            }   
             //TODO: create a dynamic error view
             //return View("~/Views/Shared/Error.cshtml");
             return RedirectToRoute(new { controller = "Teacher", action = currentclass.Code});

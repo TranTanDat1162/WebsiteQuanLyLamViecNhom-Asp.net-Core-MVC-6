@@ -128,7 +128,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     var fileID =
                     gDriveServices.UploadFile(autogenTeacherId, data, "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
 
-                    
                     teacher.ImgId = (string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID));
                 }
 
@@ -159,10 +158,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         [Route("Admin/Teacher/Lock/{id?}")]
         public async Task<IActionResult?> LecturerLock(string id, bool isLocked)
         {
+
         #pragma warning disable CS8602 // Dereference of a possibly null reference.
             //var teacher = await _context.Teacher.FindAsync(id);
             var teacher = await _context.Teacher.Where(x => x.TeacherCode.Contains(id)).FirstOrDefaultAsync();
         #pragma warning restore CS8602 // Dereference of a possibly null reference.
+
             if (teacher == null)
             {
                 return NotFound();
