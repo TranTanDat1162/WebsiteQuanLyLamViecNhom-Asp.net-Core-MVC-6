@@ -72,6 +72,12 @@
                                             <div>
                                                 <h5 class="mb-2">
                                                     @task.TaskName
+                                                    <h7 class="mt-2 ml-2 font-size-14">
+                                                        @foreach (var member in task.StudentClass)
+                                                        {
+                                                            <span class="badge bg-primary-light mt-2 ">@($"{member.Student.FirstName} {member.Student.LastName}")</span>
+                                                        }
+                                                    </h7>
                                                 </h5>
                                                 <div class="media align-items-center">
                                                     @if (@task.TaskGradedByLeader != null)
