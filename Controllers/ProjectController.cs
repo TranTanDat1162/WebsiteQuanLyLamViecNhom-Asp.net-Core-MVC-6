@@ -33,7 +33,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         }
 
         static Student? viewModelStudent = new Student
-        {
+        {   
             StudentCode = "Student",
             Id = null 
         };
@@ -61,6 +61,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                     .Include(s => s.Students)
                                         .ThenInclude(sc => sc.Student)
                                     .FirstOrDefaultAsync();
+
 
                 GroupDTO groupDTO = new();
                 StudentClass? leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
@@ -115,23 +116,29 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             Group? group = await _context.Group
                         .Where(t => t.Id == GroupId)
                         .Include(p => p.Project)
-                        .ThenInclude(c => c.Class)
+                            .ThenInclude(c => c.Class)
                         .Include(s => s.Students)
-                        .ThenInclude(sc => sc.Student)
+                            .ThenInclude(sc => sc.Student)
                         .FirstOrDefaultAsync();
 
+            if (group == null)
+            {
+                // Nếu group là null, chuyển hướng đến trang lỗi hoặc trang thông báo
+                return RedirectToAction("Error", "Student");
+            }
+
             GroupDTO groupDTO = new();
-            StudentClass? leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
+            StudentClass? leader = group?.Students.Where(l => l.Student.StudentCode == group.LeaderID)
                                         .FirstOrDefault();
 
-            var currentGroup = new GroupDTO.GroupVM
+            var currentGroup = new GroupVM
             {
                 LeaderID = group.LeaderID,
                 MOTD = group.MOTD,
                 ProjectId = group.ProjectId,
                 ProjectName = group.Project.Name,
                 memberList = group.Students,
-                LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
+                LeaderName = leader?.Student.LastName + " " + leader?.Student.FirstName,
                 CurrentClass = group.Project.Class,
                 ProjectAttachmentsJSON = group.Project.fileIDJSON,
                 GroupID = group.Id,
@@ -154,6 +161,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 };
             return View(groupDTO);
 
+        }
+
+        [Route("Student/Error")]
+        public IActionResult Error()
+        {
+            return View();
         }
 
         //------------------Actions starts------------------->>

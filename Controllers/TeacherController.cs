@@ -314,7 +314,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                             RoleGroup = createClassDTO.classDTO.RoleGroup,
                             RoleProject = createClassDTO.classDTO.RoleProject,
                             ProjectRequirements = createClassDTO.classDTO.ProjectRequirements,
-                            OpenDate = (DateTime)createClassDTO.classDTO.OpenDate,
+                            OpenDate = createClassDTO.classDTO.OpenDate ?? DateTime.Now,
                             Year = int.Parse(createClassDTO.classDTO.Year.Substring(0, 4)),
                             Semester = createClassDTO.classDTO.Semester,
                             TeacherId = viewModel.Id
@@ -342,7 +342,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                     StudentCode = student.StudentCode,
                                     FirstName = student.StudentFirstName,
                                     LastName = student.StudentLastName,
-                                    DOB = (DateTime)student.DOB,
+                                    DOB = student.DOB.HasValue ? student.DOB.Value : DateTime.Now,
                                     UserName = student.StudentCode,
                                     IsLocked = true
                                 };
