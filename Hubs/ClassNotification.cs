@@ -70,14 +70,18 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
                 var chatLog = await _context.Messages
                 .Where(r => r.RoomID == classInfo.ClassId.ToString())
                 .OrderByDescending(t => t.Timestamp)
-                .FirstOrDefaultAsync();
+                .ToListAsync();
 
-                if (chatLog != null)
-                    await Clients.User(studentId).SendAsync("ReceiveNotification",
-                       classInfo.Class.Code,
-                       chatLog.MessageLine,
-                       classInfo.Class.Teacher.ImgId,
-                       chatLog.Timestamp.ToString("hh:mm tt"));
+                foreach(var line in chatLog)
+                {
+                    if (chatLog != null)
+                        await Clients.User(studentId).SendAsync("ReceiveNotification",
+                           classInfo.Class.Code,
+                           line.MessageLine,
+                           classInfo.Class.Teacher.ImgId,
+                           line.Timestamp.ToString("(dd/MM) \n hh:mm tt"));
+                }
+
 
             }
         }

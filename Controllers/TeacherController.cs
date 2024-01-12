@@ -84,6 +84,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
             var groupList = await _context.Group
                 .Where(t => t.Project.Class.Code == classCode)
+                .Include(l => l.Students)
                 .ToListAsync();
 
             ProjectDTO ProjectDTO = new()

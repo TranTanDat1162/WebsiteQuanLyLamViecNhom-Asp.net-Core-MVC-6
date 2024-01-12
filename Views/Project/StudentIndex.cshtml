@@ -29,8 +29,8 @@
                             var data = (Student)ViewData["Student"];
                             if(data.StudentCode == Model.GroupViewModel.LeaderID)
                             {
-                                <a href="#" class="btn btn-primary" data-target="#new-task-modal"
-                                    data-toggle="modal">Tạo công việc</a>
+                                    <a href="#" class="btn btn-primary" data-target="#new-task-modal"
+                                        data-toggle="modal">Tạo công việc</a>
                             }
                         }
                     </div>
@@ -728,7 +728,21 @@
         var selectedStatus = document.getElementById('projectFilter').value;
 
         // Lặp qua tất cả các card để ẩn/hiện tùy thuộc vào giá trị của dropdown
-        var allCards = document.querySelectorAll('.task-card');
+        var allCards = document.querySelectorAll('.task-card[data-status]');
+
+        const matchingElements = document.querySelectorAll('[href^="#Edit"]');
+
+        // Do something with the fetched elements:
+        matchingElements.forEach(element => {
+            // Access the element's properties or perform actions on it, e.g.,
+            console.log(element);
+            var isExpanded = element.getAttribute('aria-expanded');
+
+            if (isExpanded === 'true') {
+                element.click();
+            }
+        });
+
         for (var i = 0; i < allCards.length; i++) {
             var card = allCards[i];
 
@@ -755,6 +769,8 @@
             }
         }
     });
+    //# sourceURL=TaskFilter.js
+
 </script>
 <script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/assets/js/chat.js"></script>

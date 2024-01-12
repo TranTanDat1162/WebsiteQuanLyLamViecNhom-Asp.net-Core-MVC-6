@@ -130,16 +130,21 @@
                                         </svg>
                                         <span class="bg-primary "></span>
                                     </a>
-                                    <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton"
+                                            style="width: 9cm">
                                         <div class="card shadow-none m-0">
-                                            <div class="card-body p-0 " id="notification-block">
+                                            <div class="card-body p-0 ">
                                                 <div class="cust-title p-3">
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <h5 class="mb-0">Notifications</h5>
                                                         <!--student's id for fetching class notification-->
                                                         <input hidden type="text" id="studentInput" value="@data.Id" />
-                                                        <a id="notificationBadge" class="badge badge-primary badge-card" href="#">3</a>
+                                                        <a id="notificationBadge" class="badge badge-primary badge-card" href="#"></a>
                                                     </div>
+                                                </div>
+                                                <div id="notification-block" style="
+                                                            overflow-y: scroll;
+                                                            max-height: 14cm;">
                                                 </div>
                                             </div>
                                         </div>
@@ -403,7 +408,7 @@
     <!-- Đảm bảo bạn đã bao gồm thư viện jQuery trước khi sử dụng đoạn mã này -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<script>
+@* <script>
     // Đoạn mã sẽ chạy khi trang được tải hoàn thành
     $(document).ready(function() {
         // Lấy giá trị của input hidden chứa id sinh viên
@@ -443,7 +448,7 @@
             $("#notificationBadge").show();
         }
     }
-</script>
+</script> *@
 
 </body>
 

@@ -312,7 +312,6 @@
                 </table>
             </div>
         </div>
-            @*Teacher vẫn chưa thể chat được*@
             <!--Group chat start -->
             <div class="card">
                 <div class="card-body">
@@ -353,7 +352,21 @@
         var selectedStatus = document.getElementById('projectFilter').value;
 
         // Lặp qua tất cả các card để ẩn/hiện tùy thuộc vào giá trị của dropdown
-        var allCards = document.querySelectorAll('.task-card');
+        var allCards = document.querySelectorAll('.task-card[data-status]');
+
+        const matchingElements = document.querySelectorAll('[href^="#Edit"]');
+
+        // Do something with the fetched elements:
+        matchingElements.forEach(element => {
+            // Access the element's properties or perform actions on it, e.g.,
+            console.log(element);
+            var isExpanded = element.getAttribute('aria-expanded');
+
+            if (isExpanded === 'true') {
+                element.click();
+            }
+        });
+
         for (var i = 0; i < allCards.length; i++) {
             var card = allCards[i];
 
@@ -402,6 +415,8 @@
             while (taskDiv.children.length > 1) {
                 taskDiv.removeChild(attachmentsContainer.lastChild);
             }
+
+
 
             // Create the heading element with the link
             const heading = document.createElement("h5");

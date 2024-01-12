@@ -12,7 +12,7 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
                     <h5>Danh sách lớp</h5>
                     <div class="d-flex flex-wrap align-items-center justify-content-between">
-@*                        <div class="dropdown status-dropdown mr-3">
+                       <div class="dropdown status-dropdown mr-3">
                             <div class="form-group mb-0">
                                 <select class="form-control" id="semesterDropdown" style="height:40px">
                                     <option selected="selected" value="">Học kỳ</option>
@@ -32,13 +32,13 @@
                                         // Tạo một Set để theo dõi các giá trị đã thêm vào spinner
                                         var addedYears = new HashSet<string>();
 
-                                        foreach (var item in Model.ClassListDTO)
+                                        foreach (var item in Model.StudentClassListDTO)
                                         {
                                             // Kiểm tra xem giá trị đã được thêm vào spinner chưa
-                                            if (addedYears.Add($"{item.Year} - {item.Year + 1}"))
+                                            if (addedYears.Add($"{item.Class.Year} - {item.Class.Year + 1}"))
                                             {
                                             // Nếu chưa, thêm giá trị vào spinner
-                                                <option value="@($"{item.Year} - {item.Year + 1}")">Năm học @($"{item.Year} - {item.Year + 1}")</option>
+                                                <option value="@($"{item.Class.Year} - {item.Class.Year + 1}")">Năm học @($"{item.Class.Year} - {item.Class.Year + 1}")</option>
                                             }
                                         }
                                     }
@@ -50,7 +50,7 @@
                                 <a class="search-link" href="#"><i class="ri-search-line"></i></a>
                                 <input type="text" class="text search-input" placeholder="Tìm kiếm">
                             </form>
-                        </div>*@
+                        </div>
                     </div>
                 </div>
             </div>
@@ -83,11 +83,12 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="iq-media-group">
                                             <a href="#" class="iq-media">
-                                                <img style="width: 100px; height: 100px" src="https://lh3.google.com/d/@item.Class.Teacher.ImgId=w250-h238-p-k-rw-v1-nu-iv1" class="img-fluid avatar-40 rounded-circle" alt=""
+                                                <img style="width: 100px; height: 100px" src="https://lh3.googleusercontent.com/u/0/d/@item.Class.Teacher.ImgId=w250-h238-p-k-rw-v1-nu-iv1" class="img-fluid avatar-40 rounded-circle" alt=""
                                                      data-trigger="hover" data-toggle="popover" data-content="@item.Class.Teacher" />
                                             </a>
                                         </div>
                                     </div>
+
                                     <a href="/Student/Project/@item.Class.Code/@item.GroupID" class="mb-3" style="padding-top: 10px;">
                                         <button type="button" class="btn btn-primary btn-block">
                                             Truy cập
@@ -107,9 +108,14 @@
     </div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script type="text/javascript" src="/assets/js/customizer.js"></script>
 <script>
+
+    // document.getElementById('.notificationBadge').innerHTML
+
     // Số lớp hiển thị mặc định
     var defaultClassCount = 6;
+    const searchInput = document.querySelector('.search-input');
 
     // Biến để theo dõi trạng thái của nút
     var isShowingAllClasses = false;
@@ -149,12 +155,7 @@
         var buttonText = isShowingAllClasses ? 'Ẩn bớt' : 'Xem thêm';
         $('#viewMoreBtn').text(buttonText);
     }
-    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
-    generateBreadcrumbs(breadcrumbData);
 
-</script>
-
-<script>
     // Lắng nghe sự kiện thay đổi giá trị của spinner Học kỳ
     document.getElementById('semesterDropdown').addEventListener('change', function () {
         filterClasses();
@@ -190,11 +191,40 @@
         var viewMoreBtn = document.getElementById('viewMoreBtn');
         viewMoreBtn.style.display = visibleClassCount > 6 ? 'block' : 'none';
     }
+    
+    searchInput.addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        const classCards = classContainer.querySelectorAll('.class-card');
+        let visibleCount = 0;
+
+        classCards.forEach(card => {
+            const cardTitle = card.querySelector('.breadcrumb-content h5').textContent.toLowerCase();
+            if (cardTitle.includes(searchTerm)) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Kiểm tra số lượng lớp học hiển thị sau khi tìm kiếm
+        if (visibleCount > 6) {
+            showMoreButton.style.display = 'block';
+
+            // Kiểm tra xem văn bản tìm kiếm có bị xóa không
+            if (searchTerm === '') {
+                // Nếu bị xóa, tự động thực hiện chức năng "Xem thêm"
+                handleViewMore();
+            }
+        } else {
+            // Ẩn nút "Xem thêm" khi không có kết quả tìm kiếm
+            showMoreButton.style.display = 'none';
+        }
+    });
+
+
 
     const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
     generateBreadcrumbs(breadcrumbData);
-        //# sourceURL=TeacherIndex.js
 
 </script>
-
-

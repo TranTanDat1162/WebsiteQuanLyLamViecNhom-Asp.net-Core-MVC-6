@@ -12,26 +12,36 @@ connection.on("ReceiveMessage", function (user, message, userId) {
     username.classList.add("chat-user", "line-height");
     username.textContent = user + ":";
 
-    var messageText = document.createElement("span");
-    messageText.classList.add("chat-content", "rounded", "bg-primary", "text-white", "p-2", "border-0", "mt-0");
-    messageText.textContent = message;
+    var messageText = document.createElement("p");
+    messageText.classList.add("chat-content", "rounded", "bg-primary", "text-white", "p-2", "border-0", "mt-0","line-height");
+    messageText.style.maxWidth = "70%";
+    messageText.style.textAlign = "justify";
+
+    messageText.innerHTML = message.replace(/\n/g, "<br>");
+
+    var messageNestContainer = document.createElement("div");
+    messageNestContainer.style.display = "flex";
+    
+    //messageNestContainer.classList.add("");
 
     // Xác định hướng tin nhắn dựa trên người dùng
-    var test = document.getElementById("userInput").value;
     var isOwnMessage = (userId === document.getElementById("userInput").value);
 
     // Thêm hoặc xóa class "float-right" tùy thuộc vào điều kiện
     messageContainer.classList.toggle("text-right", isOwnMessage);
     messageText.classList.toggle("bg-dark-light", !isOwnMessage);  // Nếu không phải tin nhắn của người gửi thì thêm màu nền
+    messageNestContainer.style.flexDirection = isOwnMessage ? "row-reverse" : "row";
+    messageNestContainer.appendChild(messageText);
 
     messageContainer.appendChild(username);
-    messageContainer.appendChild(messageText);
+    messageContainer.appendChild(messageNestContainer);
 
     document.getElementById("messagesList").appendChild(messageContainer);
 
     updateScroll();
 });
 connection.on("ReceiveNotification", function (user, message, imgId, timestamp) {
+
     // Tạo phần hiển thị thông báo
     var notificationLink = document.createElement("a");
     notificationLink.href = "#"; // Điều chỉnh URL nếu cần
@@ -43,7 +53,7 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
     var imgContainer = document.createElement("div");
     var img = document.createElement("img");
     img.classList.add("avatar-50", "rounded-small");
-    img.src = `https://lh3.google.com/d/${imgId}=w250-h238-p-k-rw-v1-nu-iv1`;
+    img.src = `https://lh3.googleusercontent.com/u/0/d/${imgId}=w250-h238-p-k-rw-v1-nu-iv1`;
     img.alt = "01";
     imgContainer.appendChild(img);
 
@@ -58,9 +68,10 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
     headerName.classList.add("mb-0");
 
     var headerTimestamp = document.createElement("small");
-    headerTimestamp.textContent = timestamp;
-    headerTimestamp.classList.add("text-dark", "mb-0");
+    headerTimestamp.textContent = timestamp.replace(" ", "\n");
+    headerTimestamp.classList.add("text-dark", "mb-0","font-size-12");
     headerTimestamp.style.fontWeight = "bold";
+    headerTimestamp.style.fontStyle = "italic";
 
     headerDiv.appendChild(headerName);
     headerDiv.appendChild(headerTimestamp);
@@ -70,7 +81,7 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
     messageElement.classList.add("mb-0");
 
     // Giới hạn ký tự cho nội dung
-    var maxMessageLength = 20;
+    var maxMessageLength = 80;
     var displayedMessage = message.length > maxMessageLength
         ? message.substring(0, maxMessageLength) + "..."
         : message;
@@ -135,6 +146,8 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
 
 connection.start().then(function () {
     var room = document.getElementById("roomInput").value;
+    const messageInput = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
 
     connection.invoke("AddToGroup", room.toString()).catch(function (err) {
         return console.error(err.toString());
@@ -144,15 +157,22 @@ connection.start().then(function () {
         return console.error(err.toString());
     });
 
-    var studentId = document.getElementById("studentInput").value;
+    sendButton.disabled = false;
 
-    if (studentId != null) {
-        connection.invoke("GetClassNotification", studentId).catch(function (err) {
-            return console.error(err.toString());
-        });
-    }
+    // Add an event listener for the "keydown" event on the textarea:
+    messageInput.addEventListener("keydown", function (event) {
+        if (event.keyCode == 13 && !event.shiftKey) {
+            // Simulate a click on the send button:
+            sendButton.click();
 
-    document.getElementById("sendButton").disabled = false;
+            // Clear the textarea:
+            this.value = "";
+
+            // Prevent the default behavior of Enter (which would usually create a new line):
+            event.preventDefault();
+        }
+    });
+
 }).catch(function (err) {
     return console.error(err.toString());
 });
