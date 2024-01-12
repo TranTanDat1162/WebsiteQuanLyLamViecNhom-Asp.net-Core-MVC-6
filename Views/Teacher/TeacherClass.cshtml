@@ -173,19 +173,19 @@
                     <div class="col-lg-12">
                         <div class="form-group mb-3">
                             <label for="exampleInputText01" class="h5">Tên Project*</label>
-                            <input asp-for="createProjectDTO.Name" type="text" class="form-control" id="exampleInputText01" placeholder="Project Name">
+                            <input asp-for="createProjectDTO.Name" type="text" class="form-control" id="exampleInputText01" placeholder="Project Name" required="required">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group mb-3">
                             <label for="exampleInputText2" class="h5">Yêu cầu *</label>
-                            <input asp-for="createProjectDTO.Requirement" type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder">
+                                <input asp-for="createProjectDTO.Requirement" type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder" required="required">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group mb-3">
                             <label for="exampleInputText004" class="h5">Ngày kết thúc*</label>
-                            <input asp-for="createProjectDTO.Deadline" type="date" class="form-control" id="exampleInputText004" value="">
+                                <input asp-for="createProjectDTO.Deadline" type="date" class="form-control" id="exampleInputText004" value="" required="required">
                         </div>
                     </div>
 @*                     <div class="col-lg-12">
@@ -289,19 +289,19 @@
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText01" class="h5">Tên Project</label>
-                                <input asp-for="updateProjectDTO.Name" type="text" class="form-control" id="updateProjectDTO_name" placeholder="Project Name">
+                                <input asp-for="updateProjectDTO.Name" type="text" class="form-control" id="updateProjectDTO_name" placeholder="Project Name" required="required">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText2" class="h5">Yêu cầu</label>
-                                <input asp-for="updateProjectDTO.Requirement" type="text" class="form-control" id="updateProjectDTO_require" placeholder="Placeholder">
+                                <input asp-for="updateProjectDTO.Requirement" type="text" class="form-control" id="updateProjectDTO_require" placeholder="Placeholder" required="required">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText004" class="h5">Ngày kết thúc</label>
-                                <input asp-for="updateProjectDTO.Deadline" type="date" class="form-control" id="updateProjectDTO_deadline">
+                                <input asp-for="updateProjectDTO.Deadline" type="date" class="form-control" id="updateProjectDTO_deadline"  required="required">
                             </div>
                         </div>
                         <div class="col-lg-12">
