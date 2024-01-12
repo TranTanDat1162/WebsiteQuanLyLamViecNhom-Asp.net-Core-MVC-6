@@ -142,6 +142,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 CurrentClass = group.Project.Class,
                 ProjectAttachmentsJSON = group.Project.fileIDJSON,
                 GroupID = group.Id,
+                Deadline = group.Project?.Deadline,
                 CurrentUser = viewModelStudent.Id
             };
 

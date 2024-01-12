@@ -92,7 +92,7 @@
                                                             <h7 class="mt-2 ml-2 font-size-14">
                                                                 @foreach (var member in task.StudentClass)
                                                                 {
-                                                                    <span class="badge bg-primary-light mt-2 ">@($"{member.Student.FirstName} {member.Student.LastName}")</span>
+                                                                    <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName} {member.Student.FirstName}")</span>
                                                                 }
                                                             </h7>
                                                         </h5>
@@ -490,7 +490,7 @@
                                 <tr>
                                     <td>
                                         <div class="media align-items-center">
-                                            <h6 class="ml-3">@($"{student.Student.FirstName} {student.Student.LastName}")</h6>
+                                            <h6 class="ml-3">@($"{student.Student.LastName} {student.Student.FirstName}")</h6>
                                         </div>
                                     </td>
                                 </tr>
@@ -553,47 +553,47 @@
     <div class="modal-dialog  modal-dialog-centered modal-lg" role="document" style="max-width: 80% !important;">
         <div class="modal-content">
             <div class="modal-header d-block text-center pb-3 border-bttom">
-                <h3 class="modal-title" id="exampleModalCenterTitle">New Task</h3>
+                <h3 class="modal-title" id="exampleModalCenterTitle">Tạo công việc</h3>
             </div>
             <form asp-action="CreateTask" asp-controller="Project">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText02" class="h5">Task Name</label>
-                                <input asp-for="createTaskDTO.TaskName" type="text" class="form-control" id="exampleInputText02" placeholder="Enter task Name">
+                                <label for="exampleInputText02" class="h5">Tên công việc*</label>
+                                <input asp-for="createTaskDTO.TaskName" type="text" class="form-control" id="exampleInputText02" placeholder="Enter task Name" required="required">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText2" class="h5">Assigned to</label>
-                                <select asp-for="createTaskDTO.memberList" id="createTaskDTO_memberList" name="createTaskDTO.memberList"
+                                <label for="exampleInputText2" class="h5">Phân cho*</label>
+                                <select asp-for="createTaskDTO.memberList" id="createTaskDTO_memberList" required="required" name="createTaskDTO.memberList"
                                         class="selectpicker form-control"
                                         data-style="py-0" multiple>
-                                    <option disabled value="">Please select</option>
+                                    <option disabled value="">Vui lòng chọn sinh viên thực hiện công việc</option>
                                     @foreach (var student in Model.GroupViewModel.memberList)
                                     {
-                                        <option value="@student.StudentId">@($"{student.Student.FirstName} {student.Student.LastName}")</option>
+                                        <option value="@student.StudentId">@($"{student.Student.LastName} {student.Student.FirstName}")</option>
                                     }
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText05" class="h5">Deadline*</label>
-                                <input asp-for="createTaskDTO.Deadline" type="date" class="form-control" id="exampleInputText05" value="">
+                                <label for="exampleInputText05" class="h5">Ngày kết thúc*</label>
+                                <input required="required" asp-for="createTaskDTO.Deadline" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@Model.GroupViewModel.Deadline.Value.ToString("yyyy-MM-dd")" class="form-control" id="exampleInputText05" value="">
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText040" class="h5">Description</label>
-                                <textarea asp-for="createTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2"></textarea>
+                                <label for="exampleInputText040" class="h5">Mô tả*</label>
+                                <textarea required="required" asp-for="createTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2"></textarea>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-4">
                                 <input type="submit" value="Tạo Task" class="btn btn-primary mr-3" />
-                                <div class="btn btn-primary" data-dismiss="modal">Cancel</div>
+                                <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
                             </div>
                         </div>
                     </div>

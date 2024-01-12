@@ -567,7 +567,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label for="exampleInputText004" class="h5">Ngày mở lớp*</label>
-                                        <input asp-for="classDTO.OpenDate" type="date" class="form-control" id="exampleInputText0004" value="">
+                                        <input asp-for="classDTO.OpenDate" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" id="exampleInputText0004" value="">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
