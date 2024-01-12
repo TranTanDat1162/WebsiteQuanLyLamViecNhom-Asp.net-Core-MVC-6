@@ -92,7 +92,7 @@
                                                             <h7 class="mt-2 ml-2 font-size-14">
                                                                 @foreach (var member in task.StudentClass)
                                                                 {
-                                                                    <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName} {member.Student.FirstName}")</span>
+                                                                    <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName}") @($"{member.Student.FirstName}")</span>
                                                                 }
                                                             </h7>
                                                         </h5>
@@ -163,7 +163,7 @@
                                                                     multiple>
                                                                         @foreach (var member in task.StudentClass)
                                                                         {
-                                                                            <option disabled selected>@($"{member.Student.FirstName} {member.Student.LastName}")</option>
+                                                                            <option disabled selected> @member.Student.LastName @member.Student.FirstName </option>
                                                                         }
                                                                     </select>
                                                                 </div>
@@ -283,7 +283,7 @@
                                                             <h7 class="mt-2 ml-2 font-size-14">
                                                                 @foreach (var member in task.StudentClass)
                                                                 {
-                                                                    <span class="badge bg-primary-light mt-2 ">@($"{member.Student.FirstName} {member.Student.LastName}")</span>
+                                                                    <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName}") @($"{member.Student.FirstName}")</span>
                                                                 }
                                                             </h7>
                                                         </h5>
@@ -573,7 +573,7 @@
                                     <option disabled value="">Vui lòng chọn sinh viên thực hiện công việc</option>
                                     @foreach (var student in Model.GroupViewModel.memberList)
                                     {
-                                        <option value="@student.StudentId">@($"{student.Student.LastName} {student.Student.FirstName}")</option>
+                                        <option value="@student.StudentId">@($"{student.Student.FirstName} {student.Student.LastName}")</option>
                                     }
                                 </select>
                             </div>
