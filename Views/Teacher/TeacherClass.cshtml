@@ -222,8 +222,8 @@
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText01" class="h5">Chọn Project*</label>
-                                <select asp-for="createGroupDTO.ProjectId" name="createGroupDTO.ProjectId" class="selectpicker form-control" data-style="py-0">
-                                    <option selected="selected" disabled value="">Please select</option>
+                                <select asp-for="createGroupDTO.ProjectId" name="createGroupDTO.ProjectId" class="selectpicker form-control" data-style="py-0" required="required">
+                                    <option selected="selected" disabled value=""><strong>Vui lòng chọn đồ án</strong></option>
                                     @foreach (var project in Model.CurrentProjects)
                                     {
                                         <option value="@project.Id">@project.Name</option>
@@ -234,7 +234,7 @@
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText2" class="h5">Ghi chú *</label>
-                                <input asp-for="createGroupDTO.MOTD" type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder">
+                                <input asp-for="createGroupDTO.MOTD" type="text" class="form-control" id="exampleInputText02" placeholder="Placeholder" required="required">
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -242,7 +242,8 @@
                                 <label for="exampleInputText2" class="h5">Chọn thành viên *</label>
                                 <select asp-for="createGroupDTO.memberList" id="createGroupDTO_memberList" name="createGroupDTO.memberList"
                                         class="selectpicker form-control"
-                                        data-style="py-0" multiple>
+                                        data-style="py-0" multiple
+                                        required="required">
                                     <option disabled value="">Please select</option>
                                     @foreach (var student in Model.StudentList)
                                     {
@@ -258,7 +259,7 @@
                         <div class="col-lg-6">
                             <div class="form-group mb-3">
                                 <label for="exampleInputText2" class="h5">Chọn nhóm trưởng *</label>
-                                <select asp-for="createGroupDTO.LeaderID" id="dependentDropdown" class="selectpicker form-control">
+                                <select asp-for="createGroupDTO.LeaderID" id="dependentDropdown" class="selectpicker form-control" required="required">
                                     <option disabled value="">Please select leader</option>
                                 </select>
                             </div>
