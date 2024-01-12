@@ -59,7 +59,7 @@
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <img src="/assets/images/user/1.jpg" class="img-fluid rounded-circle" alt="user">
                                         <div class="caption ml-3">
-                                            <h6 class="mb-0 line-height">@data.StudentCode<i class="las la-angle-down ml-2"></i></h6>
+                                            <h6 class="mb-0 line-height">@data.StudentCode<i class="pt-1 ri-arrow-down-s-line"></i></h6>
                                         </div>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right border-none" aria-labelledby="dropdownMenuButton">
@@ -79,6 +79,10 @@
         </div>
         <div class="content-page" style="margin-left: auto;">
             <div class="container-fluid">
+                <div id="breadcrumbs" class="card-body" style="
+                padding-top: 0px;
+                padding-bottom: 5px;">
+                </div>
                 <!-- https://stackoverflow.com/questions/1066777/how-can-dynamic-breadcrumbs-be-achieved-with-asp-net-mvc  -->
                 @RenderBody()
                 <!-- Page end  -->

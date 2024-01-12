@@ -55,71 +55,6 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto navbar-list align-items-center">
                                 <li class="nav-item nav-icon nav-item-icon dropdown">
-                                    <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                        <div class="card shadow-none m-0">
-                                            <div class="card-body p-0 ">
-                                                <div class="cust-title p-3">
-                                                    <div class="d-flex align-items-center justify-content-between">
-                                                        <h5 class="mb-0">All Messages</h5>
-                                                        <a class="badge badge-primary badge-card" href="#">3</a>
-                                                    </div>
-                                                </div>
-                                                <div class="px-3 pt-0 pb-0 sub-card">
-                                                    <a href="#" class="iq-sub-card">
-                                                        <div class="media align-items-center cust-card py-3 border-bottom">
-                                                            <div class="">
-                                                                <img class="avatar-50 rounded-small"
-                                                                     src="/assets/images/user/01.jpg" alt="01">
-                                                            </div>
-                                                            <div class="media-body ml-3">
-                                                                <div class="d-flex align-items-center justify-content-between">
-                                                                    <h6 class="mb-0">Emma Watson</h6>
-                                                                    <small class="text-dark"><b>12 : 47 pm</b></small>
-                                                                </div>
-                                                                <small class="mb-0">Lorem ipsum dolor sit amet</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                    <a href="#" class="iq-sub-card">
-                                                        <div class="media align-items-center cust-card py-3 border-bottom">
-                                                            <div class="">
-                                                                <img class="avatar-50 rounded-small"
-                                                                     src="/assets/images/user/02.jpg" alt="02">
-                                                            </div>
-                                                            <div class="media-body ml-3">
-                                                                <div class="d-flex align-items-center justify-content-between">
-                                                                    <h6 class="mb-0">Ashlynn Franci</h6>
-                                                                    <small class="text-dark"><b>11 : 30 pm</b></small>
-                                                                </div>
-                                                                <small class="mb-0">Lorem ipsum dolor sit amet</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                    <a href="#" class="iq-sub-card">
-                                                        <div class="media align-items-center cust-card py-3">
-                                                            <div class="">
-                                                                <img class="avatar-50 rounded-small"
-                                                                     src="/assets/images/user/03.jpg" alt="03">
-                                                            </div>
-                                                            <div class="media-body ml-3">
-                                                                <div class="d-flex align-items-center justify-content-between">
-                                                                    <h6 class="mb-0">Kianna Carder</h6>
-                                                                    <small class="text-dark"><b>11 : 21 pm</b></small>
-                                                                </div>
-                                                                <small class="mb-0">Lorem ipsum dolor sit amet</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <a class="right-ic btn btn-primary btn-block position-relative p-2" href="#"
-                                                   role="button">
-                                                    View All
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="nav-item nav-icon nav-item-icon dropdown">
                                     <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
@@ -155,7 +90,10 @@
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <img src="/assets/images/user/1.jpg" class="img-fluid rounded-circle" alt="user">
                                         <div class="caption ml-3">
-                                            <h6 class="mb-0 line-height">@data.StudentCode<i class="las la-angle-down ml-2"></i></h6>
+                                            <h6 class="mb-0 line-height d-flex" style="align-items: baseline">
+                                                @data.StudentCode
+                                                <i class="pt-1 ri-arrow-down-s-line"></i>
+                                            </h6>
                                         </div>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right border-none" aria-labelledby="dropdownMenuButton">
@@ -404,49 +342,6 @@
     <script src="/assets/js/app.js"></script>
 
     <script src="/assets/vendor/moment.min.js"></script>
-
-@* <script>
-    // Đoạn mã sẽ chạy khi trang được tải hoàn thành
-    $(document).ready(function() {
-        // Lấy giá trị của input hidden chứa id sinh viên
-        var studentId = $("#studentInput").val();
-
-        // Gọi hàm để đếm số thông báo
-        countNotifications(studentId);
-    });
-
-    // Hàm để đếm số thông báo
-    function countNotifications(studentId) {
-        // Gửi yêu cầu đến server để lấy số thông báo dựa trên logic của bạn
-        // Ở đây là một ví dụ cứng, bạn cần thay thế nó với logic thực tế của mình
-        var numberOfNotifications = getNumberOfNotifications(studentId);
-
-        // Cập nhật số lượng thông báo trên giao diện
-        updateNotificationCount(numberOfNotifications);
-    }
-
-    // Hàm để gửi yêu cầu đến server và nhận số thông báo
-    function getNumberOfNotifications(studentId) {
-        // Thực hiện yêu cầu Ajax hoặc fetch đến server để lấy số thông báo
-        // Ở đây là một ví dụ cứng, bạn cần thay thế nó với logic thực tế của mình
-        // Đảm bảo rằng bạn trả về số thông báo từ server
-        return 3; // Ví dụ: Trả về số 3, bạn cần thay đổi nó với logic thực tế
-    }
-
-    // Hàm để cập nhật số lượng thông báo trên giao diện
-    function updateNotificationCount(count) {
-        // Chọn thẻ badge và cập nhật với số mới
-        $("#notificationBadge").text(count);
-
-        // Nếu số thông báo là 0, bạn có thể ẩn badge hoặc thực hiện xử lý khác
-        if (count === 0) {
-            $("#notificationBadge").hide();
-        } else {
-            $("#notificationBadge").show();
-        }
-    }
-</script> *@
-
 </body>
 
 <!-- Mirrored from templates.iqonic.design/product/lite/webkit/html/backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 11 Nov 2023 06:14:30 GMT -->

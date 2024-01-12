@@ -39,12 +39,13 @@ connection.on("ReceiveMessage", function (user, message, userId) {
     document.getElementById("messagesList").appendChild(messageContainer);
 
     updateScroll();
+
 });
 connection.on("ReceiveNotification", function (user, message, imgId, timestamp) {
 
     // Tạo phần hiển thị thông báo
     var notificationLink = document.createElement("a");
-    notificationLink.href = "#"; // Điều chỉnh URL nếu cần
+    
     notificationLink.classList.add("iq-sub-card");
 
     var mediaCard = document.createElement("div");
@@ -97,43 +98,46 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
     mediaCard.appendChild(mediaBody);
     notificationLink.appendChild(mediaCard);
 
-    // Thêm sự kiện nhấp chuột để hiển thị nội dung đầy đủ khi cần
-    notificationLink.addEventListener("click", function (event) {
-        // Ngăn chặn sự kiện click mặc định để tránh chuyển hướng
-        event.preventDefault();
+    if (message.length > maxMessageLength) {
+        notificationLink.href = "#";
+        notificationLink.addEventListener("click", function (event) {
+            // Ngăn chặn sự kiện click mặc định để tránh chuyển hướng
+            event.preventDefault();
 
-        // Tạo phần tử popup bên trái
-        var popup = document.createElement("div");
-        popup.classList.add("popup", "position-absolute", "bg-white", "p-3", "shadow", "rounded", "mr-5");
-        popup.textContent = message;
-        popup.style.maxWidth = "500px";
-        popup.style.wordWrap = "break-word";
-        // Hiển thị toàn bộ nội dung
+            // Tạo phần tử popup bên trái
+            var popup = document.createElement("div");
+            popup.classList.add("popup", "position-absolute", "bg-white", "p-3", "shadow", "rounded", "mr-5");
+            popup.textContent = message;
+            popup.style.maxWidth = "500px";
+            popup.style.wordWrap = "break-word";
+            // Hiển thị toàn bộ nội dung
 
-        // Đặt vị trí của popup bên trái của media card
-        var rect = notificationLink.getBoundingClientRect();
-        popup.style.top = rect.top + "px";
-        popup.style.left = rect.left - popup.offsetWidth - 10 + "px";
+            // Đặt vị trí của popup bên trái của media card
+            var rect = notificationLink.getBoundingClientRect();
+            popup.style.top = rect.top + "px";
+            popup.style.left = rect.left - popup.offsetWidth - 10 + "px";
 
-        // Thêm popup vào body
-        document.body.appendChild(popup);
+            // Thêm popup vào body
+            document.body.appendChild(popup);
 
-        // Thêm sự kiện click để đóng popup khi click ra ngoài
-        var closeButton = document.createElement("button");
-        closeButton.textContent = "Đóng";
-        closeButton.classList.add("btn", "btn-secondary", "position-absolute", "bottom-0", "right-0", "mb-2", "ml-2");
-        closeButton.addEventListener("click", function () {
-            popup.remove();
+            // Thêm sự kiện click để đóng popup khi click ra ngoài
+            var closeButton = document.createElement("button");
+            closeButton.textContent = "Đóng";
+            closeButton.classList.add("btn", "btn-secondary", "position-absolute", "bottom-0", "right-0", "mb-2", "ml-2");
+            closeButton.addEventListener("click", function () {
+                popup.remove();
+            });
+
+            // Thêm nút đóng vào popup
+            popup.appendChild(closeButton);
+            popup.appendChild(document.createElement("br")); // Thêm dòng mới để tạo khoảng cách giữa nút đóng và nội dung
+
+            // Thêm popup vào body
+            document.body.appendChild(popup);
+
         });
-
-        // Thêm nút đóng vào popup
-        popup.appendChild(closeButton);
-        popup.appendChild(document.createElement("br")); // Thêm dòng mới để tạo khoảng cách giữa nút đóng và nội dung
-
-        // Thêm popup vào body
-        document.body.appendChild(popup);
-
-    });
+    }
+    // Thêm sự kiện nhấp chuột để hiển thị nội dung đầy đủ khi cần
 
     // Thêm thông báo vào block thông báo
     var notifyBlock = document.getElementById("notification-block");
@@ -172,6 +176,14 @@ connection.start().then(function () {
             event.preventDefault();
         }
     });
+    var studentId = document.getElementById("studentInput").value;
+    sendButton.disabled = false;
+
+    if (studentId != null) {
+        connection.invoke("GetClassNotification", studentId).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
 
 }).catch(function (err) {
     return console.error(err.toString());
