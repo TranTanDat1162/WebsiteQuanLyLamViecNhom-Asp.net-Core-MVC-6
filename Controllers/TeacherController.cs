@@ -298,7 +298,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 var option = new
                 {
                     value = fetchedStudent.StudentCode,
-                    text = (fetchedStudent.FirstName +" "+ fetchedStudent.LastName)
+                    text = (fetchedStudent.LastName +" "+ fetchedStudent.FirstName)
                 };
                 dependentOptions.Add(option);
 
