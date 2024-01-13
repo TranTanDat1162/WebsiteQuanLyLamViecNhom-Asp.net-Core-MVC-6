@@ -81,12 +81,16 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             var studentList = await _context.StudentClass
                 .Where(s => s.Class.Code == classCode)
                 .Include(l => l.Student)
+                .Include(g => g.Group)
+                    .ThenInclude(p => p.Project)
+                        .ThenInclude(c => c.Class)
                 .ToListAsync();
 
-            var groupList = await _context.Group
-                .Where(t => t.Project.Class.Code == classCode)
-                .Include(l => l.Students)
-                .ToListAsync();
+            var groupList = studentList
+                .Where(g => g.Group != null)
+                .Select(g => g.Group)
+                .Distinct()
+                .ToList();
 
             ProjectDTO ProjectDTO = new()
             {
@@ -232,6 +236,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             var selectedProject = await _context.Project
                 .Where(p => p.Id == createGroupDTO.ProjectId)
                 .FirstOrDefaultAsync();
+
             if (ModelState.IsValid)
             {
                 //Tạo Group mới dựa vào createGroupDTO
@@ -247,7 +252,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 foreach (var studentid in createGroupDTO.memberList)
                 {
                     var member = await _context.StudentClass
-                                        .Where(sc => sc.StudentId == studentid)
+                                        .Where(sc => sc.StudentId == studentid && sc.ClassId == id)
                                         .Include(s => s.Student)
                                         .Include(c => c.Class)
                                         .FirstOrDefaultAsync();
