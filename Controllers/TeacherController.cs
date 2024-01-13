@@ -16,6 +16,7 @@ using System.Net.Mail;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.CodeAnalysis;
 using Project = WebsiteQuanLyLamViecNhom.Models.Project;
+using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.ProjectDTO;
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     [Authorize(Roles = "Teacher")]
@@ -121,13 +122,36 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
             if (ModelState.IsValid)
             {
+                List<List<string>> uploadFiles = new List<List<string>>();
+
+                if (createProjectDTO.Attachments != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    foreach (var attachment in createProjectDTO.Attachments)
+                    {
+                        byte[] data = uploadHelper.ConvertToByteArray(attachment);
+
+                        var fileID =
+                        gDriveServices.UploadFile(currentclass.Code + attachment.FileName, data, "1HN1IZIiLErNA_JX3ze2DC8lUvWmGWg-T");
+
+                        var downloadlink = gDriveServices
+                            .GetDownloadLink((string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID)));
+
+                        if (downloadlink != null)
+                            uploadFiles.Add(new List<string> { downloadlink, attachment.FileName });
+                    }
+
+                }
                 Project newProject = new Project
-                {   
+                {
                     Name = createProjectDTO.Name,
                     Requirements = createProjectDTO.Requirement,
                     Deadline = createProjectDTO.Deadline,
                     ClassId = id,
-                    Class = currentclass
+                    Class = currentclass,
+                    fileIDJSON = JsonConvert.SerializeObject(uploadFiles),
                 };
 
                 _context.Add(newProject);

@@ -10,6 +10,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string? Name { get; set; }
             public string? Requirement { get; set; }
             public DateTime Deadline { get; set; }
+            public IList<IFormFile>? Attachments { get; set; }
 
         }
         public class UpdateProjectDTO
