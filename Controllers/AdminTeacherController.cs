@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
@@ -111,8 +112,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 //"autogenTeacherId":
                 //  using the Removediacritic to turn vietnamese alphabet into non-accent alphabet
                 string autogenTeacherId = (teacher.FirstName.ToUpper() +
-                    autogenlastname.RemoveDiacritics() +
+                    autogenlastname +
                     teacher.DOB.ToString("ddMMyyyy")).RemoveDiacritics();
+
+                autogenTeacherId = Encoding.ASCII.GetString(Encoding.GetEncoding("Cyrillic").GetBytes(autogenTeacherId));
 
                 teacher.TeacherCode = autogenTeacherId;
                 teacher.IsLocked = !teacher.IsLocked;
