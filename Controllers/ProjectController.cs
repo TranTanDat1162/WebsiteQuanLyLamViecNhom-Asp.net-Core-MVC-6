@@ -182,7 +182,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 foreach (var studentid in createTaskDTO.memberList)
                 {
                     var member = await _context.StudentClass
-                                        .Where(sc => sc.StudentId == studentid)
+                                        .Where(sc => sc.StudentId == studentid 
+                                                && sc.GroupID == createTaskDTO.GroupID)
                                         .Include(s => s.Student)
                                         .Include(g => g.Group)
                                         .Include(t => t.Tasks)

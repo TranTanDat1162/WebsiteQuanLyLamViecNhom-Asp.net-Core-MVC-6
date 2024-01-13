@@ -22,6 +22,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         }
         public class TaskDTO
         {
+            public string GroupID { get; set; }
             public string TaskName { get; set; }
             public string[] memberList { get; set; }
             public DateTime Deadline { get; set; }
