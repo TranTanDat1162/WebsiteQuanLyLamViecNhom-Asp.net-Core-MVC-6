@@ -464,6 +464,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if(task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                                {
                                 <form asp-action="RedoTask" asp-controller="Project" enctype="multipart/form-data"
                                       id="form-redo">
                                     <div class="collapse" id="@uniqueId">
@@ -577,8 +579,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                                @* <form asp-action="UpdateTask" asp-controller="Project" enctype="multipart/form-data">
+                                    </form>
+                                }
+                                else
+                                {
+                                <form asp-action="UpdateTask" asp-controller="Project" enctype="multipart/form-data">
                                     <div class="collapse" id="@uniqueId">
                                         <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
                                         <div class="card card-list task-card">
@@ -690,7 +695,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form> *@
+                                </form>
+                                }
                             }
                         </div>
                     }
