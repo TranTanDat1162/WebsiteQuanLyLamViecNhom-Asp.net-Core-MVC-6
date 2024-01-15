@@ -29,8 +29,8 @@
                             var data = (Student)ViewData["Student"];
                             if(data.StudentCode == Model.GroupViewModel.LeaderID)
                             {
-                                    <a href="#" class="btn btn-primary" data-target="#new-task-modal"
-                                        data-toggle="modal">Tạo công việc</a>
+                                                                <a href="#" class="btn btn-primary" data-target="#new-task-modal"
+                                                                    data-toggle="modal">Tạo công việc</a>
                             }
                         }
                     </div>
@@ -81,71 +81,74 @@
                         <div class="col-lg-12">
                             @if (data.StudentCode == Model.GroupViewModel.LeaderID && task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
                             {
-                                <form asp-action="VerifyTask" asp-controller="Project">
-                                    <div class="card card-widget task-card" data-status="@((int)task.Status)">
-                                        <div class="card-body">
-                                            <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <div>
-                                                        <h5 class="mb-2">
-                                                            @task.TaskName
-                                                            <h7 class="mt-2 ml-2 font-size-14">
-                                                                @foreach (var member in task.StudentClass)
-                                                                {
-                                                                    <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName}") @($"{member.Student.FirstName}")</span>
-                                                                }
-                                                            </h7>
-                                                        </h5>
-
-                                                        <div class="media align-items-center">
-                                                            @if (@task.TaskGradedByLeader != null)
+                                <div class="card card-widget task-card" data-status="@((int)task.Status)">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <h5 class="mb-2">
+                                                        @task.TaskName
+                                                        <h7 class="mt-2 ml-2 font-size-14">
+                                                            @foreach (var member in task.StudentClass)
                                                             {
-                                                                @if (task.TaskGradedByLeader < 5)
-                                                                {
-                                                                    <div class="btn text-success bg-secondary-light mr-3">
-                                                                        <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
-                                                                    </div>
-                                                                }
-                                                                else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
-                                                                {
-                                                                    <div class="btn text-success bg-warning-light mr-3">
-                                                                        <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
-                                                                    </div>
-                                                                }
-                                                                else if (task.TaskGradedByLeader >= 8)
-                                                                {
-                                                                    <div class="btn text-success bg-success-light mr-3">
-                                                                        <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
-                                                                    </div>
-                                                                }
+                                                                <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName}") @($"{member.Student.FirstName}")</span>
                                                             }
+                                                        </h7>
+                                                    </h5>
 
-                                                        </div>
+                                                    <div class="media align-items-center">
+                                                        @if (@task.TaskGradedByLeader != null)
+                                                        {
+                                                            @if (task.TaskGradedByLeader < 5)
+                                                            {
+                                                                <div class="btn text-success bg-secondary-light mr-3">
+                                                                    <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
+                                                                </div>
+                                                            }
+                                                            else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
+                                                            {
+                                                                <div class="btn text-success bg-warning-light mr-3">
+                                                                    <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
+                                                                </div>
+                                                            }
+                                                            else if (task.TaskGradedByLeader >= 8)
+                                                            {
+                                                                <div class="btn text-success bg-success-light mr-3">
+                                                                    <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
+                                                                </div>
+                                                            }
+                                                        }
+
                                                     </div>
                                                 </div>
-                                                <div class="media align-items-center mt-md-0 mt-3">
-                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
-                                                {
-                                                    <a class="btn bg-warning-light mr-3" id="btnOnPending" data-status="1">Chờ duyệt</a>
-                                                }
-@*                                                 @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                {
-                                                    <a class="btn bg-secondary-light mr-3" id="btnOnGoing" data-status="0">Đang làm</a>
-                                                }
-                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
-                                                {
-                                                    <a class="btn bg-success-light mr-3" id="btnsuccess" data-status="2">Hoàn thành</a>
-                                                } *@
-                                            <a class="btn bg-primary-light" data-toggle="collapse"
-                                               href="#@uniqueId"
-                                               role="button" aria-expanded="false"
-                                               aria-controls="@uniqueId">
-                                                <i class="ri-edit-box-line m-0"></i>
-                                            </a>
-                                        </div>
+                                            </div>
+                                            <div class="media align-items-center mt-md-0 mt-3 task-header">
+                                                <a class="btn bg-warning-light mr-3" id="btnOnPending" data-status="1">Chờ duyệt</a>
+
+                                                <a class="btn bg-primary-light mr-3" data-toggle="collapse" id="btnTrigger"
+                                                   href="#@uniqueId"
+                                                   role="button" aria-expanded="false"
+                                                   aria-controls="@uniqueId"
+                                                   hidden>
+                                                </a>
+
+                                                <a class="btn bg-primary-light mr-3" id="btnRedoTask"
+                                                   role="button">
+                                                    <i class="ri-edit-box-line m-0"></i>
+                                                </a>
+
+                                                <a class="btn bg-info-light" id="btnVerifyTask"
+                                                   role="button">
+                                                    <i class="ri-check-line m-0"></i>
+                                                </a>
+
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <form asp-action="VerifyTask" asp-controller="Project"
+                                    id="form-verify">
+                                    
                                     <div class="collapse" id="@uniqueId">
                                         <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
                                         <div class="card card-list task-card">
@@ -269,73 +272,190 @@
                                         </div>
                                     </div>
                                 </form>
-                            }
-                            else
-                            {
-                                <form asp-action="UpdateTask" asp-controller="Project" enctype="multipart/form-data">
-                                    <div class="card card-widget task-card" data-status="@((int)task.Status)">
-                                        <div class="card-body">
-                                            <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <div>
-                                                        <h5 class="mb-2">
-                                                            @task.TaskName
-                                                            <h7 class="mt-2 ml-2 font-size-14">
-                                                                @foreach (var member in task.StudentClass)
-                                                                {
-                                                                    <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName}") @($"{member.Student.FirstName}")</span>
-                                                                }
-                                                            </h7>
-                                                        </h5>
-                                                        <div class="media align-items-center">
-                                                            @if (@task.TaskGradedByLeader != null)
-                                                            {
-                                                                @if (task.TaskGradedByLeader < 5)
-                                                                {
-                                                                    <div class="btn text-success bg-secondary-light mr-3">
-                                                                        <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
-                                                                    </div>
-                                                                }
-                                                                else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
-                                                                {
-                                                                    <div class="btn text-success bg-warning-light mr-3">
-                                                                        <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
-                                                                    </div>
-                                                                }
-                                                                else if (task.TaskGradedByLeader >= 8)
-                                                                {
-                                                                    <div class="btn text-success bg-success-light mr-3">
-                                                                        <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
-                                                                    </div>
-                                                                }
-                                                            }
 
+                                //---------------------- Remake Task ------------------------
+
+                                <form asp-action="RedoTask" asp-controller="Project" enctype="multipart/form-data" style="display:none"
+                                    id="form-redo">
+                                    <div class="collapse" id="@uniqueId">
+                                        <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
+                                        <div class="card card-list task-card">
+                                            <div class="card-body">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group mb-0">
+                                                                    <label for="exampleInputText2"
+                                                                           class="h5">Thành viên phụ trách</label>
+                                                                    <select name="type"
+                                                                            class="selectpicker form-control"
+                                                                            data-style="py-0"
+                                                                            multiple>
+                                                                        @foreach (var member in task.StudentClass)
+                                                                        {
+                                                                            <option disabled selected>@($"{member.Student.FirstName} {member.Student.LastName}")</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group mb-0">
+                                                                    <label for="exampleInputText4" class="h5">
+                                                                        Hạn chót
+                                                                    </label>
+                                                                    <input disabled type="date" class="form-control"
+                                                                           id="exampleInputText4" value="@task.DeadLineDate.ToString("yyyy-MM-dd")">
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="media align-items-center mt-md-0 mt-3">
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <h5 class="mb-2">Ghi chú</h5>
+                                                                <p class="mb-0" style="word-wrap: break-word;width: 800px;">
+                                                                    @task.Description
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @foreach (var member in task.StudentClass)
+                                                {
+                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending
+                                                   && member.Student.Id == Model.GroupViewModel.CurrentUser)
                                                     {
-                                                        <a class="btn bg-warning-light mr-3" id="btnOnPending" data-status="1">Chờ duyệt</a>
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-lg-12">
+                                                                        <h5 class="mb-2">Phản hồi bài nộp*</h5>
+                                                                        <div class="form-group mb-3">
+                                                                            <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2" required="required"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     }
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
+                                                }
+                                                @if (task.AttachmentLinksJson != null)
+                                                {
+                                                    <div class="form-group mb-0 task-attachments"
+                                                         onload="getTaskAttachments(this)"
+                                                         data-task-attachment="@task.AttachmentLinksJson">
+
+                                                        <label for="exampleInputText01" class="h5">Các tệp cũ</label>
+                                                    </div>
+                                                }
+                                                @foreach (var member in task.StudentClass)
+                                                {
+                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending
+                                                   && member.Student.Id == Model.GroupViewModel.CurrentUser)
                                                     {
-                                                        <a class="btn bg-secondary-light mr-3" id="btnOnGoing" data-status="0">Đang làm</a>
+                                                        <div class="form-group mb-3">
+                                                            <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
+                                                            <div class="custom-file">
+                                                                <input asp-for="updateTaskDTO.Attachments" type="file" class="custom-file-input"
+                                                                       id="inputGroupFile002"
+                                                                       multiple />
+                                                                <label class="custom-file-label"
+                                                                       for="inputGroupFile002">Upload media</label>
+                                                            </div>
+                                                        </div>
                                                     }
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
-                                                    {
-                                                        <a class="btn bg-success-light mr-3" id="btnsuccess" data-status="2">Hoàn thành</a>
-                                                    }
-                                                    <a class="btn bg-primary-light" data-toggle="collapse"
-                                                       href="#@uniqueId"
-                                                       role="button" aria-expanded="false"
-                                                       aria-controls="@uniqueId">
-                                                        <i class="ri-edit-box-line m-0"></i>
-                                                    </a>
+                                                }
+                                                <div class="form-group mb-0 ">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                                                @foreach (var member in task.StudentClass)
+                                                                {
+                                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending
+                                                                   && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                                    {
+                                                                        <input type="submit" value="Nộp" class="btn btn-primary btn-lg" id="btnDone">
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </form>
+                            }
+                            else
+                            {
+                                <div class="card card-widget task-card" data-status="@((int)task.Status)">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <h5 class="mb-2">
+                                                        @task.TaskName
+                                                        <h7 class="mt-2 ml-2 font-size-14">
+                                                            @foreach (var member in task.StudentClass)
+                                                            {
+                                                                <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName}") @($"{member.Student.FirstName}")</span>
+                                                            }
+                                                        </h7>
+                                                    </h5>
+                                                    <div class="media align-items-center">
+                                                        @if (@task.TaskGradedByLeader != null)
+                                                        {
+                                                            @if (task.TaskGradedByLeader < 5)
+                                                            {
+                                                                <div class="btn text-success bg-secondary-light mr-3">
+                                                                    <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
+                                                                </div>
+                                                            }
+                                                            else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
+                                                            {
+                                                                <div class="btn text-success bg-warning-light mr-3">
+                                                                    <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
+                                                                </div>
+                                                            }
+                                                            else if (task.TaskGradedByLeader >= 8)
+                                                            {
+                                                                <div class="btn text-success bg-success-light mr-3">
+                                                                    <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
+                                                                </div>
+                                                            }
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="media align-items-center mt-md-0 mt-3">
+                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                                                {
+                                                    <a class="btn bg-warning-light mr-3" id="btnOnPending" data-status="1">Chờ duyệt</a>
+                                                }
+                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
+                                                {
+                                                    <a class="btn bg-secondary-light mr-3" id="btnOnGoing" data-status="0">Đang làm</a>
+                                                }
+                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
+                                                {
+                                                    <a class="btn bg-success-light mr-3" id="btnsuccess" data-status="2">Hoàn thành</a>
+                                                }
+                                                <a class="btn bg-primary-light" data-toggle="collapse"
+                                                   href="#@uniqueId"
+                                                   role="button" aria-expanded="false"
+                                                   aria-controls="@uniqueId">
+                                                    <i class="ri-edit-box-line m-0"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form asp-action="UpdateTask" asp-controller="Project" enctype="multipart/form-data">
                                     <div class="collapse" id="@uniqueId">
                                         <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
                                         <div class="card card-list task-card">
@@ -448,7 +568,6 @@
                                         </div>
                                     </div>
                                 </form>
-
                             }
                         </div>
                     }
@@ -515,6 +634,8 @@
                             <!--This input is used to help fetching the notification-->
                             <input hidden type="text" id="userInput" value="@Model.GroupViewModel.CurrentUser" />
                             <input hidden type="text" id="roomInput" value="@Model.GroupViewModel.GroupID" />
+                            <input hidden type="text" id="classInput" value="@Model.GroupViewModel.CurrentClass.Id" />
+
                             <textarea class="form-control" id="messageInput" rows="2" placeholder="Hãy giao tiếp với nhau"></textarea>
                         </div>
                     </div>
@@ -772,6 +893,72 @@
     });
     //# sourceURL=TaskFilter.js
 
+</script>
+<script>
+    document.querySelectorAll('.task-header').forEach(function (task) {
+        const btnTrigger = task.querySelector('#btnTrigger');
+        const btnRedoTask = task.querySelector('#btnRedoTask');
+        const btnVerifyTask = task.querySelector('#btnVerifyTask');
+
+        let lastClickedButton = null; // Track the last clicked button
+        let isShowed = false;
+
+        btnRedoTask.addEventListener('click', function () {
+            handleFormDisplay(btnRedoTask, lastClickedButton);
+            lastClickedButton = btnRedoTask;
+        });
+
+        btnVerifyTask.addEventListener('click', function () {
+            handleFormDisplay(btnVerifyTask, lastClickedButton);
+            lastClickedButton = btnVerifyTask;
+        });
+
+        function handleFormDisplay(clickedButton, lastClicked) {
+            const verifyTask = document.getElementById('form-verify');
+            const redoTask = document.getElementById('form-redo');
+            //First clicked
+            if (lastClicked === null && isShowed === false) {
+                btnTrigger.click();
+                isShowed = true;
+            }
+            //Consecutive clicked
+            else if (lastClicked === clickedButton) {
+                lastClickedButton = null;
+                btnTrigger.click();
+                isShowed = false;
+            }
+            //Switch clicked
+            else if (isShowed === true) {
+                btnTrigger.click();
+                setTimeout(function () {
+                    if (clickedButton === btnRedoTask) {
+
+                        verifyTask.style.display = 'none';
+                        redoTask.style.display = 'block';
+                    } else if (clickedButton === btnVerifyTask) {
+
+                        verifyTask.style.display = 'block';
+                        redoTask.style.display = 'none';
+                    }
+                    btnTrigger.click();
+                }, 1000);
+            }
+            else {
+                if (clickedButton === btnRedoTask) {
+
+                    verifyTask.style.display = 'none';
+                    redoTask.style.display = 'block';
+                } else if (clickedButton === btnVerifyTask) {
+
+                    verifyTask.style.display = 'block';
+                    redoTask.style.display = 'none';
+                }
+                btnTrigger.click(); 
+                isShowed = true;
+            }
+        }
+    });
+    //# sourceURL=SwitchForm.js
 </script>
 <script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/assets/js/chat.js"></script>

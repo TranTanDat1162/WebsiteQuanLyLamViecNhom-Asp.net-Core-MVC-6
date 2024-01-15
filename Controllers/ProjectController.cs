@@ -277,6 +277,58 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 new { Error = ModelState.ToString() });
         }
 
+        public async Task<IActionResult> RedoTask(GroupDTO.UpdateTaskDTO updateTaskDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var task = await _context.Task
+                                        .Where(sc => sc.TaskId == updateTaskDTO.TaskID)
+                                        .Include(sc => sc.StudentClass)
+                                            .ThenInclude(s => s.Student)
+                                        .Include(sc => sc.StudentClass)
+                                            .ThenInclude(c => c.Class)
+                                        .FirstOrDefaultAsync();
+
+                List<StudentClass> memberList = task.StudentClass.ToList();
+
+                //Only setting the status for now
+                task.Description = updateTaskDTO.Description;
+
+                _context.UpdateRange(memberList);
+
+                if (updateTaskDTO.Attachments != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    List<List<string>> uploadFiles = new List<List<string>>();
+
+                    foreach (var attachment in updateTaskDTO.Attachments)
+                    {
+                        byte[] data = uploadHelper.ConvertToByteArray(attachment);
+
+                        var fileID =
+                        gDriveServices.UploadFile(task.TaskId + attachment.FileName, data, "1eY_PYFOhlkXoi76uwXgxfjWJrRo6YC_K");
+
+                        var downloadlink = gDriveServices
+                            .GetDownloadLink((string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID)));
+
+                        if (downloadlink != null)
+                            uploadFiles.Add(new List<string> { downloadlink, attachment.FileName });
+                    }
+                    task.AttachmentLinksJson = JsonConvert.SerializeObject(uploadFiles);
+
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("StudentIndex",
+                    new { classCode = memberList.FirstOrDefault().Class.Code, GroupId = task.GroupId });
+            }
+            // TODO: Return errors
+            return RedirectToAction("StudentIndex",
+                new { Error = ModelState.ToString() });
+        }
+
         public async Task<IActionResult> VerifyTask(GroupDTO.UpdateTaskDTO updateTaskDTO)
         {
             if (ModelState.IsValid)

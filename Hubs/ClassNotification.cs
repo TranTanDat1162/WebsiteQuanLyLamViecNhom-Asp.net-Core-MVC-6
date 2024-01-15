@@ -40,7 +40,6 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
                 _context.SaveChanges();
             }
         }
-
         public async Task GetChatHistory(string RoomId)
         {
             DateTime start = DateTime.Now;
@@ -57,8 +56,38 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
                     , line.User.LastName + " " + line.User.FirstName, line.MessageLine,line.User.Id);
             }
         }
-        public async Task GetClassNotification(string studentId)
+        public async Task GetClassNotification(string studentId, string classId)
         {
+
+            var student = await _context.StudentClass
+                .Where(s => s.StudentId == studentId && s.ClassId == int.Parse(classId))
+                .Include(c => c.Class)
+                    .ThenInclude(t => t.Teacher)
+                .ToListAsync();
+
+            foreach (var classInfo in student)
+            {
+                var chatLog = await _context.Messages
+                .Where(r => r.RoomID == classInfo.ClassId.ToString())
+                .OrderByDescending(t => t.Timestamp)
+                .ToListAsync();
+
+                foreach (var line in chatLog)
+                {
+                    if (chatLog != null)
+                        await Clients.User(studentId).SendAsync("ReceiveNotification",
+                           classInfo.Class.Code,
+                           line.MessageLine,
+                           classInfo.Class.Teacher.ImgId,
+                           line.Timestamp.ToString("(dd/MM) \n hh:mm tt"));
+                }
+
+
+            }
+        }
+        public async Task GetClassNotifications(string studentId)
+        {
+
             var student = await _context.StudentClass
                 .Where(s => s.StudentId == studentId)
                 .Include(c => c.Class)
@@ -72,7 +101,7 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
                 .OrderByDescending(t => t.Timestamp)
                 .ToListAsync();
 
-                foreach(var line in chatLog)
+                foreach (var line in chatLog)
                 {
                     if (chatLog != null)
                         await Clients.User(studentId).SendAsync("ReceiveNotification",

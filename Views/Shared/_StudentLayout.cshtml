@@ -40,7 +40,7 @@
                 <nav class="navbar navbar-expand-lg navbar-light p-0">
                     <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
                         <a href="/Project" class="header-logo">
-                            <h4 class="logo-title text-uppercase">Project</h4>
+                            <h4 class="logo-title text-uppercase">Student</h4>
                         </a>
                     </div>
                     <div class="navbar-breadcrumb">
@@ -51,9 +51,40 @@
                                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                 aria-label="Toggle navigation">
                             <i class="ri-menu-3-line"></i>
-                        </button>
+                        </button>                    
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto navbar-list align-items-center">
+                                <li class="nav-item nav-icon nav-item-icon dropdown">
+                                    <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                             stroke-linejoin="round" class="feather feather-bell">
+                                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                        </svg>
+                                        <span class="bg-primary "></span>
+                                    </a>
+                                    <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton"
+                                         style="width: 9cm">
+                                        <div class="card shadow-none m-0">
+                                            <div class="card-body p-0 ">
+                                                <div class="cust-title p-3">
+                                                    <div class="d-flex align-items-center justify-content-between">
+                                                        <h5 class="mb-0">Thông báo</h5>
+                                                        <!--student's id for fetching class notification-->
+                                                        <input hidden type="text" id="studentInput" value="@data.Id" />
+                                                        <a id="notificationBadge" class="badge badge-primary badge-card" href="#"></a>
+                                                    </div>
+                                                </div>
+                                                <div id="notification-block" style="
+                                                            overflow-y: scroll;
+                                                            max-height: 14cm;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
                                 <li class="nav-item nav-icon dropdown caption-content">
                                     <a href="#" class="search-toggle dropdown-toggle  d-flex align-items-center" id="dropdownMenuButton4"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
