@@ -29,8 +29,8 @@
                             var data = (Student)ViewData["Student"];
                             if(data.StudentCode == Model.GroupViewModel.LeaderID)
                             {
-                                        <a href="#" class="btn btn-primary" data-target="#new-task-modal"
-                                            data-toggle="modal">Tạo công việc</a>
+                                <a href="#" class="btn btn-primary" data-target="#new-task-modal"
+                                    data-toggle="modal">Tạo công việc</a>
                             }
                         }
                     </div>
@@ -1085,7 +1085,7 @@
                         redoTask.style.display = 'none';
                     }
                     btnTrigger.click();
-                }, 1000);
+                }, 450);
             }
             else {
                 if (clickedButton === btnRedoTask) {

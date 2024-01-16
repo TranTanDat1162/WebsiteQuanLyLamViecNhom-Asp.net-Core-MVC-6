@@ -150,7 +150,7 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
 
 connection.start().then(function () {
     var room = document.getElementById("roomInput").value;
-    var classId = document.getElementById("classInput").value;
+    var classId = document.getElementById("classInput")?.value;
     const messageInput = document.getElementById("messageInput");
     const sendButton = document.getElementById("sendButton");
 
@@ -177,7 +177,7 @@ connection.start().then(function () {
             event.preventDefault();
         }
     });
-    var studentId = document.getElementById("studentInput").value;
+    var studentId = document.getElementById("studentInput")?.value;
     sendButton.disabled = false;
 
     if (studentId != null && classId != null) {
