@@ -47,7 +47,17 @@
                         <div class="row align-items-center">
                             <div class="col-md-9">
                                 <div class="mt-3 mt-md-0">
-                                    <h5 class="mb-1">@Model.GroupViewModel.ProjectName</h5>
+                                    <h5 class="mb-1">
+                                        @Model.GroupViewModel.ProjectName
+                                        @{
+                                            var firstScore = Model.GroupViewModel.memberList.FirstOrDefault()?.Score; // Get the score once
+                                            if (firstScore != null)
+                                            {
+                                                var badgeClass = firstScore < 3 ? "badge-danger" : firstScore < 6 ? "badge-warning" : "badge-success";
+                                                <span class="badge @badgeClass ml-2">@firstScore Đ</span>
+                                            }
+                                        }
+                                    </h5>
                                     <p class="mb-0">@Model.GroupViewModel.MOTD</p>
                                 </div>
                             </div>

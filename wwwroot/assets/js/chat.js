@@ -147,7 +147,6 @@ connection.on("ReceiveNotification", function (user, message, imgId, timestamp) 
     updateScroll();
 });
 
-
 connection.start().then(function () {
     var room = document.getElementById("roomInput").value;
     var classId = document.getElementById("classInput")?.value;
