@@ -9,7 +9,10 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string StudentCode { get; set; }
             public string StudentLastName { get; set; }
             public string StudentFirstName { get; set; }
+            public string Email { get; set; }
             public DateTime? DOB { get; set; }
+            public string StudentImgId { get; set; }
+            public IFormFile? StudentImgPfp { get; set; }
         }
         public class ClassDTO
         {
@@ -25,7 +28,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public List<StudentDTO> Students{ get; set; }
 
         }
-
+        public StudentDTO? studentDTO { get; set; }
         public ClassDTO classDTO { get; set; }
         public ICollection<Class>? ClassListDTO { get; set; } = new List<Class>();
         public ICollection<StudentClass>? StudentClassListDTO { get; set; } = new List<StudentClass>();

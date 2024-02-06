@@ -1,0 +1,124 @@
+﻿@model WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    var data = (Student)ViewData["Student"];
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="iq-edit-list usr-edit">
+                    <ul class="iq-edit-profile d-flex nav nav-pills">
+                        <li class="col-md-6 p-0">
+                            <a class="nav-link active" data-toggle="pill" href="#personal-information">
+                                Thông tin cá nhân
+                            </a>
+                        </li>
+                        <li class="col-md-6 p-0">
+                            <a class="nav-link" data-toggle="pill" href="#chang-pwd">
+                                Đổi mật khẩu
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="iq-edit-list-data">
+            <div class="tab-content">
+                <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="iq-header-title">
+                                <h4 class="card-title">Thông tin cá nhân</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form asp-controller="Student" asp-action="UpdateProfile" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <div class="form-group row align-items-center">
+                                    <div class="col-md-12">
+                                        <div class="profile-img-edit">
+                                            <div class="crm-profile-img-edit">
+                                                <img class="crm-profile-pic rounded-circle avatar-100" src="/assets/images/user/1.jpg" alt="profile-pic">
+                                                <div class="crm-p-image bg-primary">
+                                                    <i class="pt-1 ri-upload-line"></i>
+                                                    <input class="file-upload" type="file" name="StudentImgPfp" accept="image/*">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" row align-items-center">
+                                    <div class="form-group col-sm-6">
+                                        <label for="fname">Họ và tên:</label>
+                                        <input type="text" class="form-control" id="fname" value="@data.LastName @data.FirstName" disabled>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="lname">Ngày sinh:</label>
+                                        <input type="date" class="form-control" id="lname" value="@data.DOB.ToString("yyyy-MM-dd")" disabled>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="uname">Mã số sinh viên:</label>
+                                        <input type="text" class="form-control" id="uname" value="@data.StudentCode" disabled>
+                                    </div>
+                                    <!-- Thêm các trường ẩn để chứa giá trị của LastName, DOB, StudentCode -->
+                                    <input type="hidden" name="LastName" value="@data.LastName">
+                                    <input type="hidden" name="DOB" value="@data.DOB.ToString("yyyy-MM-dd")">
+                                    <input type="hidden" name="StudentCode" value="@data.StudentCode">
+
+                                    <div class="form-group col-sm-6">
+                                        <label for="cname">Email:</label>
+                                        <input asp-for="studentDTO.Email" type="text" class="form-control" id="cname" name="Email" value="@data.Email">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Xác nhận</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="chang-pwd" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="iq-header-title">
+                                <h4 class="card-title">Đổi mật khẩu</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="cpass">Nhập mật khẩu hiện tại:</label>
+                                    <a href="javascripe:void();" class="float-right">Quên mật khẩu?</a>
+                                    <input type="Password" class="form-control" id="cpass" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="npass">Nhập mật khẩu mới:</label>
+                                    <input type="Password" class="form-control" id="npass" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="vpass">Xác thực mật khẩu mới:</label>
+                                    <input type="Password" class="form-control" id="vpass" value="">
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Xác nhận</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/customizer.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
+    generateBreadcrumbs(breadcrumbData);
+</script>
+
+
+
+

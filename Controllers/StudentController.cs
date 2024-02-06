@@ -7,6 +7,7 @@ using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Models;
 using WebsiteQuanLyLamViecNhom.Data.Migrations;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -18,7 +19,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
         static Student? viewModel = new Student
         {
-            StudentCode = "Student"
+            StudentCode = "Student",
+            FirstName = null,
+            LastName = null,
+            DOB = DateTime.MinValue,
+            Email = null
         };
 
         public StudentController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<StudentController> logger)
@@ -69,10 +74,104 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             // Xử lý trường hợp không có người dùng đăng nhập
             return NotFound();
         }
+
+        [Route("Student/Profile")]
+        public async Task<IActionResult> Profile()
+        {
+            // Lấy thông tin người dùng đăng nhập
+            viewModel = await _context.Student.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            // Kiểm tra xem người dùng có tồn tại không
+            if (viewModel != null)
+            {
+                ViewData["Student"] = viewModel;
+                Student? currentStudent = await _context.Student
+                    .Include(t => t.ClassList)
+                        .ThenInclude(t => t.Class)
+                            .ThenInclude(t => t.Teacher)
+                    .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                CreateClassDTO ClassList = new CreateClassDTO();
+                if (currentStudent != null)
+                {
+                    var currentClasses = await _context.StudentClass
+                        .Where(s => s.StudentId == currentStudent.Id)
+                        .Include(t => t.Class)
+                        .ToListAsync();
+
+                    foreach (var studentClass in currentClasses)
+                    {
+                        ClassList.StudentClassListDTO.Add(studentClass);
+                    }
+
+                    // Update breadcrumbs for the "/Student/Profile" route
+                    ClassList.crumbs = new List<List<string>>()
+                    {
+                        new List<string>() { "/Student", "Home" },
+                        new List<string>() { "/Student/Profile", "Profile" }  // Updated breadcrumb
+                    };
+
+                    return View(ClassList);
+                }
+
+                return View(ClassList);
+            }
+
+            // Xử lý trường hợp không có người dùng đăng nhập
+            return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateProfile(CreateClassDTO.StudentDTO studentDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Lấy thông tin người dùng đăng nhập
+                    var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var loggedInStudent = await _context.Student.FindAsync(loggedInUserId);
+
+                    // Kiểm tra xem người dùng có tồn tại không
+                    if (loggedInStudent != null)
+                    {
+                        // Cập nhật email và hình ảnh cho người dùng
+                        loggedInStudent.Email = studentDTO.Email;
+
+                        // Nếu người dùng đã chọn ảnh mới
+                        if (studentDTO.StudentImgPfp != null)
+                        {
+                            GDriveServices gDriveServices = new GDriveServices();
+                            UploadHelper uploadHelper = new UploadHelper();
+
+                            byte[] data = uploadHelper.ConvertToByteArray(studentDTO.StudentImgPfp);
+                            var fileID = gDriveServices.UploadFile(loggedInUserId, data, "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
+
+                            loggedInStudent.StudentImgId = (string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID));
+                        }
+
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        await _context.SaveChangesAsync();
+
+                        // Chuyển hướng về trang profile sau khi cập nhật thành công
+                        return RedirectToAction("Profile", "Student");
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    // Xử lý ngoại lệ khi có lỗi cập nhật cơ sở dữ liệu
+                    ModelState.AddModelError("", "Có lỗi xảy ra khi cập nhật thông tin. Vui lòng thử lại.");
+                }
+            }
+
+            // Nếu ModelState không hợp lệ, trả về trang cập nhật với thông báo lỗi
+            return View("Profile", studentDTO);
+        }
+
         public IActionResult ProjectDetail()
         {
             return View();
         }
-
     }
 }
