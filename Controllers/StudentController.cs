@@ -19,6 +19,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         private readonly UserManager<Models.BaseApplicationUser> _userManager;
         private readonly ILogger<StudentController> _logger;
 
+        static CreateClassDTO StudentProfile;
+
         static Student? viewModel = new Student
         {
             StudentCode = "Student",
@@ -88,13 +90,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             if (viewModel != null)
             {
                 ViewData["Student"] = viewModel;
+                StudentProfile = new CreateClassDTO();
+
                 Student? currentStudent = await _context.Student
                     .Include(t => t.ClassList)
                         .ThenInclude(t => t.Class)
                             .ThenInclude(t => t.Teacher)
                     .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                CreateClassDTO ClassList = new CreateClassDTO();
                 if (currentStudent != null)
                 {
                     var currentClasses = await _context.StudentClass
@@ -102,22 +105,26 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                         .Include(t => t.Class)
                         .ToListAsync();
 
+                    //I dont think this is useful here,
+                    //I think you should relocate this studentDTO to a different area
+                    //so its not heavily dependent on the createClassDTO
+
                     foreach (var studentClass in currentClasses)
                     {
-                        ClassList.StudentClassListDTO.Add(studentClass);
+                        StudentProfile.StudentClassListDTO.Add(studentClass);
                     }
 
                     // Update breadcrumbs for the "/Student/Profile" route
-                    ClassList.crumbs = new List<List<string>>()
+                    StudentProfile.crumbs = new List<List<string>>()
                     {
                         new List<string>() { "/Student", "Home" },
                         new List<string>() { "/Student/Profile", "Profile" }  // Updated breadcrumb
                     };
 
-                    return View(ClassList);
+                    return View(StudentProfile);
                 }
 
-                return View(ClassList);
+                return View(StudentProfile);
             }
 
             // Xử lý trường hợp không có người dùng đăng nhập
@@ -176,9 +183,15 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePassword(CreateClassDTO.ChangePasswordDTO changePasswordDTO)
         {
+            viewModel = await _context.Student.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (viewModel != null)
+            {
+                ViewData["Student"] = viewModel; // Lấy info student trước để đưa vào view
+            }
+
             if (!ModelState.IsValid)
             {
-                return View("Profile", new CreateClassDTO()); // Trả về view Profile với một đối tượng CreateClassDTO mới
+                return View("Profile", StudentProfile); // Trả về view Profile với một đối tượng StudentProfile được tạo ở trc đó
             }
 
             // Lấy thông tin người dùng đăng nhập
