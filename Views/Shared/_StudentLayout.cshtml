@@ -73,7 +73,7 @@
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <h5 class="mb-0">Thông báo</h5>
                                                         <!--student's id for fetching class notification-->
-                                                        <input hidden type="text" id="studentInput" value="@data.Id" />
+                                                        <input hidden type="text" id="studentInput" value="@data?.Id" />
                                                         <a id="notificationBadge" class="badge badge-primary badge-card" href="#"></a>
                                                     </div>
                                                 </div>
@@ -88,9 +88,16 @@
                                 <li class="nav-item nav-icon dropdown caption-content">
                                     <a href="#" class="search-toggle dropdown-toggle  d-flex align-items-center" id="dropdownMenuButton4"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <img src="/assets/images/user/1.jpg" class="img-fluid rounded-circle" alt="user">
+                                        @if (data?.StudentImgId != null)
+                                        {
+                                            <img src="https://lh3.googleusercontent.com/u/0/d/@data.StudentImgId=w250-h238-p-k-rw-v1-nu-iv1" class="img-fluid rounded-circle" alt="user">
+                                        }
+                                        else
+                                        {
+                                            <img class="avatar-70 rounded" src="../assets/images/user/1.png" alt="#" data-original-title="" title="">
+                                        }
                                         <div class="caption ml-3">
-                                            <h6 class="mb-0 line-height">@data.StudentCode<i class="pt-1 ri-arrow-down-s-line"></i></h6>
+                                            <h6 class="mb-0 line-height">@data?.StudentCode<i class="pt-1 ri-arrow-down-s-line"></i></h6>
                                         </div>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right border-none" aria-labelledby="dropdownMenuButton">

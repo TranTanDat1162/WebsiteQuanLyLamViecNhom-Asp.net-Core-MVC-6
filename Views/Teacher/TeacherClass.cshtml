@@ -140,14 +140,20 @@
                             </div>
                             <div class="col-sm-4 text-sm-right mt-3 mt-sm-0">
                                 <div class="iq-media-group">
-                                    @foreach(var member in item.Students)
+                                    @foreach (var member in item.Students)
                                     {
                                         <a href="#" class="iq-media">
-                                            <img class="img-fluid avatar-40 rounded-circle"
-                                                 src="~/assets/images/user/01.jpg"
-                                                 alt="" />
+                                            @if (member.Student.StudentImgId != null)
+                                            {
+                                                <img class="img-fluid avatar-40 rounded-circle" src="https://lh3.googleusercontent.com/u/0/d/@member.Student.StudentImgId=w250-h238-p-k-rw-v1-nu-iv1" alt="" />
+                                            }
+                                            else
+                                            {
+                                                <img class="img-fluid avatar-40 rounded-circle" src="../assets/images/user/01.jpg" alt="" />
+                                            }
                                         </a>
                                     }
+
                                 </div>
                             </div>
                         </div>

@@ -8,6 +8,8 @@ using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Models;
 using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -23,7 +25,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             FirstName = null,
             LastName = null,
             DOB = DateTime.MinValue,
-            Email = null
+            Email = null,
+            StudentImgId = null
         };
 
         public StudentController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<StudentController> logger)
@@ -169,9 +172,53 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return View("Profile", studentDTO);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePassword(CreateClassDTO.ChangePasswordDTO changePasswordDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Profile", new CreateClassDTO()); // Trả về view Profile với một đối tượng CreateClassDTO mới
+            }
+
+            // Lấy thông tin người dùng đăng nhập
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(loggedInUserId);
+
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{loggedInUserId}'.");
+            }
+
+            // Kiểm tra mật khẩu hiện tại của người dùng
+            var passwordCheckResult = await _userManager.CheckPasswordAsync(user, changePasswordDTO.CurrentPassword);
+            if (!passwordCheckResult)
+            {
+                ModelState.AddModelError(string.Empty, "Mật khẩu hiện tại không đúng.");
+                return View("Profile", new CreateClassDTO()); // Trả về view Profile với một đối tượng CreateClassDTO mới
+            }
+
+            // Thay đổi mật khẩu
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, changePasswordDTO.CurrentPassword, changePasswordDTO.NewPassword);
+            if (!changePasswordResult.Succeeded)
+            {
+                foreach (var error in changePasswordResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View("Profile", new CreateClassDTO()); // Trả về view Profile với một đối tượng CreateClassDTO mới
+            }
+
+            // Mật khẩu đã được thay đổi thành công, bạn có thể thực hiện các hành động khác ở đây
+
+            // Chuyển hướng về trang profile sau khi thay đổi mật khẩu thành công
+            return RedirectToAction("Profile");
+        }
+
         public IActionResult ProjectDetail()
         {
             return View();
         }
+
     }
 }
