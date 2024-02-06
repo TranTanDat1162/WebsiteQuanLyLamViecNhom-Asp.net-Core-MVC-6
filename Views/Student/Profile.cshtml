@@ -36,17 +36,26 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form asp-controller="Student" asp-action="UpdateProfile" enctype="multipart/form-data">
+                            <form method="post" asp-controller="Student" asp-action="UpdateProfile" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 <div class="form-group row align-items-center">
                                     <div class="col-md-12">
                                         <div class="profile-img-edit">
                                             <div class="crm-profile-img-edit">
-                                                <img class="crm-profile-pic rounded-circle avatar-100" src="/assets/images/user/1.jpg" alt="profile-pic">
-                                                <div class="crm-p-image bg-primary">
+                                                @if (data.StudentImgId!= null)
+                                                {
+                                                    <img class="crm-profile-pic rounded-circle avatar-100" id="img-pfp" src="https://lh3.googleusercontent.com/u/0/d/@data.StudentImgId=w250-h238-p-k-rw-v1-nu-iv1" alt="profile-pic">
+                                                }
+                                                else
+                                                {
+                                                    <img class="crm-profile-pic rounded-circle avatar-100" id="img-pfp" src="/assets/images/user/1.jpg" alt="profile-pic">
+                                                }
+
+                                                <label for="upload-pfp" class="crm-p-image bg-primary custom-file">
                                                     <i class="pt-1 ri-upload-line"></i>
-                                                    <input class="file-upload" type="file" name="StudentImgPfp" accept="image/*">
-                                                </div>
+                                                </label>
+                                                <input id="upload-pfp" asp-for="studentDTO.StudentImgPfp" class="custom-file-input dis" type="file" accept="image/*" style="display: none"
+                                                       onchange="document.getElementById('img-pfp').src = window.URL.createObjectURL(this.files[0])">
                                             </div>
                                         </div>
                                     </div>
@@ -64,14 +73,16 @@
                                         <label for="uname">Mã số sinh viên:</label>
                                         <input type="text" class="form-control" id="uname" value="@data.StudentCode" disabled>
                                     </div>
+
                                     <!-- Thêm các trường ẩn để chứa giá trị của LastName, DOB, StudentCode -->
-                                    <input type="hidden" name="LastName" value="@data.LastName">
-                                    <input type="hidden" name="DOB" value="@data.DOB.ToString("yyyy-MM-dd")">
-                                    <input type="hidden" name="StudentCode" value="@data.StudentCode">
+                                    <input asp-for="studentDTO.StudentLastName" type="hidden" value="@data.LastName">
+                                    <input asp-for="studentDTO.StudentFirstName" type="hidden" value="@data.FirstName">
+                                    <input asp-for="studentDTO.DOB" type="hidden" value="@data.DOB.ToString("yyyy-MM-dd")">
+                                    <input asp-for="studentDTO.StudentCode" type="hidden" value="@data.StudentCode">
 
                                     <div class="form-group col-sm-6">
                                         <label for="cname">Email:</label>
-                                        <input asp-for="studentDTO.Email" type="text" class="form-control" id="cname" name="Email" value="@data.Email">
+                                        <input asp-for="studentDTO.Email" type="text" class="form-control" id="cname" value="@data.Email">
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary mr-2">Xác nhận</button>

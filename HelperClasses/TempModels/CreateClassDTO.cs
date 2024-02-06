@@ -11,7 +11,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string StudentFirstName { get; set; }
             public string Email { get; set; }
             public DateTime? DOB { get; set; }
-            public string StudentImgId { get; set; }
+            public string? StudentImgId { get; set; }
             public IFormFile? StudentImgPfp { get; set; }
         }
         public class ClassDTO
