@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using WebsiteQuanLyLamViecNhom.Models;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO.StudentDTO;
 
@@ -36,8 +37,12 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             [Display(Name = "Mật khẩu hiện tại")]
             public string? CurrentPassword { get; set; }
 
+            // Đoạn mã để kiểm tra mật khẩu hiện tại của người dùng
+            [NotMapped] // Đánh dấu không phải là một trường trong cơ sở dữ liệu
+            public bool IsCurrentPasswordValid { get; set; }
+
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} " +
+            [StringLength(100, ErrorMessage = "{0} phải ít nhất {2} và tối đa {1} " +
                 "characters long.", MinimumLength = 8)]
             [DataType(DataType.Password)]
             [Display(Name = "Mật khẩu mới")]

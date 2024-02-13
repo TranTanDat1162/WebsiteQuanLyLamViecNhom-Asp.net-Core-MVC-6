@@ -18,8 +18,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Models.BaseApplicationUser> _userManager;
         private readonly ILogger<StudentController> _logger;
-
-        static CreateClassDTO StudentProfile;
+        
+        static CreateClassDTO? StudentProfile;
 
         static Student? viewModel = new Student
         {
@@ -28,7 +28,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             LastName = null,
             DOB = DateTime.MinValue,
             Email = null,
-            StudentImgId = null
+            StudentImgId = null,
         };
 
         public StudentController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<StudentController> logger)
@@ -146,8 +146,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     // Kiểm tra xem người dùng có tồn tại không
                     if (loggedInStudent != null)
                     {
-                        // Cập nhật email và hình ảnh cho người dùng
+                        // Cập nhật email cho người dùng
                         loggedInStudent.Email = studentDTO.Email;
+
+                        // Chuẩn hóa và cập nhật NormalizedEmail
+                        loggedInStudent.NormalizedEmail = studentDTO.Email?.ToUpperInvariant();
 
                         // Nếu người dùng đã chọn ảnh mới
                         if (studentDTO.StudentImgPfp != null)
@@ -179,6 +182,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return View("Profile", studentDTO);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePassword(CreateClassDTO.ChangePasswordDTO changePasswordDTO)
@@ -208,7 +212,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             if (!passwordCheckResult)
             {
                 ModelState.AddModelError(string.Empty, "Mật khẩu hiện tại không đúng.");
+                changePasswordDTO.IsCurrentPasswordValid = false;
                 return View("Profile", new CreateClassDTO()); // Trả về view Profile với một đối tượng CreateClassDTO mới
+            }
+            else
+            {
+                changePasswordDTO.IsCurrentPasswordValid = true;
             }
 
             // Thay đổi mật khẩu
@@ -227,6 +236,24 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             // Chuyển hướng về trang profile sau khi thay đổi mật khẩu thành công
             return RedirectToAction("Profile");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckCurrentPassword(string currentPassword)
+        {
+            // Lấy thông tin người dùng đăng nhập
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(loggedInUserId);
+
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{loggedInUserId}'.");
+            }
+
+            // Kiểm tra mật khẩu hiện tại của người dùng
+            var passwordCheckResult = await _userManager.CheckPasswordAsync(user, currentPassword);
+            return Json(new { isValid = passwordCheckResult });
+        }
+
 
         public IActionResult ProjectDetail()
         {

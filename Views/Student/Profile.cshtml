@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form method="post" asp-controller="Student" asp-action="UpdateProfile" enctype="multipart/form-data">
+                            <form id="update-form-profile" method="post" asp-controller="Student" asp-action="UpdateProfile" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 <div class="form-group row align-items-center">
                                     <div class="col-md-12">
@@ -100,27 +100,47 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form asp-controller="Student" asp-action="UpdatePassword" method="post">
+                            <form id="changePasswordForm" asp-controller="Student" asp-action="UpdatePassword" method="post">
                                 <div class="form-group">
                                     <label asp-for="changePasswordDTO.CurrentPassword">Nhập mật khẩu hiện tại:</label>
-                                    <input type="password" class="form-control" asp-for="changePasswordDTO.CurrentPassword" required>
-                                    <span class="text-danger" asp-validation-for="changePasswordDTO.CurrentPassword"></span>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" asp-for="changePasswordDTO.CurrentPassword" required id="currentPassword">
+                                        <div class="input-group-append">
+                                            <span id="eye-icon" class="input-group-text" onclick="togglePasswordVisibility('currentPassword')">
+                                                <i class="ri-eye-line" id="currentPasswordShow"></i>
+                                                <i class="ri-eye-off-line d-none" id="currentPasswordHide"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="changePasswordDTO.CurrentPassword" id="currentPasswordError"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="changePasswordDTO.NewPassword">Nhập mật khẩu mới:</label>
-                                    <input type="password" class="form-control" asp-for="changePasswordDTO.NewPassword" required>
-                                    <span class="text-danger" asp-validation-for="changePasswordDTO.NewPassword"></span>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="newPassword" asp-for="changePasswordDTO.NewPassword" required>
+                                        <div class="input-group-append">
+                                            <span id="eye-icon" class="input-group-text" onclick="togglePasswordVisibility('newPassword')">
+                                                <i class="ri-eye-line" id="newPasswordShow"></i>
+                                                <i class="ri-eye-off-line d-none" id="newPasswordHide"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="changePasswordDTO.NewPassword" id="newPasswordError"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="changePasswordDTO.ConfirmPassword">Xác thực mật khẩu mới:</label>
-                                    <input type="password" class="form-control" asp-for="changePasswordDTO.ConfirmPassword" required>
-                                    <span class="text-danger" asp-validation-for="changePasswordDTO.ConfirmPassword"></span>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="confirmPassword" asp-for="changePasswordDTO.ConfirmPassword" required>
+                                        <div class="input-group-append">
+                                            <span id="eye-icon" class="input-group-text" onclick="togglePasswordVisibility('confirmPassword')">
+                                                <i class="ri-eye-line" id="confirmPasswordShow"></i>
+                                                <i class="ri-eye-off-line d-none" id="confirmPasswordHide"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger" asp-validation-for="changePasswordDTO.ConfirmPassword" id="confirmPasswordError"></span>
                                 </div>
-@*                                <input asp-for="studentDTO.StudentLastName" type="hidden" value="@data?.LastName">
-                                <input asp-for="studentDTO.StudentFirstName" type="hidden" value="@data?.FirstName">
-                                <input asp-for="studentDTO.DOB" type="hidden" value="@data?.DOB.ToString("yyyy-MM-dd")">
-                                <input asp-for="studentDTO.StudentCode" type="hidden" value="@data?.StudentCode">*@
-                                <button type="submit" class="btn btn-primary mr-2">Xác nhận</button>
+                                <button type="submit" class="btn btn-primary mr-2" id="submitButton" disabled>Xác nhận</button>
                             </form>
                         </div>
                     </div>
@@ -130,6 +150,160 @@
         </div>
     </div>
 </div>
+
+
+@*Show hide password*@
+<style>
+    #eye-icon {
+        cursor: pointer; /* Đổi kiểu con trỏ thành pointer khi di chuyển vào biểu tượng */
+    }
+</style>
+
+<script>
+    function togglePasswordVisibility(inputId) {
+        var passwordInput = document.getElementById(inputId);
+        var showIcon = document.getElementById(inputId + "Show");
+        var hideIcon = document.getElementById(inputId + "Hide");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            showIcon.classList.add("d-none");
+            hideIcon.classList.remove("d-none");
+        } else {
+            passwordInput.type = "password";
+            showIcon.classList.remove("d-none");
+            hideIcon.classList.add("d-none");
+        }
+    }
+</script>
+
+@*Pop up notification for update profile*@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.getElementById("update-form-profile"); // Sử dụng ID để chọn form
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+            // Sử dụng Fetch API hoặc XMLHttpRequest để gửi dữ liệu form
+            fetch(form.action, {
+                method: form.method,
+                body: new FormData(form)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Nếu submit thành công, hiển thị thông báo
+                        return Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Thông tin đã được cập nhật!',
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        throw new Error('Đã có lỗi xảy ra.');
+                    }
+                })
+                .catch(error => {
+                    // Xử lý lỗi nếu có
+                    console.error('Error:', error);
+                });
+        });
+    });
+</script>
+
+@*Update Password*@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var currentPasswordField = document.getElementById("currentPassword");
+        var currentPasswordError = document.getElementById("currentPasswordError");
+        var newPasswordField = document.getElementById("newPassword");
+        var newPasswordError = document.getElementById("newPasswordError");
+        var confirmPasswordField = document.getElementById("confirmPassword");
+        var confirmPasswordError = document.getElementById("confirmPasswordError");
+        var submitButton = document.getElementById("submitButton");
+        var updatePasswordForm = document.getElementById("changePasswordForm");
+
+        currentPasswordField.addEventListener("input", validateForm);
+        newPasswordField.addEventListener("input", validateForm);
+        confirmPasswordField.addEventListener("input", validateForm);
+
+        // Thêm sự kiện lắng nghe cho việc nhấn nút submit
+        updatePasswordForm.addEventListener("submit", function (event) {
+            // Ngăn chặn hành động mặc định của biểu mẫu
+            event.preventDefault();
+
+            // Validate form
+            validateForm();
+
+            // Nếu không có lỗi, gửi biểu mẫu và hiển thị thông báo thành công
+            if (!submitButton.disabled) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: 'Mật khẩu đã được thay đổi thành công.'
+                }).then(function() {
+                    updatePasswordForm.submit(); // Gửi biểu mẫu sau khi người dùng nhấn OK
+                });
+            }
+        });
+
+        function validateForm() {
+            var currentPassword = currentPasswordField.value;
+            var newPassword = newPasswordField.value;
+            var confirmPassword = confirmPasswordField.value;
+            var errors = false;
+
+            // Kiểm tra mật khẩu hiện tại trong cơ sở dữ liệu
+            checkCurrentPassword(currentPassword, function (isValid) {
+                if (!isValid) {
+                    currentPasswordError.innerText = "Mật khẩu hiện tại không đúng.";
+                    currentPasswordError.classList.add("text-danger"); // Thêm class text-danger
+                    errors = true;
+                } else {
+                    currentPasswordError.innerText = "";
+                    currentPasswordError.classList.remove("text-danger"); // Loại bỏ class text-danger
+                }
+
+                // Kiểm tra mật khẩu mới và xác thực mật khẩu
+                if (newPassword.length < 8) {
+                    newPasswordError.innerText = "Mật khẩu mới phải có ít nhất 8 ký tự.";
+                    newPasswordError.classList.add("text-danger"); // Thêm class text-danger
+                    errors = true;
+                } else if (!/(?=.*[A-Z])(?=.*[!@@#$%^&*()_+])[a-zA-Z0-9!@@#$%^&*()_+]/.test(newPassword)) {
+                    newPasswordError.innerText = "Mật khẩu mới phải chứa ít nhất một ký tự in hoa và một ký tự đặc biệt.";
+                    newPasswordError.classList.add("text-danger"); // Thêm class text-danger
+                    errors = true;
+                } else {
+                    newPasswordError.innerText = "";
+                    newPasswordError.classList.remove("text-danger"); // Loại bỏ class text-danger
+                }
+
+                if (newPassword !== confirmPassword) {
+                    confirmPasswordError.innerText = "Mật khẩu xác thực không khớp.";
+                    confirmPasswordError.classList.add("text-danger"); // Thêm class text-danger
+                    errors = true;
+                } else {
+                    confirmPasswordError.innerText = "";
+                    confirmPasswordError.classList.remove("text-danger"); // Loại bỏ class text-danger
+                }
+
+                submitButton.disabled = errors; // Disable nút submit nếu có lỗi
+            });
+        }
+
+        function checkCurrentPassword(currentPassword, callback) {
+            $.ajax({
+                url: '@Url.Action("CheckCurrentPassword", "Student")',
+                type: 'POST',
+                data: { currentPassword: currentPassword },
+                success: function (response) {
+                    callback(response.isValid);
+                }
+            });
+        }
+    });
+</script>
+
 
 <script type="text/javascript" src="/assets/js/customizer.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
