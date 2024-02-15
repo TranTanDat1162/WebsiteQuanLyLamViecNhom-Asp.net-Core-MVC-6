@@ -11,14 +11,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<BaseApplicationUser> _userManager;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+        public ConfirmEmailModel(UserManager<BaseApplicationUser> userManager)
         {
             _userManager = userManager;
         }
@@ -42,7 +43,7 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
                 return NotFound($"Unable to load user with ID '{userId}'.");
             }
 
-            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            //code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
             return Page();

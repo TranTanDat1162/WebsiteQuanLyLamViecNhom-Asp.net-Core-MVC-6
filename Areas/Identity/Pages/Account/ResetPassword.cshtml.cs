@@ -69,7 +69,6 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             public string Code { get; set; }
-
         }
 
         public IActionResult OnGet(string code = null)
@@ -82,7 +81,8 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
             {
                 Input = new InputModel
                 {
-                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+                    //Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+                    Code = code
                 };
                 return Page();
             }

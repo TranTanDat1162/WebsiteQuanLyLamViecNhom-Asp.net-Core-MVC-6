@@ -11,10 +11,10 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
@@ -62,13 +62,14 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user != null) 
+                if (user != null && user.EmailConfirmed == true) 
                 {
                     string token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var linkHref = "<a href = '" + Url.Action("ResetPassword", "Account", new { email = Input.Email, code = token }, "http") + "'>Reset Password</a>";
-                    string subject = "Password change Karenge"; // Đổi subject lại
-                    string body = "<b>Password link Neche hai.</b><br/>" + linkHref; // Đổi body lại
-                    SendEmail(Input.Email, subject, body);
+                    var linkHref = "<a href = '" + Url.Action("ResetPassword", "Account",
+                        new { UserId = user.Id, code = token }, protocol: Request.Scheme) + "'>Reset Password</a>";
+                    string subject = "Password change"; // Đổi subject lại
+                    string body = "<b>Password link.</b><br/>" + linkHref; // Đổi body lại
+                    SendEmailAsync(Input.Email, subject, body);
                     return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
@@ -99,25 +100,27 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private bool SendEmail(string toEmail, string subject, string emailBody)
+        private async Task<bool> SendEmailAsync(string toEmail, string subject, string emailBody)
         {
             try
             {
                 // Cần xác thực 2 step verification
-                string senderEmail = "email@gmail.com"; // Đổi gmail riêng nckh2324@gmail.com của mình
-                string senderPassword = "password"; // Tương tự
-                SmtpClient client= new SmtpClient ("smtp.gmail.com", 587);
-                client.EnableSsl = true;
-                client.Timeout = 100000;
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials= false;
-                client.Credentials = new NetworkCredential(senderEmail, senderPassword);
+                //string senderEmail = "email@gmail.com"; // Đổi gmail riêng nckh2324@gmail.com của mình
+                //string senderPassword = "password"; // Tương tự
+                //SmtpClient client= new SmtpClient ("smtp.gmail.com", 587);
+                //client.EnableSsl = true;
+                //client.Timeout = 100000;
+                //client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                //client.UseDefaultCredentials= false;
+                //client.Credentials = new NetworkCredential(senderEmail, senderPassword);
 
-                MailMessage mailMessage= new MailMessage(senderEmail, toEmail, subject,
-                    emailBody);
-                mailMessage.IsBodyHtml = true;
-                mailMessage.BodyEncoding = UTF8Encoding.UTF8;
-                client.Send(mailMessage);
+                //MailMessage mailMessage= new MailMessage(senderEmail, toEmail, subject,
+                //    emailBody);
+                //mailMessage.IsBodyHtml = true;
+                //mailMessage.BodyEncoding = UTF8Encoding.UTF8;
+                //client.Send(mailMessage);
+
+                await _emailSender.SendEmailAsync(toEmail, subject, emailBody);
 
                 return true;
             }

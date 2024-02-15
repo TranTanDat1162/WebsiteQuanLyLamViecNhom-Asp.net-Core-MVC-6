@@ -6,6 +6,7 @@ using System;
 using WebsiteQuanLyLamViecNhom;
 using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.Hubs;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +55,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
+
+
+builder.Services.AddTransient<IEmailSender, MailServices>();
 //----------------------------------------------------
 
 var app = builder.Build();

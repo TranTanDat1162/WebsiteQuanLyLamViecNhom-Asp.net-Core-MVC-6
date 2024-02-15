@@ -10,6 +10,9 @@ using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using Google.Apis.Drive.v3.Data;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -18,8 +21,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Models.BaseApplicationUser> _userManager;
         private readonly ILogger<StudentController> _logger;
-        
+        private readonly IEmailSender _emailSender;
+
+
         static CreateClassDTO? StudentProfile;
+
 
         static Student? viewModel = new Student
         {
@@ -31,8 +37,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             StudentImgId = null,
         };
 
-        public StudentController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<StudentController> logger)
+
+        public StudentController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<StudentController> logger, IEmailSender emailSender)
         {
+            _emailSender = emailSender;
             _context = context;
             _userManager = userManager;
             _logger = logger;
@@ -164,6 +172,22 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                             loggedInStudent.StudentImgId = (string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID));
                         }
 
+                        if(studentDTO.Email != null && !loggedInStudent.EmailConfirmed)
+                        {
+                            //Sử dụng các phương thức của microsoft:
+                            //Generate cái token (code) và link để chứa cái token đó để gửi qua cha ng dùng
+                            string returnUrl = null ?? Url.Content("~/");
+
+                            var code = await _userManager.GenerateEmailConfirmationTokenAsync(loggedInStudent);
+
+                            string EmailConfirmationUrl = Url.Page(
+                                "/Account/ConfirmEmail",
+                                pageHandler: null,
+                                values: new { area = "Identity", userId = loggedInUserId, code, returnUrl },
+                                protocol: Request.Scheme);
+
+                            await _emailSender.SendEmailAsync(loggedInStudent.Email, "Verify your account", EmailConfirmationUrl);
+                        }
                         // Lưu thay đổi vào cơ sở dữ liệu
                         await _context.SaveChangesAsync();
 
