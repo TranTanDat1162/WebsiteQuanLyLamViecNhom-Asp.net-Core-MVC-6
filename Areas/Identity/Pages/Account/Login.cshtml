@@ -4,7 +4,30 @@
 @{
     ViewData["Title"] = "Log in";
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    var isPasswordChanged = TempData["IsPasswordChanged"] as bool? ?? false;
 }
+
+@if (isPasswordChanged)
+{
+    <script>
+        // Kiểm tra biến isPasswordChanged và hiển thị thông báo nếu cần
+        if (@isPasswordChanged.ToString().ToLower()) {
+            var alertDiv = document.createElement("div");
+            alertDiv.className = "alert alert-success fixed-top mr-3 mt-3";
+            alertDiv.setAttribute("role", "alert");
+            alertDiv.innerHTML = `
+                            <div class="iq-alert-text">Mật khẩu đã được thay đổi thành công!</div>
+                        `;
+            alertDiv.style.marginLeft = "80%"; // Thêm thuộc tính margin-left: 80%
+            document.body.appendChild(alertDiv);
+
+            setTimeout(function () {
+                alertDiv.style.display = "none";
+            }, 5000);
+        }
+    </script>
+}
+
 
 <div class="row align-items-center justify-content-center height-self-center">
     <div class="col-lg-8">

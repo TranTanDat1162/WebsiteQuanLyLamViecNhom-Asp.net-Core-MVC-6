@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.CodeAnalysis;
 using Project = WebsiteQuanLyLamViecNhom.Models.Project;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.ProjectDTO;
+using Microsoft.AspNetCore.Identity.UI.Services;
+
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     [Authorize(Roles = "Teacher")]
@@ -35,6 +37,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             LastName =null
         };
 
+        static CreateClassDTO? TeacherProfile;
 
         public TeacherController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<TeacherController> logger)
         {
@@ -66,6 +69,160 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             }
             // Xử lý trường hợp không có người dùng đăng nhập
             return NotFound();
+        }
+
+        [Route("Teacher/Profile")]
+        public async Task<IActionResult> Profile()
+        {
+            viewModel = await _context.Teacher
+                            .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+            // Kiểm tra xem người dùng có tồn tại không
+            if (viewModel != null)
+            {
+                ViewData["Teacher"] = viewModel;
+                CreateClassDTO ClassList = new CreateClassDTO();
+                ClassList.crumbs = new List<List<string>>()
+                {
+                    new List<string>() { "/Teacher/Class", "Home" },
+                    new List<string>() { "/Teacher/Profile", "Profile"}
+                };
+                return View(ClassList);
+            }
+            // Xử lý trường hợp không có người dùng đăng nhập
+            return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateProfile(CreateClassDTO.TeacherDTO teacherDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Lấy thông tin người dùng đăng nhập
+                    var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var loggedInTeacher = await _context.Teacher.FindAsync(loggedInUserId);
+
+                    // Kiểm tra xem người dùng có tồn tại không
+                    if (loggedInTeacher != null)
+                    {
+
+                        // Nếu người dùng đã chọn ảnh mới
+                        if (teacherDTO.TeacherImgPfp != null)
+                        {
+                            GDriveServices gDriveServices = new GDriveServices();
+                            UploadHelper uploadHelper = new UploadHelper();
+
+                            byte[] data = uploadHelper.ConvertToByteArray(teacherDTO.TeacherImgPfp);
+                            var fileID = gDriveServices.UploadFile(loggedInUserId, data, "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
+
+                            loggedInTeacher.ImgId = (string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID));
+                        }
+
+                        //if (teacherDTO.TeacherImgPfp != null && !loggedInTeacher.EmailConfirmed)
+                        //{
+                        //    //Sử dụng các phương thức của microsoft:
+                        //    //Generate cái token (code) và link để chứa cái token đó để gửi qua cha ng dùng
+                        //    string returnUrl = null ?? Url.Content("~/");
+
+                        //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(loggedInTeacher);
+
+                        //    string EmailConfirmationUrl = Url.Page(
+                        //        "/Account/ConfirmEmail",
+                        //        pageHandler: null,
+                        //        values: new { area = "Identity", userId = loggedInUserId, code, returnUrl },
+                        //    protocol: Request.Scheme);
+
+                        //    await _emailSender.SendEmailAsync(loggedInTeacher.Email, "Xác nhận tài khoản", EmailConfirmationUrl);
+                        //}
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        await _context.SaveChangesAsync();
+
+                        // Chuyển hướng về trang profile sau khi cập nhật thành công
+                        return RedirectToAction("Profile", "Teacher");
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    // Xử lý ngoại lệ khi có lỗi cập nhật cơ sở dữ liệu
+                    ModelState.AddModelError("", "Có lỗi xảy ra khi cập nhật thông tin. Vui lòng thử lại.");
+                }
+            }
+
+            // Nếu ModelState không hợp lệ, trả về trang cập nhật với thông báo lỗi
+            return View("Profile", teacherDTO);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePassword(CreateClassDTO.ChangePasswordDTO changePasswordDTO)
+        {
+            viewModel = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (viewModel != null)
+            {
+                ViewData["Teacher"] = viewModel; // Lấy info student trước để đưa vào view
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("Profile", TeacherProfile); // Trả về view Profile với một đối tượng TeacherProfile được tạo ở trc đó
+            }
+
+            // Lấy thông tin người dùng đăng nhập
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(loggedInUserId);
+
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{loggedInUserId}'.");
+            }
+
+            // Kiểm tra mật khẩu hiện tại của người dùng
+            var passwordCheckResult = await _userManager.CheckPasswordAsync(user, changePasswordDTO.CurrentPassword);
+            if (!passwordCheckResult)
+            {
+                ModelState.AddModelError(string.Empty, "Mật khẩu hiện tại không đúng.");
+                changePasswordDTO.IsCurrentPasswordValid = false;
+                return View("Profile", new CreateClassDTO()); // Trả về view Profile với một đối tượng CreateClassDTO mới
+            }
+            else
+            {
+                changePasswordDTO.IsCurrentPasswordValid = true;
+            }
+
+            // Thay đổi mật khẩu
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, changePasswordDTO.CurrentPassword, changePasswordDTO.NewPassword);
+            if (!changePasswordResult.Succeeded)
+            {
+                foreach (var error in changePasswordResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View("Profile", new CreateClassDTO()); // Trả về view Profile với một đối tượng CreateClassDTO mới
+            }
+
+            // Mật khẩu đã được thay đổi thành công, bạn có thể thực hiện các hành động khác ở đây
+
+            // Chuyển hướng về trang profile sau khi thay đổi mật khẩu thành công
+            return RedirectToAction("Profile");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckCurrentPassword(string currentPassword)
+        {
+            // Lấy thông tin người dùng đăng nhập
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(loggedInUserId);
+
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{loggedInUserId}'.");
+            }
+
+            // Kiểm tra mật khẩu hiện tại của người dùng
+            var passwordCheckResult = await _userManager.CheckPasswordAsync(user, currentPassword);
+            return Json(new { isValid = passwordCheckResult });
         }
 
         [HttpGet("Teacher/{classCode}")]

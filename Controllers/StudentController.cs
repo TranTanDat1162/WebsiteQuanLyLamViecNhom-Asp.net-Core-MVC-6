@@ -73,10 +73,19 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     {
                         ClassList.StudentClassListDTO.Add(studentClass);
                     }
+
                     ClassList.crumbs = new List<List<string>>()
                     {
                         new List<string>() { "/Student", "Home" }
                     };
+
+                    // Kiểm tra nếu người dùng chưa cập nhật email
+                    if (string.IsNullOrEmpty(viewModel.Email))
+                    {
+                        TempData["UpdateProfileNotification"] = "Vui lòng cập nhật thêm email";
+                        return RedirectToAction("Profile","Student");
+                    }
+
                     return View(ClassList);
 
                 }
@@ -186,7 +195,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                 values: new { area = "Identity", userId = loggedInUserId, code, returnUrl },
                                 protocol: Request.Scheme);
 
-                            await _emailSender.SendEmailAsync(loggedInStudent.Email, "Verify your account", EmailConfirmationUrl);
+                            await _emailSender.SendEmailAsync(loggedInStudent.Email, "Xác nhận tài khoản", EmailConfirmationUrl);
                         }
                         // Lưu thay đổi vào cơ sở dữ liệu
                         await _context.SaveChangesAsync();

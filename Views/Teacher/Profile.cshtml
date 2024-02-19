@@ -2,8 +2,9 @@
 
 @{
     ViewData["Title"] = "Profile";
-    Layout = "~/Views/Shared/_StudentLayout.cshtml";
-    var data = (Student)ViewData["Student"];
+    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
+    var data = (Teacher)ViewData["Teacher"];
+
 }
 
 @if (TempData["UpdateProfileNotification"] != null)
@@ -55,15 +56,15 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form id="update-form-profile" method="post" asp-controller="Student" asp-action="UpdateProfile" enctype="multipart/form-data">
+                            <form id="update-form-profile" method="post" asp-controller="Teacher" asp-action="UpdateProfile" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 <div class="form-group row align-items-center">
                                     <div class="col-md-12">
                                         <div class="profile-img-edit">
                                             <div class="crm-profile-img-edit">
-                                                @if (data?.StudentImgId != null)
+                                                @if (data?.ImgId != null)
                                                 {
-                                                    <img class="crm-profile-pic rounded-circle avatar-100" id="img-pfp" src="https://lh3.googleusercontent.com/u/0/d/@data.StudentImgId=w250-h238-p-k-rw-v1-nu-iv1" alt="profile-pic">
+                                                    <img class="crm-profile-pic rounded-circle avatar-100" id="img-pfp" src="https://lh3.googleusercontent.com/u/0/d/@data.ImgId=w250-h238-p-k-rw-v1-nu-iv1" alt="profile-pic">
                                                 }
                                                 else
                                                 {
@@ -73,7 +74,7 @@
                                                 <label for="upload-pfp" class="crm-p-image bg-primary custom-file">
                                                     <i class="pt-1 ri-upload-line"></i>
                                                 </label>
-                                                <input id="upload-pfp" asp-for="studentDTO.StudentImgPfp" class="custom-file-input dis" type="file" accept="image/*" style="display: none"
+                                                <input id="upload-pfp" asp-for="teacherDTO.TeacherImgPfp" class="custom-file-input dis" type="file" accept="image/*" style="display: none"
                                                        onchange="document.getElementById('img-pfp').src = window.URL.createObjectURL(this.files[0])">
                                             </div>
                                         </div>
@@ -89,19 +90,19 @@
                                         <input type="date" class="form-control" id="lname" value="@data?.DOB.ToString("yyyy-MM-dd")" disabled>
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        <label for="uname">Mã số sinh viên:</label>
-                                        <input type="text" class="form-control" id="uname" value="@data?.StudentCode" disabled>
+                                        <label for="uname">Mã giảng viên:</label>
+                                        <input type="text" class="form-control" id="uname" value="@data?.TeacherCode" disabled>
                                     </div>
 
                                     <!-- Thêm các trường ẩn để chứa giá trị của LastName, DOB, StudentCode -->
-                                    <input asp-for="studentDTO.StudentLastName" type="hidden" value="@data?.LastName">
-                                    <input asp-for="studentDTO.StudentFirstName" type="hidden" value="@data?.FirstName">
-                                    <input asp-for="studentDTO.DOB" type="hidden" value="@data?.DOB.ToString("yyyy-MM-dd")">
-                                    <input asp-for="studentDTO.StudentCode" type="hidden" value="@data?.StudentCode">
+                                    <input asp-for="teacherDTO.TeacherLastName" type="hidden" value="@data?.LastName">
+                                    <input asp-for="teacherDTO.TeacherFirstName" type="hidden" value="@data?.FirstName">
+                                    <input asp-for="teacherDTO.DOB" type="hidden" value="@data?.DOB.ToString("yyyy-MM-dd")">
+                                    <input asp-for="teacherDTO.TeacherCode" type="hidden" value="@data?.TeacherCode">
 
                                     <div class="form-group col-sm-6">
                                         <label for="cname">Email:</label>
-                                        <input asp-for="studentDTO.Email" type="text" class="form-control" id="cname" value="@data?.Email" required>
+                                        <input asp-for="teacherDTO.Email" type="text" class="form-control" id="cname" value="@data?.Email" disabled>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary mr-2">Xác nhận</button>
@@ -117,7 +118,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form id="changePasswordForm" asp-controller="Student" asp-action="UpdatePassword" method="post">
+                            <form id="changePasswordForm" asp-controller="Teacher" asp-action="UpdatePassword" method="post">
                                 <div class="form-group">
                                     <label asp-for="changePasswordDTO.CurrentPassword">Nhập mật khẩu hiện tại:</label>
                                     <div class="input-group">
@@ -258,7 +259,7 @@
                     icon: 'success',
                     title: 'Thành công!',
                     text: 'Mật khẩu đã được thay đổi thành công.'
-                }).then(function() {
+                }).then(function () {
                     updatePasswordForm.submit(); // Gửi biểu mẫu sau khi người dùng nhấn OK
                 });
             }
@@ -310,7 +311,7 @@
 
         function checkCurrentPassword(currentPassword, callback) {
             $.ajax({
-                url: '@Url.Action("CheckCurrentPassword", "Student")',
+                url: '@Url.Action("CheckCurrentPassword", "Teacher")',
                 type: 'POST',
                 data: { currentPassword: currentPassword },
                 success: function (response) {
@@ -329,3 +330,4 @@
     const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
     generateBreadcrumbs(breadcrumbData);
 </script>
+

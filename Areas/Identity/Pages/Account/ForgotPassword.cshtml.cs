@@ -56,49 +56,31 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
         {
             return Page();
         }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user != null && user.EmailConfirmed == true) 
+                if (user != null && user.EmailConfirmed == true)
                 {
                     string token = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var linkHref = "<a href = '" + Url.Action("ResetPassword", "Account",
                         new { UserId = user.Id, code = token }, protocol: Request.Scheme) + "'>Reset Password</a>";
-                    string subject = "Password change"; // Đổi subject lại
-                    string body = "<b>Password link.</b><br/>" + linkHref; // Đổi body lại
+                    string subject = "Đổi mật khẩu"; // Đổi subject lại
+                    string body = "<b>Đường dẫn đổi mật khẩu</b><br/>" + linkHref; // Đổi body lại
                     SendEmailAsync(Input.Email, subject, body);
                     return RedirectToPage("./ForgotPasswordConfirmation");
                 }
-
-                //if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                //{
-                //    // Don't reveal that the user does not exist or is not confirmed
-                //    return RedirectToPage("./ForgotPasswordConfirmation");
-                //}
-
-                // For more information on how to enable account confirmation and password reset please
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
-                //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                //var callbackUrl = Url.Page(
-                //    "/Account/ResetPassword",
-                //    pageHandler: null,
-                //    values: new { area = "Identity", code },
-                //    protocol: Request.Scheme);
-
-                //await _emailSender.SendEmailAsync(
-                //    Input.Email,
-                //    "Reset Password",
-                //    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                //return RedirectToPage("./ForgotPasswordConfirmation");
+                else
+                {
+                    TempData["ErrorMessage"] = "Email không tồn tại hoặc chưa được xác nhận.";
+                    return Page();
+                }
             }
 
             return Page();
         }
+
 
         private async Task<bool> SendEmailAsync(string toEmail, string subject, string emailBody)
         {
