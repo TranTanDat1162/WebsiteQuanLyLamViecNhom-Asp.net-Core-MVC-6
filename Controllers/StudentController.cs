@@ -160,8 +160,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     var loggedInStudent = await _context.Student.FindAsync(loggedInUserId);
 
+                    bool isEmailUnique = await _userManager.FindByEmailAsync(studentDTO.Email) == null;
+
                     // Kiểm tra xem người dùng có tồn tại không
-                    if (loggedInStudent != null)
+                    if (loggedInStudent != null && isEmailUnique)
                     {
                         // Cập nhật email cho người dùng
                         loggedInStudent.Email = studentDTO.Email;
