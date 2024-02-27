@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
@@ -114,6 +115,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     autogenlastname +
                     teacher.DOB.ToString("ddMMyyyy")).RemoveDiacritics();
 
+                autogenTeacherId = Encoding.ASCII.GetString(Encoding.GetEncoding("Cyrillic").GetBytes(autogenTeacherId));
+
                 teacher.TeacherCode = autogenTeacherId;
                 teacher.IsLocked = !teacher.IsLocked;
                 teacher.UserName = teacher.Email;
@@ -128,7 +131,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     var fileID =
                     gDriveServices.UploadFile(autogenTeacherId, data, "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
 
-                    
                     teacher.ImgId = (string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID));
                 }
 
@@ -159,10 +161,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         [Route("Admin/Teacher/Lock/{id?}")]
         public async Task<IActionResult?> LecturerLock(string id, bool isLocked)
         {
+
         #pragma warning disable CS8602 // Dereference of a possibly null reference.
             //var teacher = await _context.Teacher.FindAsync(id);
             var teacher = await _context.Teacher.Where(x => x.TeacherCode.Contains(id)).FirstOrDefaultAsync();
         #pragma warning restore CS8602 // Dereference of a possibly null reference.
+
             if (teacher == null)
             {
                 return NotFound();

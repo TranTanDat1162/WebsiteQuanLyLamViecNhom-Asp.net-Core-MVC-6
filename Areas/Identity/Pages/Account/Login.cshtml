@@ -4,7 +4,30 @@
 @{
     ViewData["Title"] = "Log in";
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    var isPasswordChanged = TempData["IsPasswordChanged"] as bool? ?? false;
 }
+
+@if (isPasswordChanged)
+{
+    <script>
+        // Kiểm tra biến isPasswordChanged và hiển thị thông báo nếu cần
+        if (@isPasswordChanged.ToString().ToLower()) {
+            var alertDiv = document.createElement("div");
+            alertDiv.className = "alert alert-success fixed-top mr-3 mt-3";
+            alertDiv.setAttribute("role", "alert");
+            alertDiv.innerHTML = `
+                            <div class="iq-alert-text">Mật khẩu đã được thay đổi thành công!</div>
+                        `;
+            alertDiv.style.marginLeft = "80%"; // Thêm thuộc tính margin-left: 80%
+            document.body.appendChild(alertDiv);
+
+            setTimeout(function () {
+                alertDiv.style.display = "none";
+            }, 5000);
+        }
+    </script>
+}
+
 
 <div class="row align-items-center justify-content-center height-self-center">
     <div class="col-lg-8">
@@ -24,14 +47,34 @@
                                             <span id="validation-error" asp-validation-for="Input.Email" class="alert alert-danger" style="display:none;"></span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12">
+@*                                    <div class="col-lg-12">
                                         <div class="floating-label form-group">
                                             <input asp-for="Input.Password" class="floating-input form-control" autocomplete="current-password" type="password" placeholder="Password">
                                             <span id="validation-error" asp-validation-for="Input.Password" class="alert alert-danger" style="display:none;"></span>
                                         </div>
-                                    </div>
+                                    </div>*@
                                     <div class="col-lg-12">
-                                        <a id="forgot-password" class="text-white float-right" asp-page="./ForgotPassword">Quên mật khẩu</a>
+                                        <div class="floating-label form-group">
+                                            <div class="input-group">
+                                                <input asp-for="Input.Password" class="floating-input form-control password" autocomplete="current-password" type="password" placeholder="Password" aria-describedby="password-addon">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="eye-icon" onclick="password_show_hide(this)">
+                                                        <i class="ri-eye-line" id="show_eye"></i>
+                                                        <i class="ri-eye-off-line d-none" id="hide_eye"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span id="validation-error" asp-validation-for="Input.Password" class="alert alert-danger" style="display:none;"></span>
+                                    </div>
+                                    <div class="col-lg-6">
+@*                                          <div class="custom-control custom-checkbox mb-3">
+                                             <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                             <label class="custom-control-label control-label-1 text-white" for="customCheck1">Remember Me</label>
+                                          </div>*@
+                                       </div>
+                                    <div class="col-lg-6">
+                                        <a href="/Identity/Account/ForgotPassword" class="text-white float-right">Quên mật khẩu?</a>
                                     </div>
                                 </div>
                                 <button id="login-submit" type="submit" class="btn btn-white">Đăng nhập</button>
@@ -46,6 +89,30 @@
         </div>
     </div>
 </div>
+
+@*Show/Hide password*@
+<style>
+    #eye-icon {
+        cursor: pointer; /* Đổi kiểu con trỏ thành pointer khi di chuyển vào biểu tượng */
+    }
+</style>
+<script>
+    function password_show_hide(element) {
+        var passwordInput = element.parentNode.previousElementSibling;
+        var showEyeIcon = element.querySelector("#show_eye");
+        var hideEyeIcon = element.querySelector("#hide_eye");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            showEyeIcon.classList.add("d-none");
+            hideEyeIcon.classList.remove("d-none");
+        } else {
+            passwordInput.type = "password";
+            showEyeIcon.classList.remove("d-none");
+            hideEyeIcon.classList.add("d-none");
+        }
+    }
+</script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

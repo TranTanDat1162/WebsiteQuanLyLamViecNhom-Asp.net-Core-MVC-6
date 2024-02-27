@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using WebsiteQuanLyLamViecNhom.Data;
+using WebsiteQuanLyLamViecNhom.Data.Migrations;
 using WebsiteQuanLyLamViecNhom.HelperClasses;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using WebsiteQuanLyLamViecNhom.Models;
@@ -17,7 +18,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
     public class ProjectController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<BaseApplicationUser> _userManager;
+        private readonly UserManager<Models.BaseApplicationUser> _userManager;
 
         static Teacher? viewModel = new Teacher
         {
@@ -25,14 +26,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             ImgId = null
         };
 
-        public ProjectController(ApplicationDbContext context, UserManager<BaseApplicationUser> userManager)
+        public ProjectController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
         static Student? viewModelStudent = new Student
-        {
+        {   
             StudentCode = "Student",
             Id = null 
         };
@@ -56,10 +57,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 //var result = await _context.Class.Where(t => t.Code == id).FirstOrDefaultAsync();
                 Group? group = await _context.Group.Where(t => t.Id == GroupId)
                                     .Include(p => p.Project)
-                                    .ThenInclude(c => c.Class)
+                                        .ThenInclude(c => c.Class)
                                     .Include(s => s.Students)
-                                    .ThenInclude(sc => sc.Student)
+                                        .ThenInclude(sc => sc.Student)
                                     .FirstOrDefaultAsync();
+
 
                 GroupDTO groupDTO = new();
                 StudentClass? leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
@@ -74,8 +76,9 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     memberList = group.Students,
                     LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
                     CurrentClass = group.Project.Class,
+                    CurrentUser = viewModelTeacher.Id,
                     ProjectAttachmentsJSON = group.Project.fileIDJSON,
-                    GroupID = group.Id
+                    GroupID = group.Id,
                 };
 
                 var taskList = await _context.Task
@@ -88,7 +91,12 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     currentGroup.Tasks = taskList;
 
                 groupDTO.GroupViewModel = currentGroup;
-
+                groupDTO.crumbs = new List<List<string>>()
+                    {
+                        new List<string>() { "/Teacher/Class", "Home" },
+                        new List<string>() { "/Teacher/"+ Class, Class  },
+                        new List<string>() { "/Teacher/Project/" + GroupId + "/" + GroupId, GroupId }
+                    };
                 return View(groupDTO);
             }
             catch (Exception ex)
@@ -98,36 +106,43 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         }
 
         // Return View for Student
-        [Route("Student/Project/{ClassCode?}")]
+        [Route("Student/Project/{ClassCode?}/{GroupId?}")]
         [Authorize(Roles = "Student")]
-        public async Task<IActionResult> StudentIndex(string ClassCode)
+        public async Task<IActionResult> StudentIndex(string ClassCode, string GroupId)
         {
             viewModelStudent = await _context.Student.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             ViewData["Student"] = viewModelStudent;
 
             Group? group = await _context.Group
-                        .Where(t => t.Project.Class.Code == ClassCode)
+                        .Where(t => t.Id == GroupId)
                         .Include(p => p.Project)
-                        .ThenInclude(c => c.Class)
+                            .ThenInclude(c => c.Class)
                         .Include(s => s.Students)
-                        .ThenInclude(sc => sc.Student)
+                            .ThenInclude(sc => sc.Student)
                         .FirstOrDefaultAsync();
 
+            if (group == null)
+            {
+                // Nếu group là null, chuyển hướng đến trang lỗi hoặc trang thông báo
+                return RedirectToAction("Error", "Student");
+            }
+
             GroupDTO groupDTO = new();
-            StudentClass? leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
+            StudentClass? leader = group?.Students.Where(l => l.Student.StudentCode == group.LeaderID)
                                         .FirstOrDefault();
 
-            var currentGroup = new GroupDTO.GroupVM
+            var currentGroup = new GroupVM
             {
                 LeaderID = group.LeaderID,
                 MOTD = group.MOTD,
                 ProjectId = group.ProjectId,
                 ProjectName = group.Project.Name,
                 memberList = group.Students,
-                LeaderName = leader.Student.LastName + " " + leader.Student.FirstName,
+                LeaderName = leader?.Student.LastName + " " + leader?.Student.FirstName,
                 CurrentClass = group.Project.Class,
                 ProjectAttachmentsJSON = group.Project.fileIDJSON,
                 GroupID = group.Id,
+                Deadline = group.Project?.Deadline,
                 CurrentUser = viewModelStudent.Id
             };
 
@@ -140,9 +155,19 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 currentGroup.Tasks = taskList;
 
             groupDTO.GroupViewModel = currentGroup;
-
+            groupDTO.crumbs = new List<List<string>>()
+                {
+                    new List<string>() { "/Student", "Home" },
+                    new List<string>() { "/Student/Project/" + ClassCode, ClassCode }
+                };
             return View(groupDTO);
 
+        }
+
+        [Route("Student/Error")]
+        public IActionResult Error()
+        {
+            return View();
         }
 
         //------------------Actions starts------------------->>
@@ -157,7 +182,8 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 foreach (var studentid in createTaskDTO.memberList)
                 {
                     var member = await _context.StudentClass
-                                        .Where(sc => sc.StudentId == studentid)
+                                        .Where(sc => sc.StudentId == studentid 
+                                                && sc.GroupID == createTaskDTO.GroupID)
                                         .Include(s => s.Student)
                                         .Include(g => g.Group)
                                         .Include(t => t.Tasks)
@@ -190,7 +216,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("StudentIndex", 
-                    new { classCode = memberList.FirstOrDefault().Class.Code });
+                    new { classCode = memberList.FirstOrDefault().Class.Code, GroupId= newtask.GroupId });
             }
             // TODO: Return errors
             return RedirectToAction("StudentIndex",
@@ -244,7 +270,59 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("StudentIndex",
-                    new { classCode = memberList.FirstOrDefault().Class.Code });
+                    new { classCode = memberList.FirstOrDefault().Class.Code, GroupId = task.GroupId });
+            }
+            // TODO: Return errors
+            return RedirectToAction("StudentIndex",
+                new { Error = ModelState.ToString() });
+        }
+
+        public async Task<IActionResult> RedoTask(GroupDTO.UpdateTaskDTO updateTaskDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var task = await _context.Task
+                                        .Where(sc => sc.TaskId == updateTaskDTO.TaskID)
+                                        .Include(sc => sc.StudentClass)
+                                            .ThenInclude(s => s.Student)
+                                        .Include(sc => sc.StudentClass)
+                                            .ThenInclude(c => c.Class)
+                                        .FirstOrDefaultAsync();
+
+                List<StudentClass> memberList = task.StudentClass.ToList();
+
+                //Only setting the status for now
+                task.Description = updateTaskDTO.Description;
+
+                _context.UpdateRange(memberList);
+
+                if (updateTaskDTO.Attachments != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    List<List<string>> uploadFiles = new List<List<string>>();
+
+                    foreach (var attachment in updateTaskDTO.Attachments)
+                    {
+                        byte[] data = uploadHelper.ConvertToByteArray(attachment);
+
+                        var fileID =
+                        gDriveServices.UploadFile(task.TaskId + attachment.FileName, data, "1eY_PYFOhlkXoi76uwXgxfjWJrRo6YC_K");
+
+                        var downloadlink = gDriveServices
+                            .GetDownloadLink((string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID)));
+
+                        if (downloadlink != null)
+                            uploadFiles.Add(new List<string> { downloadlink, attachment.FileName });
+                    }
+                    task.AttachmentLinksJson = JsonConvert.SerializeObject(uploadFiles);
+
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("StudentIndex",
+                    new { classCode = memberList.FirstOrDefault().Class.Code, GroupId = task.GroupId });
             }
             // TODO: Return errors
             return RedirectToAction("StudentIndex",
@@ -275,7 +353,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("StudentIndex",
-                    new { classCode = memberList.FirstOrDefault().Class.Code });
+                    new { classCode = memberList.FirstOrDefault().Class.Code, GroupId = task.GroupId });
             }
             // TODO: Return errors
             return RedirectToAction("StudentIndex",

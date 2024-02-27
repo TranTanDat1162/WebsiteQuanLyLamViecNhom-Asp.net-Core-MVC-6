@@ -11,14 +11,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using WebsiteQuanLyLamViecNhom.Models;
 
 namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
 {
     public class ResetPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<BaseApplicationUser> _userManager;
 
-        public ResetPasswordModel(UserManager<IdentityUser> userManager)
+        public ResetPasswordModel(UserManager<BaseApplicationUser> userManager)
         {
             _userManager = userManager;
         }
@@ -68,24 +69,31 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             public string Code { get; set; }
-
         }
 
-        public IActionResult OnGet(string code = null)
+        public async Task<IActionResult> OnGetAsync(string userId = null, string code = null)
         {
-            if (code == null)
+            if (userId == null || code == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return BadRequest("User ID and code must be supplied for password reset.");
             }
-            else
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
             {
-                Input = new InputModel
-                {
-                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
-                };
-                return Page();
+                // Nếu không tìm thấy người dùng với userId cung cấp, có thể hiển thị một thông báo lỗi thích hợp ở đây
+                return BadRequest("Invalid user ID.");
             }
+
+            Input = new InputModel
+            {
+                Code = code,
+                Email = user.Email // Gán email của người dùng cho Input.Email để truyền giá trị này vào form
+            };
+
+            return Page();
         }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -104,7 +112,8 @@ namespace WebsiteQuanLyLamViecNhom.Areas.Identity.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
-                return RedirectToPage("./ResetPasswordConfirmation");
+                TempData["IsPasswordChanged"] = true;
+                return RedirectToPage("./Login");
             }
 
             foreach (var error in result.Errors)

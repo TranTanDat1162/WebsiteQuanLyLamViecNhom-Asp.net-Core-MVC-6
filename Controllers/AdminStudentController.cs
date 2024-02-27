@@ -68,10 +68,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         [Route("Admin/Student/Lock/{id?}")]
         public async Task<IActionResult?> StudentLock(string id, bool isLocked)
         {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            #pragma warning disable CS8602 // Dereference of a possibly null reference.
             //var teacher = await _context.Teacher.FindAsync(id);
-            var student = await _context.Student.Where(x => x.StudentCode.Contains(id)).FirstOrDefaultAsync();
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            var student = await _context.Student.Where(x => x.Id.Contains(id)).FirstOrDefaultAsync();
+            #pragma warning restore CS8602 // Dereference of a possibly null reference.
             if (student == null)
             {
                 return NotFound();

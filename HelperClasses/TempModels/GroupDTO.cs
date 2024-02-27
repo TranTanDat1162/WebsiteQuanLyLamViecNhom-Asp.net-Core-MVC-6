@@ -15,11 +15,14 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string LeaderName { get; set; } = string.Empty;
             public Class CurrentClass { get; set; }
             public string CurrentUser {  get; set; }
+            public DateTime? Deadline { get; set; }
+
             public ICollection<StudentClass> memberList { get; set; }
             public ICollection<Models.Task>? Tasks { get; set; } = new List<Models.Task>();
         }
         public class TaskDTO
         {
+            public string GroupID { get; set; }
             public string TaskName { get; set; }
             public string[] memberList { get; set; }
             public DateTime Deadline { get; set; }
@@ -27,22 +30,23 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
         }
         public class UpdateTaskDTO
         {
-            public string TaskID { get; set; }
-            public string Description { get; set; }
+            public string? TaskID { get; set; }
+            public string? Description { get; set; }
             public float? Grade { get; set; }
             public IList<IFormFile>? Attachments { get; set; }
         }
         public class GradeGroupDTO
         {
-            public string GroupID { get; set; }
+            public string? GroupID { get; set; }
             public string? Description { get; set; }
             public float TeacherGrade { get; set; }
             public float LeaderAGVGrade { get; set; }
         }
-        public GradeGroupDTO gradeGroupDTO { get; set; }
-        public UpdateTaskDTO updateTaskDTO { get; set; }
-        public TaskDTO createTaskDTO { get; set; }
-        public GroupVM GroupViewModel {  get; set; }
+        public GradeGroupDTO? gradeGroupDTO { get; set; }
+        public UpdateTaskDTO? updateTaskDTO { get; set; }
+        public TaskDTO? createTaskDTO { get; set; }
+        public GroupVM? GroupViewModel {  get; set; }
+        public List<List<string>>? crumbs { get; set; }
 
     }
 }

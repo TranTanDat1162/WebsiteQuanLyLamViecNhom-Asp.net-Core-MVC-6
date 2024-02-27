@@ -37,7 +37,9 @@
                                     <td>
                                         @if(item.ImgId != null)
                                         {
-                                            <img class="avatar-70 rounded" src="https://drive.google.com/uc?id=@item.ImgId&export=download" alt="#" data-original-title="" title="">
+                                            <img class="avatar-70 rounded" src="https://lh3.googleusercontent.com/u/0/d/@item.ImgId=w250-h238-p-k-rw-v1-nu-iv1" alt="#" data-original-title="" title="">
+
+                                            @* <img class="avatar-70 rounded" src="https://drive.google.com/uc?id=@item.ImgId&export=download" alt="#" data-original-title="" title=""> *@
                                         }
                                         else
                                         {
@@ -78,7 +80,7 @@
     <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header d-block text-center pb-3 border-bttom">
-                <h3 class="modal-title" id="exampleModalCenterTitle02">New User</h3>
+                <h3 class="modal-title" id="exampleModalCenterTitle02">Thêm giảng viên</h3>
             </div>
             <div class="modal-body">
                 <form asp-action="LecturerCreate" enctype="multipart/form-data">
@@ -86,7 +88,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group mb-3 custom-file-small">
-                            <label for="exampleInputText01" class="h5">Upload Profile Picture</label>
+                            <label for="exampleInputText01" class="h5">Hình ảnh</label>
                             <div class="custom-file">
                                 <input asp-for="@Model.Teacher.ImgPfp" type="file" class="custom-file-input" id="inputGroupFile02">
                                 <span asp-validation-for="@Model.Teacher.ImgPfp" class="text-danger"></span>

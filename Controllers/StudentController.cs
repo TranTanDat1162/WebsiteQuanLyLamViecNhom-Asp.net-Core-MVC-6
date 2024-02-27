@@ -6,6 +6,13 @@ using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.HelperClasses.TempModels;
 using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.CreateClassDTO;
 using WebsiteQuanLyLamViecNhom.Models;
+using WebsiteQuanLyLamViecNhom.Data.Migrations;
+using WebsiteQuanLyLamViecNhom.HelperClasses;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
+using Google.Apis.Drive.v3.Data;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -14,14 +21,26 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Models.BaseApplicationUser> _userManager;
         private readonly ILogger<StudentController> _logger;
+        private readonly IEmailSender _emailSender;
+
+
+        static CreateClassDTO? StudentProfile;
+
 
         static Student? viewModel = new Student
         {
-            StudentCode = "Student"
+            StudentCode = "Student",
+            FirstName = null,
+            LastName = null,
+            DOB = DateTime.MinValue,
+            Email = null,
+            StudentImgId = null,
         };
 
-        public StudentController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<StudentController> logger)
+
+        public StudentController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<StudentController> logger, IEmailSender emailSender)
         {
+            _emailSender = emailSender;
             _context = context;
             _userManager = userManager;
             _logger = logger;
@@ -39,20 +58,38 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 ViewData["Student"] = viewModel;
                 Student? currentStudent = await _context.Student
                     .Include(t => t.ClassList)
-                    .ThenInclude(t => t.Class)
-                    .ThenInclude(t => t.Teacher)
+                        .ThenInclude(t => t.Class)
+                            .ThenInclude(t => t.Teacher)
                     .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                //Teacher? currentTeacher = await _context.Teacher
-                //    .Include(t => t.ClassList)
-                //    .ThenInclude(t => t.ClassGroup)
-                //    .FirstOrDefaultAsync(t => t.Id == User.FindFirst(ClaimTypes.NameIdentifier));
-
                 CreateClassDTO ClassList = new CreateClassDTO();
-                foreach(var studentClass in currentStudent.ClassList)
-                {
-                    ClassList.ClassListDTO.Add(studentClass.Class);
+                if (currentStudent != null) {
+                    var currentClasses = await _context.StudentClass
+                        .Where(s => s.StudentId == currentStudent.Id)
+                        .Include(t => t.Class)
+                        .ToListAsync();
+
+                    foreach (var studentClass in currentClasses)
+                    {
+                        ClassList.StudentClassListDTO.Add(studentClass);
+                    }
+
+                    ClassList.crumbs = new List<List<string>>()
+                    {
+                        new List<string>() { "/Student", "Home" }
+                    };
+
+                    // Kiểm tra nếu người dùng chưa cập nhật email
+                    if (string.IsNullOrEmpty(viewModel.Email))
+                    {
+                        TempData["UpdateProfileNotification"] = "Vui lòng cập nhật thêm email";
+                        return RedirectToAction("Profile","Student");
+                    }
+
+                    return View(ClassList);
+
                 }
+
                 return View(ClassList);
             }
 
@@ -257,5 +294,6 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
         {
             return View();
         }
+
     }
 }

@@ -17,9 +17,6 @@
                         <div class="form-group mt-0 mb-0">
                             <select class="custom-select" id="projectFilter" style="height:40px">
                                 <option value="all" selected>Tất cả</option>
-@*                                <option value="@WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending">Chờ duyệt</option>
-                                <option value="@WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing">Đang làm</option>
-                                <option value="@WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete">Hoàn thành</option>*@
                                 <option value="Pending">Chờ duyệt</option>
                                 <option value="OnGoing">Đang làm</option>
                                 <option value="Complete">Hoàn thành</option>
@@ -58,6 +55,7 @@
             </div>
         </div>
         <!--Task List starts-->
+        @*Công việc của thành viên nào chưa để disabled*@
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -67,20 +65,41 @@
                     @foreach(var task in Model.GroupViewModel.Tasks){
                         var uniqueId = $"Edit{uniqueIdCounter++}";
                         <div class="col-lg-12">
-                            <div class="card card-widget task-card">
+                            <div class="card card-widget task-card" data-status="@((int)task.Status)">
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <div>
                                                 <h5 class="mb-2">
                                                     @task.TaskName
+                                                    <h7 class="mt-2 ml-2 font-size-14">
+                                                        @foreach (var member in task.StudentClass)
+                                                        {
+                                                            <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName}") @($"{member.Student.FirstName}")</span>
+                                                        }
+                                                    </h7>
                                                 </h5>
                                                 <div class="media align-items-center">
                                                     @if (@task.TaskGradedByLeader != null)
                                                     {
-                                                        <div class="btn text-success bg-success-light mr-3">
-                                                            <i class="ri-thumb-up-line mr-2"></i>@task.TaskGradedByLeader /10
-                                                        </div>
+                                                        @if (task.TaskGradedByLeader < 5)
+                                                        {
+                                                            <div class="btn text-success bg-secondary-light mr-3">
+                                                                <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
+                                                            </div>
+                                                        }
+                                                        else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
+                                                        {
+                                                            <div class="btn text-success bg-warning-light mr-3">
+                                                                <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
+                                                            </div>
+                                                        }
+                                                        else if (task.TaskGradedByLeader >= 8)
+                                                        {
+                                                            <div class="btn text-success bg-success-light mr-3">
+                                                                <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
+                                                            </div>
+                                                        }
                                                     }
                                                 </div>
                                             </div>
@@ -124,7 +143,7 @@
                                                                     multiple>
                                                                 @foreach (var member in task.StudentClass)
                                                                 {
-                                                                    <option disabled selected>@member.Student.FirstName</option>
+                                                                    <option disabled selected> @member.Student.LastName @member.Student.FirstName </option>
                                                                 }
                                                             </select>
                                                         </div>
@@ -153,13 +172,57 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group mb-3">
-                                            <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input"
-                                                       id="inputGroupFile002" />
-                                                <label class="custom-file-label"
-                                                       for="inputGroupFile002">Upload media</label>
+                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
+                                        {
+                                            @*<div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <h5 class="mb-2">Ghi chú bài nộp</h5>
+                                                            <div class="form-group mb-3">
+                                                                <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                        }
+                                        @if (task.AttachmentLinksJson != null)
+                                        {
+                                            <div class="form-group mb-0 task-attachments"
+                                         onload="getTaskAttachments(this)"
+                                         data-task-attachment="@task.AttachmentLinksJson">
+
+                                                <label for="exampleInputText01" class="h5">Các tệp cũ</label>
+                                            </div>
+                                        }
+                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
+                                        {
+                                            @*<div class="form-group mb-3">
+                                                <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
+                                                <div class="custom-file">
+                                                    <input asp-for="updateTaskDTO.Attachments" type="file" class="custom-file-input"
+                                                   id="inputGroupFile002"
+                                                   multiple />
+                                                    <label class="custom-file-label"
+                                                   for="inputGroupFile002">Upload media</label>
+                                                </div>
+                                            </div>*@
+                                        }
+                                        <div class="form-group mb-0 ">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                                        @foreach (var member in task.StudentClass)
+                                                        {
+                                                            @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing
+                                                           && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                            {
+                                                                <input type="submit" value="Nộp" class="btn btn-primary btn-lg" id="btnDone">
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -169,9 +232,7 @@
                     }    
                     @if (Model.GroupViewModel.Tasks.Count == 0)
                     {
-                        <h5>
-                            TODO: decorate when theres no Task
-                        </h5>
+                        
                     }
                 </div>
             </div>
@@ -219,7 +280,7 @@
                 <table class="table mb-0 table-borderless tbl-server-info">
                     <tbody>
                         <div class="card-body">
-                            <h5 class="md-3">Members List</h5>
+                            <h5 class="md-3">Danh sách thành viên</h5>
                         </div>
                         <tr>
                             <td>
@@ -229,7 +290,7 @@
                                     </h6>
                                     <span class="badge badge-leader">
                                         <i class="ri-vip-crown-fill"></i>
-                                        Leader
+                                        Trưởng nhóm
                                     </span>
                                 </div>
                             </td>
@@ -241,7 +302,7 @@
                                 <tr>
                                     <td>
                                         <div class="media align-items-center">
-                                            <h6 class="ml-3">@($"{student.Student.FirstName} {student.Student.LastName}")</h6>
+                                            <h6 class="ml-3">@($"{student.Student.LastName} {student.Student.FirstName}")</h6>
                                         </div>
                                     </td>
                                 </tr>
@@ -251,9 +312,39 @@
                 </table>
             </div>
         </div>
+            <!--Group chat start -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="md-3">Khu trò chuyện</h5>
+                </div>
+                <div class="form-group pl-3 pr-3">
+                    <div class="form-control pre-scrollable" id="messagesList" style="max-height: 300px; min-height: 200px;flex-direction: column-reverse">
+                    </div>
+                </div>
+                <div class="row pl-3 pr-3">
+                    <div class="col-10">
+                        <div class="form-group">
+                            <!--This input is used to help fetching the notification-->
+                            <input hidden type="text" id="userInput" value="@Model.GroupViewModel.CurrentUser" />
+                            <input hidden type="text" id="roomInput" value="@Model.GroupViewModel.GroupID" />
+                            <textarea class="form-control" id="messageInput" rows="2" placeholder="Hãy giao tiếp với nhau"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="d-flex flex-wrap align-items-ceter justify-content-center">
+                            <div class="btn btn-outline-info mr-3 ri-send-plane-2-line" id="sendButton">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Group chat start -->
     </div>
     <!--Member List end -->
+
 </div>
+<script type="text/javascript" src="/assets/js/customizer.js"></script>
+
 <script>
     // Xử lý sự kiện khi giá trị của dropdown thay đổi
     document.getElementById('projectFilter').addEventListener('change', function () {
@@ -261,7 +352,21 @@
         var selectedStatus = document.getElementById('projectFilter').value;
 
         // Lặp qua tất cả các card để ẩn/hiện tùy thuộc vào giá trị của dropdown
-        var allCards = document.querySelectorAll('.task-card');
+        var allCards = document.querySelectorAll('.task-card[data-status]');
+
+        const matchingElements = document.querySelectorAll('[href^="#Edit"]');
+
+        // Do something with the fetched elements:
+        matchingElements.forEach(element => {
+            // Access the element's properties or perform actions on it, e.g.,
+            console.log(element);
+            var isExpanded = element.getAttribute('aria-expanded');
+
+            if (isExpanded === 'true') {
+                element.click();
+            }
+        });
+
         for (var i = 0; i < allCards.length; i++) {
             var card = allCards[i];
 
@@ -288,4 +393,61 @@
             }
         }
     });
+
+    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
+    generateBreadcrumbs(breadcrumbData);
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get all divs with the "updateTaskDTO_attachments" ID
+        const taskDivs = document.querySelectorAll(".task-attachments");
+        taskDivs.forEach(function (taskDiv) {
+            getTaskAttachments(taskDiv);
+        });
+    });
+    function getTaskAttachments(taskDiv) {
+        let pAttachments = taskDiv.getAttribute("data-task-attachment");
+
+        if (pAttachments != null) {
+            let pAttachmentList = JSON.parse(pAttachments);
+
+            while (taskDiv.children.length > 1) {
+                taskDiv.removeChild(attachmentsContainer.lastChild);
+            }
+
+
+
+            // Create the heading element with the link
+            const heading = document.createElement("h5");
+            heading.classList.add("pl-2", "mb-3");
+            heading.textContent = "";
+
+            for (let i = 0; i < pAttachmentList.length; i++) {
+                let attachment = pAttachmentList[i];
+
+                // Access download link and file name separately
+                const downloadLink = attachment[0]; // First element holds the link
+                const fileName = attachment[1];    // Second element holds the name
+
+                // Create the "New" badge
+                const badge = document.createElement("a");
+                badge.classList.add("badge", "badge-info", "mr-2");
+                badge.textContent = fileName;
+
+                // Append the badge to the heading
+                heading.appendChild(badge);
+
+                // Add downloadlink to a tag
+                badge.href = downloadLink;
+
+                // Append the <a> element to the container
+                taskDiv.appendChild(heading);
+
+            }
+        }
+    }
+</script>
+
+<script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/assets/js/chat.js"></script>

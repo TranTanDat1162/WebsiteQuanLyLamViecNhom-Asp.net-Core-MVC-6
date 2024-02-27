@@ -15,75 +15,22 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
                     <h5>@($"({Model.GroupViewModel.CurrentClass.Code}) {Model.GroupViewModel.CurrentClass.SubjectName}")</h5>
                     <div class="d-flex flex-wrap align-items-center">
-                        <div class="nav-item nav-icon nav-item-icon dropdown">
-                            <a href="#" class="search-toggle dropdown-toggle mr-2" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                    </path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                                <span class="bg-primary"></span>
-                            </a>
-                            <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton2" id="notification-list">
-                                <div class="card shadow-none m-0">
-                                    <div class="card-body p-0 ">
-                                        <div class="cust-title p-3">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h5 class="mb-0">Thông báo từ Giảng viên hướng dẫn</h5>
-                                                <a class="badge badge-primary badge-card" href="#">0</a>
-                                            </div>
-                                        </div>
-                                        <div class="px-3 pt-0 pb-0 sub-card">
-                                            <a href="#" class="iq-sub-card" data-target="#show-notification-modal"
-                                               data-toggle="modal">
-                                                <div class="media align-items-center cust-card py-3 border-bottom">
-                                                    <div class="">
-                                                        <img class="avatar-50 rounded-small" src="../assets/images/user/01.jpg" alt="01">
-                                                    </div>
-                                                    <div class="media-body ml-3">
-                                                        <div class="d-flex align-items-center justify-content-between">
-                                                            <h6 class="mb-0">Emma Watson</h6>
-                                                            <small class="text-dark"><b style="margin-left: 23px;">1m ago</b></small>
-                                                        </div>
-                                                        <small class="mb-0">View notification of this Leacture</small>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <a class="right-ic btn btn-primary btn-block position-relative p-2" href="#" role="button">
-                                            View All
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="d-flex flex-wrap align-items-center">
+                        <div class="form-group mt-0 mb-0 mr-2">
+                            <select class="custom-select" id="projectFilter" style="height:40px">
+                                <option value="all" selected>Tất cả</option>
+                                <option value="Pending">Chờ duyệt</option>
+                                <option value="OnGoing">Đang làm</option>
+                                <option value="Complete">Hoàn thành</option>
+                            </select>
                         </div>
-                        <div class="dropdown dropdown-project mr-3">
-                            <div class="dropdown-toggle" id="dropdownMenuButton03"
-                                 data-toggle="dropdown">
-                                <div class="btn bg-body">
-                                    <span class="h6">Project :</span> webkit Project<i class="ri-arrow-down-s-line ml-2 mr-0"></i>
-                                </div>
-                            </div>
-                            <div class="dropdown-menu dropdown-menu-right"
-                                 aria-labelledby="dropdownMenuButton03">
-                                <a class="dropdown-item" href="#">
-                                    <i class="ri-mic-line mr-2"></i>In
-                                    Progress
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="ri-attachment-line mr-2"></i>Priority
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="ri-file-copy-line mr-2"></i>Category
-                                </a>
-                            </div>
-                        </div>
+                    </div>
                         @{
                             var data = (Student)ViewData["Student"];
                             if(data.StudentCode == Model.GroupViewModel.LeaderID)
                             {
                                 <a href="#" class="btn btn-primary" data-target="#new-task-modal"
-                                    data-toggle="modal">New Task</a>
+                                    data-toggle="modal">Tạo công việc</a>
                             }
                         }
                     </div>
@@ -92,7 +39,7 @@
         </div>
     </div>
 
-    <div class="col-lg-9">
+    <div class="col-lg-8">
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -100,7 +47,17 @@
                         <div class="row align-items-center">
                             <div class="col-md-9">
                                 <div class="mt-3 mt-md-0">
-                                    <h5 class="mb-1">@Model.GroupViewModel.ProjectName</h5>
+                                    <h5 class="mb-1">
+                                        @Model.GroupViewModel.ProjectName
+                                        @{
+                                            var firstScore = Model.GroupViewModel.memberList.FirstOrDefault()?.Score; // Get the score once
+                                            if (firstScore != null)
+                                            {
+                                                var badgeClass = firstScore < 3 ? "badge-danger" : firstScore < 6 ? "badge-warning" : "badge-success";
+                                                <span class="badge @badgeClass ml-2">@firstScore Đ</span>
+                                            }
+                                        }
+                                    </h5>
                                     <p class="mb-0">@Model.GroupViewModel.MOTD</p>
                                 </div>
                             </div>
@@ -133,361 +90,211 @@
                         var uniqueId = $"Edit{uniqueIdCounter++}";
                         <div class="col-lg-12">
                             @if (data.StudentCode == Model.GroupViewModel.LeaderID 
-                            && task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                                && task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
                             {
-                                <form asp-action="VerifyTask" asp-controller="Project">
-                                    <div class="card card-widget task-card">
+                                <div class="task-wrap">                           
+                                    <div class="card card-widget task-card" data-status="@((int)task.Status)">
                                         <div class="card-body">
                                             <div class="d-flex flex-wrap align-items-center justify-content-between">
                                                 <div class="d-flex align-items-center">
                                                     <div>
                                                         <h5 class="mb-2">
                                                             @task.TaskName
+                                                            <h7 class="mt-2 ml-2 font-size-14">
+                                                                @foreach (var member in task.StudentClass)
+                                                                {
+                                                                    <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName}") @($"{member.Student.FirstName}")</span>
+                                                                }
+                                                            </h7>
                                                         </h5>
+
                                                         <div class="media align-items-center">
                                                             @if (@task.TaskGradedByLeader != null)
                                                             {
-                                                                <div class="btn text-success bg-success-light mr-3">
-                                                                    <i class="ri-thumb-up-line mr-2"></i>@task.TaskGradedByLeader /10
-                                                                </div>
+                                                                @if (task.TaskGradedByLeader < 5)
+                                                                {
+                                                                    <div class="btn text-success bg-secondary-light mr-3">
+                                                                        <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
+                                                                    </div>
+                                                                }
+                                                                else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
+                                                                {
+                                                                    <div class="btn text-success bg-warning-light mr-3">
+                                                                        <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
+                                                                    </div>
+                                                                }
+                                                                else if (task.TaskGradedByLeader >= 8)
+                                                                {
+                                                                    <div class="btn text-success bg-success-light mr-3">
+                                                                        <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
+                                                                    </div>
+                                                                }
                                                             }
+
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="media align-items-center mt-md-0 mt-3">
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
-                                                    {
-                                                        <a class="btn bg-warning-light mr-3" id="btnOnPending">Chờ duyệt</a>
-                                                    }
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                    {
-                                                        <a class="btn bg-secondary-light mr-3" id="btnOnGoing">Đang làm</a>
-                                                    }
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
-                                                    {
-                                                        <a class="btn bg-success-light mr-3" id="btnsuccess">Hoàn thành</a>
-                                                    }
-                                                    <a class="btn bg-primary-light" data-toggle="collapse"
-                                                    href="#@uniqueId"
-                                                    role="button" aria-expanded="false"
-                                                    aria-controls="@uniqueId">
-                                                        <i class="ri-edit-box-line m-0"></i>
+                                                <div class="media align-items-center mt-md-0 mt-3 task-header">
+                                                    <a class="btn bg-warning-light mr-3" id="btnOnPending" data-status="1">Chờ duyệt</a>
+
+                                                    <a class="btn bg-primary-light mr-3" data-toggle="collapse" id="btnTrigger"
+                                                       href="#@uniqueId"
+                                                       role="button" aria-expanded="false"
+                                                       aria-controls="@uniqueId"
+                                                       hidden>
                                                     </a>
+
+                                                    @foreach (var member in task.StudentClass)
+                                                    {
+                                                        if (member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                        {
+                                                            <a class="btn bg-primary-light mr-3" id="btnRedoTask"
+                                                               role="button">
+                                                                <i class="ri-edit-box-line m-0"></i>
+                                                            </a>
+                                                        }
+                                                    }
+
+                                                    <a class="btn bg-info-light" id="btnVerifyTask"
+                                                       role="button">
+                                                        <i class="ri-check-line m-0"></i>
+                                                    </a>
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="collapse" id="@uniqueId">
-                                        <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
-                                        <div class="card card-list task-card">
-                                            <div class="card-body">
-                                                <div class="card mb-3">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-lg-6">
-                                                                <div class="form-group mb-0">
-                                                                    <label for="exampleInputText2"
-                                                                    class="h5">Thành viên phụ trách</label>
-                                                                    <select name="type"
-                                                                    class="selectpicker form-control"
-                                                                    data-style="py-0"
-                                                                    multiple>
-                                                                        @foreach (var member in task.StudentClass)
-                                                                        {
-                                                                            <option disabled selected>@member.Student.FirstName</option>
-                                                                        }
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <div class="form-group mb-0">
-                                                                    <label for="exampleInputText4" class="h5">
-                                                                        Hạn chót
-                                                                    </label>
-                                                                    <input disabled type="date" class="form-control"
-                                                                    id="exampleInputText4" value="@task.DeadLineDate.ToString("yyyy-MM-dd")">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card mb-3">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-lg-6">
-                                                                <h5 class="mb-2">Ghi chú</h5>
-                                                                <p class="mb-0" style="word-wrap: break-word;width: 800px;">
-                                                                    @task.Description
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
-                                                {
+
+                                    <form asp-action="VerifyTask" asp-controller="Project"
+                                        id="form-verify">
+                                    
+                                        <div class="collapse" id="@uniqueId">
+                                            <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
+                                            <div class="card card-list task-card">
+                                                <div class="card-body">
                                                     <div class="card mb-3">
                                                         <div class="card-body">
                                                             <div class="row">
-                                                                <div class="col-lg-12">
-                                                                    <h5 class="mb-2">Đánh giá</h5>
-                                                                    <div class="form-group mb-3">
-                                                                        <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2"></textarea>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group mb-0">
+                                                                        <label for="exampleInputText2"
+                                                                        class="h5">Thành viên phụ trách</label>
+                                                                        <select name="type"
+                                                                        class="selectpicker form-control"
+                                                                        data-style="py-0"
+                                                                        multiple>
+                                                                            @foreach (var member in task.StudentClass)
+                                                                            {
+                                                                                <option disabled selected> @member.Student.LastName @member.Student.FirstName </option>
+                                                                            }
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group mb-0">
+                                                                        <label for="exampleInputText4" class="h5">
+                                                                            Hạn chót
+                                                                        </label>
+                                                                        <input disabled type="date" class="form-control"
+                                                                        id="exampleInputText4" value="@task.DeadLineDate.ToString("yyyy-MM-dd")">
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    @if (task.AttachmentLinksJson != null)
+                                                    <div class="card mb-3">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <h5 class="mb-2">Ghi chú</h5>
+                                                                    <p class="mb-0" style="word-wrap: break-word;width: 800px;">
+                                                                        @task.Description
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
                                                     {
                                                         <div class="card mb-3">
                                                             <div class="card-body">
                                                                 <div class="row">
                                                                     <div class="col-lg-12">
-                                                                        <div class="form-group mb-0 task-attachments"
-                                                                                data-task-attachment="@task.AttachmentLinksJson">
+                                                                        <h5 class="mb-2">Đánh giá</h5>
+                                                                        <div class="form-group mb-3">
+                                                                            <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2" required="required"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @if (task.AttachmentLinksJson != null)
+                                                        {
+                                                            <div class="card mb-3">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12">
+                                                                            <div class="form-group mb-0 task-attachments"
+                                                                                    data-task-attachment="@task.AttachmentLinksJson">
 
-                                                                            <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
+                                                                                <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-lg-12">
+                                                                        <div class="form-group form-grade">
+                                                                            <label class="h5" for="scoreGrade">Chấm điểm</label>
+                                                                            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2 h5">
+                                                                                <span class ="badge badge-primary">
+                                                                                    <output class="output-value"></output>
+                                                                                </span>
+                                                                            </div>
+                                                                            <input asp-for="updateTaskDTO.Grade" type="range" min="0" max="10" step="0.25" class="custom-range scoreGrade">
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     }
-                                                    <div class="card mb-3">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-lg-12">
-                                                                    <div class="form-group form-grade">
-                                                                        <label class="h5" for="scoreGrade">Chấm điểm</label>
-                                                                        <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2 h5">
-                                                                            <span class ="badge badge-primary">
-                                                                                <output class="output-value"></output>
-                                                                            </span>
-                                                                        </div>
-                                                                        <input asp-for="updateTaskDTO.Grade" type="range" min="0" max="10" step="0.25" class="custom-range scoreGrade">
-                                                                    </div>
-                                                                </div>
+    @*                                                 @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
+                                                    {
+                                                        <div class="form-group mb-3">
+                                                            <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
+                                                            <div class="custom-file">
+                                                                <input asp-for="updateTaskDTO.Attachments" type="file" class="custom-file-input"
+                                                                        id="inputGroupFile002"
+                                                                        multiple />
+                                                                <label class="custom-file-label"
+                                                                        for="inputGroupFile002">Tải lên tệp tin</label>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                }
-                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                {
-                                                    <div class="form-group mb-3">
-                                                        <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
-                                                        <div class="custom-file">
-                                                            <input asp-for="updateTaskDTO.Attachments" type="file" class="custom-file-input"
-                                                                    id="inputGroupFile002"
-                                                                    multiple />
-                                                            <label class="custom-file-label"
-                                                                    for="inputGroupFile002">Tải lên tệp tin</label>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                <div class="form-group mb-0 ">
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
-                                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
-                                                                {
-                                                                    <input type="submit" value="Cập nhật" class="btn btn-primary btn-lg" id="btnDone">
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            }
-                            else
-                            {
-                                <form asp-action="UpdateTask" asp-controller="Project" enctype="multipart/form-data">
-                                    <div class="card card-widget task-card">
-                                        <div class="card-body">
-                                            <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <div>
-                                                        <h5 class="mb-2">
-                                                            @task.TaskName
-                                                        </h5>
-                                                        <div class="media align-items-center">
-                                                            @if (@task.TaskGradedByLeader != null)
-                                                            {
-                                                                <div class="btn text-success bg-success-light mr-3">
-                                                                    <i class="ri-thumb-up-line mr-2"></i>@task.TaskGradedByLeader /10
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="media align-items-center mt-md-0 mt-3">
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
-                                                    {
-                                                        <a class="btn bg-warning-light mr-3" id="btnOnPending">Chờ duyệt</a>
-                                                    }
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                    {
-                                                        <a class="btn bg-secondary-light mr-3" id="btnOnGoing">Đang làm</a>
-                                                    }
-                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
-                                                    {
-                                                        <a class="btn bg-success-light mr-3" id="btnsuccess">Hoàn thành</a>
-                                                    }
-                                                    <a class="btn bg-primary-light" data-toggle="collapse"
-                                                        href="#@uniqueId"
-                                                        role="button" aria-expanded="false"
-                                                        aria-controls="@uniqueId">
-                                                        <i class="ri-edit-box-line m-0"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="collapse" id="@uniqueId">
-                                        <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
-                                        <div class="card card-list task-card">
-                                            <div class="card-body">
-                                                <div class="card mb-3">
-                                                    <div class="card-body">
+                                                    } *@
+                                                    <div class="form-group mb-0 ">
                                                         <div class="row">
-                                                            <div class="col-lg-6">
-                                                                <div class="form-group mb-0">
-                                                                    <label for="exampleInputText2"
-                                                                            class="h5">Thành viên phụ trách</label>
-                                                                    <select name="type"
-                                                                            class="selectpicker form-control"
-                                                                            data-style="py-0"
-                                                                            multiple>
-                                                                        @foreach (var member in task.StudentClass)
-                                                                        {
-                                                                            <option disabled selected>@member.Student.FirstName</option>
-                                                                        }
-                                                                    </select>
+                                                            <div class="col-lg-12">
+                                                                <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                                                                    {
+                                                                        <input type="submit" value="Cập nhật" class="btn btn-primary btn-lg" id="btnDone">
+                                                                    }
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <div class="form-group mb-0">
-                                                                    <label for="exampleInputText4" class="h5">
-                                                                        Hạn chót
-                                                                    </label>
-                                                                    <input type="date" class="form-control"
-                                                                            id="exampleInputText4" value="@task.DeadLineDate.ToString("yyyy-MM-dd")">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card mb-3">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-lg-6">
-                                                                <h5 class="mb-2">Ghi chú</h5>
-                                                                <p class="mb-0" style="word-wrap: break-word;width: 800px;">
-                                                                    @task.Description
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @if(task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing){
-                                                    <div class="card mb-3">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-lg-12">
-                                                                    <h5 class="mb-2">Ghi chú bài nộp</h5>
-                                                                    <div class="form-group mb-3">
-                                                                        <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                @if(task.AttachmentLinksJson != null)
-                                                {
-                                                    <div class="form-group mb-0 task-attachments"
-                                                            onload="getTaskAttachments(this)"
-                                                            data-task-attachment="@task.AttachmentLinksJson">
-
-                                                        <label for="exampleInputText01" class="h5">Các tệp cũ</label>
-                                                    </div>
-                                                }
-                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                {
-                                                    <div class="form-group mb-3">
-                                                        <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
-                                                        <div class="custom-file">
-                                                            <input asp-for="updateTaskDTO.Attachments" type="file" class="custom-file-input"
-                                                                    id="inputGroupFile002"
-                                                                    multiple />
-                                                            <label class="custom-file-label"
-                                                                    for="inputGroupFile002">Upload media</label>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                <div class="form-group mb-0 ">
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
-                                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                                {
-                                                                    <input type="submit" value="Nộp" class="btn btn-primary btn-lg" id="btnDone">
-                                                                }
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
 
-                            }
-@*                             }
-                            else
-                            {
-                                <form asp-action="UpdateTask" asp-controller="Project">
-                                        <div class="card card-widget task-card">
-
-                                            <div class="card-body">
-                                                <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                                    <div class="d-flex align-items-center">
-                                                        <div>
-                                                            <h5 class="mb-2">
-                                                                @task.TaskName
-                                                            </h5>
-                                                            <div class="media align-items-center">
-                                                                <div class="btn bg-body mr-3">
-                                                                    <i class="ri-align-justify mr-2"></i>5/10
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="media align-items-center mt-md-0 mt-3">
-                                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
-                                                        {
-                                                            <a class="btn bg-warning-light mr-3" id="btnOnPending">Chờ duyệt</a>
-                                                        }
-                                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
-                                                        {
-                                                            <a class="btn bg-secondary-light mr-3" id="btnOnGoing">Đang làm</a>
-                                                        }
-                                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
-                                                        {
-                                                            <a class="btn bg-success-light mr-3" id="btnsuccess">Hoàn thành</a>
-                                                        }
-                                                        <a class="btn bg-primary-light" data-toggle="collapse"
-                                                           href="#@uniqueId"
-                                                           role="button" aria-expanded="false"
-                                                           aria-controls="@uniqueId">
-                                                            <i class="ri-edit-box-line m-0"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    @* //---------------------- Remake Task ------------------------ *@
+                                    <form asp-action="RedoTask" asp-controller="Project" enctype="multipart/form-data"
+                                        id="form-redo">
                                         <div class="collapse" id="@uniqueId">
                                             <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
                                             <div class="card card-list task-card">
@@ -505,7 +312,7 @@
                                                                                 multiple>
                                                                             @foreach (var member in task.StudentClass)
                                                                             {
-                                                                                <option disabled selected>@member.Student.FirstName</option>
+                                                                                <option disabled selected>@($"{member.Student.FirstName} {member.Student.LastName}")</option>
                                                                             }
                                                                         </select>
                                                                     </div>
@@ -515,7 +322,7 @@
                                                                         <label for="exampleInputText4" class="h5">
                                                                             Hạn chót
                                                                         </label>
-                                                                        <input type="date" class="form-control"
+                                                                        <input disabled type="date" class="form-control"
                                                                                id="exampleInputText4" value="@task.DeadLineDate.ToString("yyyy-MM-dd")">
                                                                     </div>
                                                                 </div>
@@ -534,34 +341,63 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="card mb-3">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-lg-12">
-                                                                    <h5 class="mb-2">Ghi chú bài nộp</h5>
-                                                                    <div class="form-group mb-3">
-                                                                        <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2"></textarea>
+
+                                                    @foreach (var member in task.StudentClass)
+                                                    {
+                                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending
+                                                       && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                        {
+                                                            <div class="card mb-3">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12">
+                                                                            <h5 class="mb-2">Phản hồi bài nộp*</h5>
+                                                                            <div class="form-group mb-3">
+                                                                                <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2" required="required"></textarea>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        }
+                                                    }
+                                                    @if (task.AttachmentLinksJson != null)
+                                                    {
+                                                        <div class="form-group mb-0 task-attachments"
+                                                             onload="getTaskAttachments(this)"
+                                                             data-task-attachment="@task.AttachmentLinksJson">
+
+                                                            <label for="exampleInputText01" class="h5">Các tệp cũ</label>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group mb-3">
-                                                        <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input"
-                                                                   id="inputGroupFile002" />
-                                                            <label class="custom-file-label"
-                                                                   for="inputGroupFile002">Upload media</label>
-                                                        </div>
-                                                    </div>
+                                                    }
+                                                    @foreach (var member in task.StudentClass)
+                                                    {
+                                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending
+                                                       && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                        {
+                                                            <div class="form-group mb-3">
+                                                                <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
+                                                                <div class="custom-file">
+                                                                    <input asp-for="updateTaskDTO.Attachments" type="file" class="custom-file-input"
+                                                                           id="inputGroupFile002"
+                                                                           multiple />
+                                                                    <label class="custom-file-label"
+                                                                           for="inputGroupFile002">Upload media</label>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
                                                     <div class="form-group mb-0 ">
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
-                                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
+                                                                    @foreach (var member in task.StudentClass)
                                                                     {
-                                                                        <input type="submit" value="Nộp" class="btn btn-primary btn-lg" id="btnDone">
+                                                                        @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending
+                                                                       && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                                        {
+                                                                            <input type="submit" value="Nộp" class="btn btn-primary btn-lg" id="btnDone">
+                                                                        }
                                                                     }
                                                                 </div>
                                                             </div>
@@ -570,29 +406,327 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="card card-widget task-card" data-status="@((int)task.Status)">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <h5 class="mb-2">
+                                                        @task.TaskName
+                                                        <h7 class="mt-2 ml-2 font-size-14">
+                                                            @foreach (var member in task.StudentClass)
+                                                            {
+                                                                <span class="badge bg-primary-light mt-2 ">@($"{member.Student.LastName}") @($"{member.Student.FirstName}")</span>
+                                                            }
+                                                        </h7>
+                                                    </h5>
+                                                    <div class="media align-items-center">
+                                                        @if (@task.TaskGradedByLeader != null)
+                                                        {
+                                                            @if (task.TaskGradedByLeader < 5)
+                                                            {
+                                                                <div class="btn text-success bg-secondary-light mr-3">
+                                                                    <i class="ri-emotion-unhappy-line"></i>@task.TaskGradedByLeader / 10
+                                                                </div>
+                                                            }
+                                                            else if (task.TaskGradedByLeader >= 5 && task.TaskGradedByLeader <= 7.75)
+                                                            {
+                                                                <div class="btn text-success bg-warning-light mr-3">
+                                                                    <i class="ri-emotion-happy-line"></i>@task.TaskGradedByLeader / 10
+                                                                </div>
+                                                            }
+                                                            else if (task.TaskGradedByLeader >= 8)
+                                                            {
+                                                                <div class="btn text-success bg-success-light mr-3">
+                                                                    <i class="ri-emotion-laugh-line"></i>@task.TaskGradedByLeader / 10
+                                                                </div>
+                                                            }
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="media align-items-center mt-md-0 mt-3">
+                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                                                {
+                                                    <a class="btn bg-warning-light mr-3" id="btnOnPending" data-status="1">Chờ duyệt</a>
+                                                }
+                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing)
+                                                {
+                                                    <a class="btn bg-secondary-light mr-3" id="btnOnGoing" data-status="0">Đang làm</a>
+                                                }
+                                                @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete)
+                                                {
+                                                    <a class="btn bg-success-light mr-3" id="btnsuccess" data-status="2">Hoàn thành</a>
+                                                }
+                                                <a class="btn bg-primary-light" data-toggle="collapse"
+                                                   href="#@uniqueId"
+                                                   role="button" aria-expanded="false"
+                                                   aria-controls="@uniqueId">
+                                                    <i class="ri-edit-box-line m-0"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if(task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending)
+                                {
+                                <form asp-action="RedoTask" asp-controller="Project" enctype="multipart/form-data"
+                                      id="form-redo">
+                                    <div class="collapse" id="@uniqueId">
+                                        <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
+                                        <div class="card card-list task-card">
+                                            <div class="card-body">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group mb-0">
+                                                                    <label for="exampleInputText2"
+                                                                           class="h5">Thành viên phụ trách</label>
+                                                                    <select name="type"
+                                                                            class="selectpicker form-control"
+                                                                            data-style="py-0"
+                                                                            multiple>
+                                                                        @foreach (var member in task.StudentClass)
+                                                                        {
+                                                                            <option disabled selected>@($"{member.Student.FirstName} {member.Student.LastName}")</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group mb-0">
+                                                                    <label for="exampleInputText4" class="h5">
+                                                                        Hạn chót
+                                                                    </label>
+                                                                    <input disabled type="date" class="form-control"
+                                                                           id="exampleInputText4" value="@task.DeadLineDate.ToString("yyyy-MM-dd")">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <h5 class="mb-2">Ghi chú</h5>
+                                                                <p class="mb-0" style="word-wrap: break-word;width: 800px;">
+                                                                    @task.Description
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @foreach (var member in task.StudentClass)
+                                                {
+                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending
+                                                   && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                    {
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-lg-12">
+                                                                        <h5 class="mb-2">Phản hồi bài nộp*</h5>
+                                                                        <div class="form-group mb-3">
+                                                                            <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2" required="required"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                                @if (task.AttachmentLinksJson != null)
+                                                {
+                                                    <div class="form-group mb-0 task-attachments"
+                                                         onload="getTaskAttachments(this)"
+                                                         data-task-attachment="@task.AttachmentLinksJson">
+
+                                                        <label for="exampleInputText01" class="h5">Các tệp cũ</label>
+                                                    </div>
+                                                }
+                                                @foreach (var member in task.StudentClass)
+                                                {
+                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending
+                                                   && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                    {
+                                                        <div class="form-group mb-3">
+                                                            <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
+                                                            <div class="custom-file">
+                                                                <input asp-for="updateTaskDTO.Attachments" type="file" class="custom-file-input"
+                                                                       id="inputGroupFile002"
+                                                                       multiple />
+                                                                <label class="custom-file-label"
+                                                                       for="inputGroupFile002">Upload media</label>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                                <div class="form-group mb-0 ">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                                                @foreach (var member in task.StudentClass)
+                                                                {
+                                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending
+                                                                   && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                                    {
+                                                                        <input type="submit" value="Nộp" class="btn btn-primary btn-lg" id="btnDone">
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </form>
+                                }
+                                else
+                                {
+                                <form asp-action="UpdateTask" asp-controller="Project" enctype="multipart/form-data">
+                                    <div class="collapse" id="@uniqueId">
+                                        <input type="hidden" asp-for="updateTaskDTO.TaskID" value="@task.TaskId" />
+                                        <div class="card card-list task-card">
+                                            <div class="card-body">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group mb-0">
+                                                                    <label for="exampleInputText2"
+                                                                            class="h5">Thành viên phụ trách</label>
+                                                                    <select name="type"
+                                                                            class="selectpicker form-control"
+                                                                            data-style="py-0"
+                                                                            multiple>
+                                                                        @foreach (var member in task.StudentClass)
+                                                                        {
+                                                                            <option disabled selected>@($"{member.Student.FirstName} {member.Student.LastName}")</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group mb-0">
+                                                                    <label for="exampleInputText4" class="h5">
+                                                                        Hạn chót
+                                                                    </label>
+                                                                    <input disabled type="date" class="form-control"
+                                                                            id="exampleInputText4" value="@task.DeadLineDate.ToString("yyyy-MM-dd")">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <h5 class="mb-2">Ghi chú</h5>
+                                                                <p class="mb-0" style="word-wrap: break-word;width: 800px;">
+                                                                    @task.Description
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @foreach (var member in task.StudentClass)
+                                                {
+                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing
+                                                        && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                    {
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-lg-12">
+                                                                        <h5 class="mb-2">Phản hồi bài nộp*</h5>
+                                                                        <div class="form-group mb-3">                                                                        
+                                                                            <textarea asp-for="updateTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2" required="required"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                                @if(task.AttachmentLinksJson != null)
+                                                {
+                                                    <div class="form-group mb-0 task-attachments"
+                                                            onload="getTaskAttachments(this)"
+                                                            data-task-attachment="@task.AttachmentLinksJson">
+
+                                                        <label for="exampleInputText01" class="h5">Các tệp cũ</label>
+                                                    </div>
+                                                }
+                                                @foreach (var member in task.StudentClass)
+                                                {
+                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing
+                                                            && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                    {
+                                                        <div class="form-group mb-3">
+                                                            <label for="exampleInputText01" class="h5">Tệp đính kèm</label>
+                                                            <div class="custom-file">
+                                                                <input asp-for="updateTaskDTO.Attachments" type="file" class="custom-file-input"
+                                                                        id="inputGroupFile002"
+                                                                        multiple />
+                                                                <label class="custom-file-label"
+                                                                        for="inputGroupFile002">Upload media</label>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                                <div class="form-group mb-0 ">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                                                                @foreach(var member in task.StudentClass)
+                                                                {
+                                                                    @if (task.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing
+                                                                        && member.Student.Id == Model.GroupViewModel.CurrentUser)
+                                                                    {
+                                                                        <input type="submit" value="Nộp" class="btn btn-primary btn-lg" id="btnDone">
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </form>
-                            } *@
+                                }
+                            }
                         </div>
                     }
                     @if (Model.GroupViewModel.Tasks.Count == 0)
                     {
-                        <h5>
-                            TODO: decorate when theres no Task
-                        </h5>
+
                     }
                 </div>
             </div>
         </div>
         <!--Task List ends-->
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-4">
         <div id="list" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
             <!--Member List start-->
             <div class="table-responsive rounded bg-white mb-4">
                 <table class="table mb-0 table-borderless tbl-server-info">
                     <tbody>
                         <div class="card-body">
-                            <h5 class="md-3">Members List</h5>
+                            <h5 class="md-3">Danh sách thành viên</h5>
                         </div>
                         <tr>
                             <td>
@@ -602,7 +736,7 @@
                                     </h6>
                                     <span class="badge badge-leader">
                                         <i class="ri-vip-crown-fill"></i>
-                                        Leader
+                                        Trưởng nhóm
                                     </span>
                                 </div>
                             </td>
@@ -614,7 +748,7 @@
                                 <tr>
                                     <td>
                                         <div class="media align-items-center">
-                                            <h6 class="ml-3">@($"{student.Student.FirstName} {student.Student.LastName}")</h6>
+                                            <h6 class="ml-3">@($"{student.Student.LastName} {student.Student.FirstName}")</h6>
                                         </div>
                                     </td>
                                 </tr>
@@ -639,12 +773,14 @@
                             <!--This input is used to help fetching the notification-->
                             <input hidden type="text" id="userInput" value="@Model.GroupViewModel.CurrentUser" />
                             <input hidden type="text" id="roomInput" value="@Model.GroupViewModel.GroupID" />
+                            <input hidden type="text" id="classInput" value="@Model.GroupViewModel.CurrentClass.Id" />
+
                             <textarea class="form-control" id="messageInput" rows="2" placeholder="Hãy giao tiếp với nhau"></textarea>
                         </div>
                     </div>
                     <div class="col-2 ">
                         <div class="d-flex flex-wrap align-items-ceter justify-content-center">
-                            <div class="btn btn-outline-info mr-3 ri-send-plane-2-line" id="sendButton">
+                            <div class="btn btn-outline-info mr-3 mt-3 ri-send-plane-2-line" id="sendButton">
                             </div>
                         </div>
                     </div>
@@ -677,47 +813,48 @@
     <div class="modal-dialog  modal-dialog-centered modal-lg" role="document" style="max-width: 80% !important;">
         <div class="modal-content">
             <div class="modal-header d-block text-center pb-3 border-bttom">
-                <h3 class="modal-title" id="exampleModalCenterTitle">New Task</h3>
+                <h3 class="modal-title" id="exampleModalCenterTitle">Tạo công việc</h3>
             </div>
             <form asp-action="CreateTask" asp-controller="Project">
                 <div class="modal-body">
                     <div class="row">
+                        <input asp-for="createTaskDTO.GroupID" hidden value="@Model.GroupViewModel.GroupID"/>
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText02" class="h5">Task Name</label>
-                                <input asp-for="createTaskDTO.TaskName" type="text" class="form-control" id="exampleInputText02" placeholder="Enter task Name">
+                                <label for="exampleInputText02" class="h5">Tên công việc*</label>
+                                <input asp-for="createTaskDTO.TaskName" type="text" class="form-control" id="exampleInputText02" placeholder="Enter task Name" required="required">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText2" class="h5">Assigned to</label>
-                                <select asp-for="createTaskDTO.memberList" id="createTaskDTO_memberList" name="createTaskDTO.memberList"
+                                <label for="exampleInputText2" class="h5">Phân cho*</label>
+                                <select asp-for="createTaskDTO.memberList" id="createTaskDTO_memberList" required="required" name="createTaskDTO.memberList"
                                         class="selectpicker form-control"
                                         data-style="py-0" multiple>
-                                    <option disabled value="">Please select</option>
+                                    <option disabled value="">Vui lòng chọn sinh viên thực hiện công việc</option>
                                     @foreach (var student in Model.GroupViewModel.memberList)
                                     {
-                                        <option value="@student.StudentId">@($"{student.Student.FirstName} {student.Student.LastName}")</option>
+                                        <option value="@student.StudentId">@($"{student.Student.LastName} {student.Student.FirstName}")</option>
                                     }
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText05" class="h5">Deadline*</label>
-                                <input asp-for="createTaskDTO.Deadline" type="date" class="form-control" id="exampleInputText05" value="">
+                                <label for="exampleInputText05" class="h5">Ngày kết thúc*</label>
+                                <input required="required" asp-for="createTaskDTO.Deadline" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@Model.GroupViewModel.Deadline.Value.ToString("yyyy-MM-dd")" class="form-control" id="exampleInputText05" value="">
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group mb-3">
-                                <label for="exampleInputText040" class="h5">Description</label>
-                                <textarea asp-for="createTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2"></textarea>
+                                <label for="exampleInputText040" class="h5">Mô tả*</label>
+                                <textarea required="required" asp-for="createTaskDTO.Description" class="form-control" id="exampleInputText040" rows="2"></textarea>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-4">
                                 <input type="submit" value="Tạo Task" class="btn btn-primary mr-3" />
-                                <div class="btn btn-primary" data-dismiss="modal">Cancel</div>
+                                <div class="btn btn-primary" data-dismiss="modal">Thoát</div>
                             </div>
                         </div>
                     </div>
@@ -728,6 +865,8 @@
 </div>
 
 <!--Model List end-->
+<script type="text/javascript" src="/assets/js/customizer.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     //Xử lý output của thanh tính điểm của leader
     document.querySelectorAll(".form-grade").forEach(function (formGroup) {
@@ -838,8 +977,142 @@
         var element = document.getElementById("yourDivID");
         element.scrollTop = element.scrollHeight;
     }
-        //# sourceURL=Attachmentbadge.js
-</script>
 
+    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
+    generateBreadcrumbs(breadcrumbData);   
+    //# sourceURL=Attachmentbadge.js
+</script>
+<script>
+    // Xử lý sự kiện khi giá trị của dropdown thay đổi
+    document.getElementById('projectFilter').addEventListener('change', function () {
+        // Lấy giá trị của dropdown
+        var selectedStatus = document.getElementById('projectFilter').value;
+
+        // Lặp qua tất cả các card để ẩn/hiện tùy thuộc vào giá trị của dropdown
+        var allCards = document.querySelectorAll('.task-card[data-status]');
+
+        const matchingElements = document.querySelectorAll('[href^="#Edit"]');
+
+        // Do something with the fetched elements:
+        matchingElements.forEach(element => {
+            // Access the element's properties or perform actions on it, e.g.,
+            console.log(element);
+            var isExpanded = element.getAttribute('aria-expanded');
+
+            if (isExpanded === 'true') {
+                element.click();
+            }
+        });
+
+        for (var i = 0; i < allCards.length; i++) {
+            var card = allCards[i];
+
+            // Lấy giá trị data-status của từng card
+            var cardStatus = card.getAttribute('data-status');
+
+            // Ẩn hoặc hiện card tùy thuộc vào giá trị của dropdown
+            switch (selectedStatus) {
+                case 'all':
+                    card.style.display = 'block';
+                    break;
+                case 'Pending':
+                    card.style.display = cardStatus === '1' ? 'block' : 'none';
+                    break;
+                case 'OnGoing':
+                    card.style.display = cardStatus === '0' ? 'block' : 'none';
+                    break;
+                case 'Complete':
+                    card.style.display = cardStatus === '2' ? 'block' : 'none';
+                    break;
+                default:
+                    card.style.display = 'none';
+                    break;
+            }
+        }
+    });
+    //# sourceURL=TaskFilter.js
+
+</script>
+<script>
+    document.querySelectorAll('.task-wrap').forEach(function (task) {
+        const btnTrigger = task.querySelector('#btnTrigger');
+        const btnRedoTask = task.querySelector('#btnRedoTask');
+        const btnVerifyTask = task.querySelector('#btnVerifyTask');
+
+        let lastClickedButton = null; // Track the last clicked button
+        let isShowed = false;
+
+        try {
+            btnRedoTask.addEventListener('click', function () {
+                handleFormDisplay(btnRedoTask, lastClickedButton);
+                lastClickedButton = btnRedoTask;
+            });
+        }
+        catch(error) {
+            console.error(error);
+        }
+
+        btnVerifyTask.addEventListener('click', function () {
+            handleFormDisplay(btnVerifyTask, lastClickedButton);
+            lastClickedButton = btnVerifyTask;
+        });
+
+        function handleFormDisplay(clickedButton, lastClicked) {
+            const verifyTask = task.querySelector('#form-verify');
+            const redoTask = task.querySelector('#form-redo');
+
+            //First clicked
+            if (lastClicked === null && isShowed === false) {
+                if (clickedButton === btnRedoTask) {
+
+                    verifyTask.style.display = 'none';
+                    redoTask.style.display = 'block';
+                } else if (clickedButton === btnVerifyTask) {
+
+                    verifyTask.style.display = 'block';
+                    redoTask.style.display = 'none';
+                }
+                btnTrigger.click();
+                isShowed = true;
+            }
+            //Consecutive clicked
+            else if (lastClicked === clickedButton) {
+                lastClickedButton = null;
+                btnTrigger.click();
+                isShowed = false;
+            }
+            //Switch clicked
+            else if (isShowed === true) {
+                btnTrigger.click();
+                setTimeout(function () {
+                    if (clickedButton === btnRedoTask) {
+
+                        verifyTask.style.display = 'none';
+                        redoTask.style.display = 'block';
+                    } else if (clickedButton === btnVerifyTask) {
+
+                        verifyTask.style.display = 'block';
+                        redoTask.style.display = 'none';
+                    }
+                    btnTrigger.click();
+                }, 450);
+            }
+            else {
+                if (clickedButton === btnRedoTask) {
+
+                    verifyTask.style.display = 'none';
+                    redoTask.style.display = 'block';
+                } else if (clickedButton === btnVerifyTask) {
+
+                    verifyTask.style.display = 'block';
+                    redoTask.style.display = 'none';
+                }
+                btnTrigger.click(); 
+                isShowed = true;
+            }
+        }
+    });
+    //# sourceURL=SwitchForm.js
+</script>
 <script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/assets/js/chat.js"></script>

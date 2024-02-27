@@ -9,7 +9,7 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
                     <h5>Danh sách lớp</h5>
                     <div class="d-flex flex-wrap align-items-center justify-content-between">
-                        <div class="dropdown status-dropdown mr-3">
+                       <div class="dropdown status-dropdown mr-3">
                             <div class="form-group mb-0">
                                 <select class="form-control" id="semesterDropdown" style="height:40px">
                                     <option selected="selected" value="">Học kỳ</option>
@@ -87,7 +87,7 @@
                                             <a href="#" class="iq-media">
                                                 @if (item.Teacher.ImgId != null)
                                                 {
-                                                    <img style="margin-top:-30px;width: 100px;height: 100px" src="https://drive.google.com/uc?id=@item.Teacher.ImgId&export=download" class="img-fluid avatar-40 rounded-circle" alt=""
+                                                    <img style="margin-top:-30px;width: 100px;height: 100px" src="https://lh3.googleusercontent.com/u/0/d/@item.Teacher.ImgId=w250-h238-p-k-rw-v1-nu-iv1" class="img-fluid avatar-40 rounded-circle" alt=""
                                                          data-trigger="hover" data-toggle="popover" data-content="@item.Teacher" />
                                                 }
                                                 else
@@ -100,7 +100,7 @@
                                     </div>
                                     <a href="/Teacher/@item.Code" class="mb-3" style="padding-top: 10px;">
                                         <button type="button" class="btn btn-primary btn-block">
-                                            Get Access
+                                            Truy cập
                                         </button>
                                     </a>
                                 </div>
@@ -567,7 +567,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label for="exampleInputText004" class="h5">Ngày mở lớp*</label>
-                                        <input asp-for="classDTO.OpenDate" type="date" class="form-control" id="exampleInputText0004" value="">
+                                        <input asp-for="classDTO.OpenDate" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" id="exampleInputText0004" value="">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -758,7 +758,8 @@
         var groupCell = workbook.Sheets[workbook.SheetNames[0]]['J5'];
 
         // Tạo mã lớp
-        var year = new Date().getFullYear().toString().substr(-2); // Lấy hai chữ số cuối cùng của năm hiện tại
+        var yearMatch = semesterCell.v.match(/\d{4}/);
+        var year = yearMatch ? yearMatch[0].slice(-2) : ''; // Lấy hai chữ số cuối cùng của năm hiện tại
         var semester = semesterCell ? semesterCell.v.match(/\d+/)[0] : '';
         var subjectCode = subjectCell ? subjectCell.v.match(/\(([^)]+)\)/)[1] : '';
         var groupCode = groupCell ? groupCell.v : '';
@@ -797,6 +798,7 @@
         document.getElementById('exampleInputText05').value = semester;
         document.getElementById('exampleInputText03').value = subjectCode;
     }
+    //# sourceURL=ImportClass.js
 </script>
 <script>
     $(document).ready(function () {
@@ -932,7 +934,7 @@
 
     // Biến để theo dõi trạng thái của nút
     let isShowingAllClasses = false;
-
+        
     searchInput.addEventListener('input', function () {
         const searchTerm = this.value.toLowerCase();
         const classCards = classContainer.querySelectorAll('.class-card');
@@ -978,6 +980,7 @@
         }
     }
 </script>
+<script type="text/javascript" src="/assets/js/customizer.js"></script>
 <script>
     // Lắng nghe sự kiện thay đổi giá trị của spinner Học kỳ
     document.getElementById('semesterDropdown').addEventListener('change', function () {
@@ -1014,6 +1017,10 @@
         var viewMoreBtn = document.getElementById('viewMoreBtn');
         viewMoreBtn.style.display = visibleClassCount > 6 ? 'block' : 'none';
     }
+
+    const breadcrumbData = '@Html.Raw(Json.Serialize(Model.crumbs))';
+    generateBreadcrumbs(breadcrumbData);
+    //# sourceURL=TeacherIndex.js
 
 </script>
 

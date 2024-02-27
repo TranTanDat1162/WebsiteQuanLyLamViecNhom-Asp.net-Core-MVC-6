@@ -1,6 +1,7 @@
-﻿using Google.Apis.Drive.v3.Data;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WebsiteQuanLyLamViecNhom.Data;
 using WebsiteQuanLyLamViecNhom.Models;
 using Task = System.Threading.Tasks.Task;
@@ -20,12 +21,11 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
         {
             _context = context;
         }
-
         public async Task SendMessage(string userId,string roomId, string message)
         {
             //return this.serviceProvider.GetRequiredService<IDatabaseManager
             var User = await _context.Users.FindAsync(userId);
-            await Clients.Group(roomId).SendAsync("ReceiveMessage", User.LastName + " " + User.FirstName, message);
+            await Clients.Group(roomId).SendAsync("ReceiveMessage", User.LastName + " " + User.FirstName, message, userId);
 
             if (User != null)
             {
@@ -40,7 +40,6 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
                 _context.SaveChanges();
             }
         }
-
         public async Task GetChatHistory(string RoomId)
         {
             DateTime start = DateTime.Now;
@@ -54,11 +53,41 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
             foreach (var line in chatLog)
             {
                 await Clients.Group(RoomId).SendAsync("ReceiveMessage"
-                    , line.User.LastName + " " + line.User.FirstName, line.MessageLine);
+                    , line.User.LastName + " " + line.User.FirstName, line.MessageLine,line.User.Id);
             }
         }
-        public async Task GetClassNotification(string studentId)
+        public async Task GetClassNotification(string studentId, string classId)
         {
+
+            var student = await _context.StudentClass
+                .Where(s => s.StudentId == studentId && s.ClassId == int.Parse(classId))
+                .Include(c => c.Class)
+                    .ThenInclude(t => t.Teacher)
+                .ToListAsync();
+
+            foreach (var classInfo in student)
+            {
+                var chatLog = await _context.Messages
+                .Where(r => r.RoomID == classInfo.ClassId.ToString())
+                .OrderByDescending(t => t.Timestamp)
+                .ToListAsync();
+
+                foreach (var line in chatLog)
+                {
+                    if (chatLog != null)
+                        await Clients.User(studentId).SendAsync("ReceiveNotification",
+                           classInfo.Class.Code,
+                           line.MessageLine,
+                           classInfo.Class.Teacher.ImgId,
+                           line.Timestamp.ToString("(dd/MM) \n hh:mm tt"));
+                }
+
+
+            }
+        }
+        public async Task GetClassNotifications(string studentId)
+        {
+
             var student = await _context.StudentClass
                 .Where(s => s.StudentId == studentId)
                 .Include(c => c.Class)
@@ -70,22 +99,24 @@ namespace WebsiteQuanLyLamViecNhom.Hubs
                 var chatLog = await _context.Messages
                 .Where(r => r.RoomID == classInfo.ClassId.ToString())
                 .OrderByDescending(t => t.Timestamp)
-                .FirstOrDefaultAsync();
+                .ToListAsync();
 
-                if (chatLog != null)
-                    await Clients.User(studentId).SendAsync("ReceiveNotification",
-                       classInfo.Class.Code,
-                       chatLog.MessageLine,
-                       classInfo.Class.Teacher.ImgId,
-                       chatLog.Timestamp.ToString("hh:mm tt"));
+                foreach (var line in chatLog)
+                {
+                    if (chatLog != null)
+                        await Clients.User(studentId).SendAsync("ReceiveNotification",
+                           classInfo.Class.Code,
+                           line.MessageLine,
+                           classInfo.Class.Teacher.ImgId,
+                           line.Timestamp.ToString("(dd/MM) \n hh:mm tt"));
+                }
+
 
             }
         }
         public async Task AddToGroup(string RoomId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, RoomId);
-
-            await Clients.Group(RoomId).SendAsync("ReceiveMessage", $"{Context.ConnectionId}"," has joined the group {RoomId}.");
         }
     }
 }

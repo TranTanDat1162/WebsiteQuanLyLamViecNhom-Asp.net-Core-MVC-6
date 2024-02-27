@@ -14,6 +14,11 @@ using WebsiteQuanLyLamViecNhom.HelperClasses;
 using Newtonsoft.Json;
 using System.Net.Mail;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.CodeAnalysis;
+using Project = WebsiteQuanLyLamViecNhom.Models.Project;
+using static WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.ProjectDTO;
+using Microsoft.AspNetCore.Identity.UI.Services;
+
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
     [Authorize(Roles = "Teacher")]
@@ -32,6 +37,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             LastName =null
         };
 
+        static CreateClassDTO? TeacherProfile;
 
         public TeacherController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> userManager, ILogger<TeacherController> logger)
         {
@@ -54,11 +60,169 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             {
                 ViewData["Teacher"] = viewModel;
                 CreateClassDTO ClassList = new CreateClassDTO();
+                ClassList.crumbs = new List<List<string>>()
+                {
+                    new List<string>() { "/Teacher/Class", "Home" },
+                };
                 ClassList.ClassListDTO = viewModel.ClassList;
                 return View(ClassList);
             }
             // Xử lý trường hợp không có người dùng đăng nhập
             return NotFound();
+        }
+
+        [Route("Teacher/Profile")]
+        public async Task<IActionResult> Profile()
+        {
+            viewModel = await _context.Teacher
+                            .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+            // Kiểm tra xem người dùng có tồn tại không
+            if (viewModel != null)
+            {
+                ViewData["Teacher"] = viewModel;
+                CreateClassDTO ClassList = new CreateClassDTO();
+                ClassList.crumbs = new List<List<string>>()
+                {
+                    new List<string>() { "/Teacher/Class", "Home" },
+                    new List<string>() { "/Teacher/Profile", "Profile"}
+                };
+                return View(ClassList);
+            }
+            // Xử lý trường hợp không có người dùng đăng nhập
+            return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateProfile(CreateClassDTO.TeacherDTO teacherDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Lấy thông tin người dùng đăng nhập
+                    var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var loggedInTeacher = await _context.Teacher.FindAsync(loggedInUserId);
+
+                    // Kiểm tra xem người dùng có tồn tại không
+                    if (loggedInTeacher != null)
+                    {
+
+                        // Nếu người dùng đã chọn ảnh mới
+                        if (teacherDTO.TeacherImgPfp != null)
+                        {
+                            GDriveServices gDriveServices = new GDriveServices();
+                            UploadHelper uploadHelper = new UploadHelper();
+
+                            byte[] data = uploadHelper.ConvertToByteArray(teacherDTO.TeacherImgPfp);
+                            var fileID = gDriveServices.UploadFile(loggedInUserId, data, "1n680aa3fmW9qkZwrd7A1C5k0nf7DhkeP");
+
+                            loggedInTeacher.ImgId = (string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID));
+                        }
+
+                        //if (teacherDTO.TeacherImgPfp != null && !loggedInTeacher.EmailConfirmed)
+                        //{
+                        //    //Sử dụng các phương thức của microsoft:
+                        //    //Generate cái token (code) và link để chứa cái token đó để gửi qua cha ng dùng
+                        //    string returnUrl = null ?? Url.Content("~/");
+
+                        //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(loggedInTeacher);
+
+                        //    string EmailConfirmationUrl = Url.Page(
+                        //        "/Account/ConfirmEmail",
+                        //        pageHandler: null,
+                        //        values: new { area = "Identity", userId = loggedInUserId, code, returnUrl },
+                        //    protocol: Request.Scheme);
+
+                        //    await _emailSender.SendEmailAsync(loggedInTeacher.Email, "Xác nhận tài khoản", EmailConfirmationUrl);
+                        //}
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        await _context.SaveChangesAsync();
+
+                        // Chuyển hướng về trang profile sau khi cập nhật thành công
+                        return RedirectToAction("Profile", "Teacher");
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    // Xử lý ngoại lệ khi có lỗi cập nhật cơ sở dữ liệu
+                    ModelState.AddModelError("", "Có lỗi xảy ra khi cập nhật thông tin. Vui lòng thử lại.");
+                }
+            }
+
+            // Nếu ModelState không hợp lệ, trả về trang cập nhật với thông báo lỗi
+            return View("Profile", teacherDTO);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePassword(CreateClassDTO.ChangePasswordDTO changePasswordDTO)
+        {
+            viewModel = await _context.Teacher.FindAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (viewModel != null)
+            {
+                ViewData["Teacher"] = viewModel; // Lấy info student trước để đưa vào view
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("Profile", TeacherProfile); // Trả về view Profile với một đối tượng TeacherProfile được tạo ở trc đó
+            }
+
+            // Lấy thông tin người dùng đăng nhập
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(loggedInUserId);
+
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{loggedInUserId}'.");
+            }
+
+            // Kiểm tra mật khẩu hiện tại của người dùng
+            var passwordCheckResult = await _userManager.CheckPasswordAsync(user, changePasswordDTO.CurrentPassword);
+            if (!passwordCheckResult)
+            {
+                ModelState.AddModelError(string.Empty, "Mật khẩu hiện tại không đúng.");
+                changePasswordDTO.IsCurrentPasswordValid = false;
+                return View("Profile", new CreateClassDTO()); // Trả về view Profile với một đối tượng CreateClassDTO mới
+            }
+            else
+            {
+                changePasswordDTO.IsCurrentPasswordValid = true;
+            }
+
+            // Thay đổi mật khẩu
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, changePasswordDTO.CurrentPassword, changePasswordDTO.NewPassword);
+            if (!changePasswordResult.Succeeded)
+            {
+                foreach (var error in changePasswordResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View("Profile", new CreateClassDTO()); // Trả về view Profile với một đối tượng CreateClassDTO mới
+            }
+
+            // Mật khẩu đã được thay đổi thành công, bạn có thể thực hiện các hành động khác ở đây
+
+            // Chuyển hướng về trang profile sau khi thay đổi mật khẩu thành công
+            return RedirectToAction("Profile");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckCurrentPassword(string currentPassword)
+        {
+            // Lấy thông tin người dùng đăng nhập
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(loggedInUserId);
+
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{loggedInUserId}'.");
+            }
+
+            // Kiểm tra mật khẩu hiện tại của người dùng
+            var passwordCheckResult = await _userManager.CheckPasswordAsync(user, currentPassword);
+            return Json(new { isValid = passwordCheckResult });
         }
 
         [HttpGet("Teacher/{classCode}")]
@@ -74,20 +238,30 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             var studentList = await _context.StudentClass
                 .Where(s => s.Class.Code == classCode)
                 .Include(l => l.Student)
+                .Include(g => g.Group)
+                    .ThenInclude(p => p.Project)
+                        .ThenInclude(c => c.Class)
                 .ToListAsync();
 
-            var groupList = await _context.Group
-                .Where(t => t.Project.Class.Code == classCode)
-                .ToListAsync();
+            var groupList = studentList
+                .Where(g => g.Group != null)
+                .Select(g => g.Group)
+                .Distinct()
+                .ToList();
 
             ProjectDTO ProjectDTO = new()
             {
                 TeacherName = viewModel.LastName + " " + viewModel.FirstName,
-                TeacherId = projectList.First().Class.TeacherId,
+                TeacherId = viewModel.Id,
                 CurrentGroups = groupList,
                 CurrentProjects = projectList,
-                ClassID = studentList.ToArray().First().ClassId,
-                StudentList = studentList                
+                ClassID = studentList.ToArray().FirstOrDefault()?.ClassId,
+                StudentList = studentList,
+                crumbs = new List<List<string>>()
+                {   
+                    new List<string>() { "/Teacher/Class", "Home" },
+                    new List<string>() { "/Teacher/"+ classCode, classCode }
+                }
             };
                 
             return View(ProjectDTO);
@@ -106,21 +280,46 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             var currentclass = await _context.Class
                 .Where(t => t.Id == id)
                 .FirstOrDefaultAsync();
+
             if (ModelState.IsValid)
             {
+                List<List<string>> uploadFiles = new List<List<string>>();
+
+                if (createProjectDTO.Attachments != null)
+                {
+                    GDriveServices gDriveServices = new GDriveServices();
+                    UploadHelper uploadHelper = new UploadHelper();
+
+                    foreach (var attachment in createProjectDTO.Attachments)
+                    {
+                        byte[] data = uploadHelper.ConvertToByteArray(attachment);
+
+                        var fileID =
+                        gDriveServices.UploadFile(currentclass.Code + attachment.FileName, data, "1HN1IZIiLErNA_JX3ze2DC8lUvWmGWg-T");
+
+                        var downloadlink = gDriveServices
+                            .GetDownloadLink((string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID)));
+
+                        if (downloadlink != null)
+                            uploadFiles.Add(new List<string> { downloadlink, attachment.FileName });
+                    }
+
+                }
                 Project newProject = new Project
                 {
                     Name = createProjectDTO.Name,
                     Requirements = createProjectDTO.Requirement,
                     Deadline = createProjectDTO.Deadline,
                     ClassId = id,
-                    Class = currentclass
+                    Class = currentclass,
+                    fileIDJSON = JsonConvert.SerializeObject(uploadFiles),
                 };
+
                 _context.Add(newProject);
                 await _context.SaveChangesAsync();
                 _logger.LogInformation("New project has been created {Project}",
                     new { projectId = newProject.Id, code = newProject.Name, Class = newProject.ClassId });
-            }
+            }   
             //TODO: create a dynamic error view
             //return View("~/Views/Shared/Error.cshtml");
             return RedirectToRoute(new { controller = "Teacher", action = currentclass.Code});
@@ -194,6 +393,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             var selectedProject = await _context.Project
                 .Where(p => p.Id == createGroupDTO.ProjectId)
                 .FirstOrDefaultAsync();
+
             if (ModelState.IsValid)
             {
                 //Tạo Group mới dựa vào createGroupDTO
@@ -209,7 +409,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 foreach (var studentid in createGroupDTO.memberList)
                 {
                     var member = await _context.StudentClass
-                                        .Where(sc => sc.StudentId == studentid)
+                                        .Where(sc => sc.StudentId == studentid && sc.ClassId == id)
                                         .Include(s => s.Student)
                                         .Include(c => c.Class)
                                         .FirstOrDefaultAsync();
@@ -260,7 +460,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 var option = new
                 {
                     value = fetchedStudent.StudentCode,
-                    text = (fetchedStudent.FirstName +" "+ fetchedStudent.LastName)
+                    text = (fetchedStudent.LastName +" "+ fetchedStudent.FirstName)
                 };
                 dependentOptions.Add(option);
 
@@ -301,7 +501,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                             RoleGroup = createClassDTO.classDTO.RoleGroup,
                             RoleProject = createClassDTO.classDTO.RoleProject,
                             ProjectRequirements = createClassDTO.classDTO.ProjectRequirements,
-                            OpenDate = (DateTime)createClassDTO.classDTO.OpenDate,
+                            OpenDate = createClassDTO.classDTO.OpenDate ?? DateTime.Now,
                             Year = int.Parse(createClassDTO.classDTO.Year.Substring(0, 4)),
                             Semester = createClassDTO.classDTO.Semester,
                             TeacherId = viewModel.Id
@@ -329,7 +529,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                     StudentCode = student.StudentCode,
                                     FirstName = student.StudentFirstName,
                                     LastName = student.StudentLastName,
-                                    DOB = (DateTime)student.DOB,
+                                    DOB = student.DOB.HasValue ? student.DOB.Value : DateTime.Now,
                                     UserName = student.StudentCode,
                                     IsLocked = true
                                 };

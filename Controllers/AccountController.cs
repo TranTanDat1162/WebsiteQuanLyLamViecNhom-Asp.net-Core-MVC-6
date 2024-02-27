@@ -23,10 +23,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return View();
         }
         // Giao diện đổi lại mật khẩu mới
-        public IActionResult ResetPassword()
+        public IActionResult ResetPassword(string UserId, string code)
         {
             ViewData["Title"] = "UEF - Quản lý làm việc nhóm";
-            return View();
+            return RedirectToPage("/Account/ResetPassword", new { area = "Identity", UserId, code });
         }
         // Giao diện đổi mật khẩu thành công
         public IActionResult PasswordConfirm()

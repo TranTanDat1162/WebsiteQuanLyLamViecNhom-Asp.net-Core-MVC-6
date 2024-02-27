@@ -12,7 +12,7 @@
                     <h5>Danh sách sinh viên</h5>
                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                         <div class="dropdown status-dropdown mr-3">
-                            <div class="dropdown-toggle" id="dropdownMenuButton03" data-toggle="dropdown" aria-expanded="false">
+@*                            <div class="dropdown-toggle" id="dropdownMenuButton03" data-toggle="dropdown" aria-expanded="false">
                                 <div class="btn bg-body"><span class="h6">Khóa học 2020</span><i class="ri-arrow-down-s-line ml-2 mr-0"></i></div>
                             </div>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton03" style="">
@@ -20,7 +20,7 @@
                                 <a class="dropdown-item" href="#">Khóa học 2021</a>
                                 <a class="dropdown-item" href="#">Khóa học 2022</a>
                                 <a class="dropdown-item" href="#">Khóa học 2023</a>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -66,11 +66,11 @@
                                     @Html.DisplayFor(modelItem => item.DOB)
                                 </td>
                                 <td>
-                                    <form asp-action="StudentLock" asp-route-id="@item.StudentId">
+                                    <form asp-action="StudentLock" asp-route-id="@item.Id">
                                         <div class="custom-control custom-switch custom-switch-text custom-control-inline">
                                             <div class="custom-switch-inner">
-                                                @Html.CheckBox("isLocked", item.IsLocked, new { @class = "custom-control-input", @id = item.StudentId, @onchange = "submitForm(this)" })
-                                                <label class="custom-control-label" for="@Html.DisplayFor(modelItem => item.StudentId)" data-on-label="On" data-off-label="Off"></label>
+                                                    @Html.CheckBox("isLocked", item.IsLocked, new { @class = "custom-control-input", @id = item.Id, @onchange = "submitForm(this)" })
+                                                <label class="custom-control-label" for="@Html.DisplayFor(modelItem => item.Id)" data-on-label="On" data-off-label="Off"></label>
                                             </div>
                                         </div>
                                     </form>
