@@ -249,14 +249,18 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                 .Distinct()
                 .ToList();
 
+            var currentClass = await _context.Class
+                .Where(s => s.Code == classCode).FirstAsync();
+
             ProjectDTO ProjectDTO = new()
             {
                 TeacherName = viewModel.LastName + " " + viewModel.FirstName,
                 TeacherId = viewModel.Id,
                 CurrentGroups = groupList,
                 CurrentProjects = projectList,
-                ClassID = studentList.ToArray().FirstOrDefault()?.ClassId,
+                ClassID = currentClass.Id,
                 StudentList = studentList,
+                CurrentClass = currentClass,
                 crumbs = new List<List<string>>()
                 {   
                     new List<string>() { "/Teacher/Class", "Home" },
