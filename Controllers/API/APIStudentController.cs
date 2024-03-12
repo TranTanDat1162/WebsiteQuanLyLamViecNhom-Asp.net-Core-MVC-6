@@ -43,72 +43,90 @@ namespace WebsiteQuanLyLamViecNhom.Controllers.API
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<StudentController>/5    
-        [HttpGet("{userid}")]
-        public async Task<ActionResult<object>> GetAsync(string userid)
+        // GET api/<StudentController>/ClassList/5    
+        [HttpGet("ClassList/{userid}")]
+        public async Task<ActionResult<object>> GetClassListAsync(string userid)
         {
             _logger.LogInformation("Userid: {userid}", userid);
             //var settings = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve };
 
             // Lấy thông tin người dùng đăng nhập
-            var tempuser = await _context.Student.FindAsync(userid);
-
-            // Kiểm tra xem người dùng có tồn tại không
-            if (tempuser != null)
-            {
-                Student? currentStudent = await _context.Student
+            Student? currentStudent = await _context.Student
                     .Include(t => t.ClassList)
                         .ThenInclude(t => t.Class)
                             .ThenInclude(t => t.Teacher)
                     .FirstOrDefaultAsync(t => t.Id == userid);
 
-                CreateClassDTO ClassList = new CreateClassDTO();
+            // Kiểm tra xem người dùng có tồn tại không
+            if (currentStudent != null)
+            {
                 ClassListAPIDTO classListAPIDTO = new ClassListAPIDTO();
-                if (currentStudent != null)
+                var currentClasses = await _context.StudentClass
+                    .Where(s => s.StudentId == currentStudent.Id)
+                    .Include(t => t.Class)
+                    .Select(c => new
+                    {
+                        c.Id,
+                        c.GroupID,
+                        c.StudentId,
+                        c.ClassId,
+                        c.Class.SubjectName,
+                        c.Class.SubjectId,
+                        c.Class.Teacher.Email,
+                        c.Class.TeacherId,
+                        c.Class.ClassGroup,
+                        c.Class.MOTD
+                    })
+                    .ToListAsync();
+
+                foreach (var studentClass in currentClasses)
                 {
-                    var currentClasses = await _context.StudentClass
-                        .Where(s => s.StudentId == currentStudent.Id)
-                        .Include(t => t.Class)
-                        .Select(c => new
-                        {
-                            c.Id,
-                            c.GroupID,
-                            c.StudentId,
-                            c.ClassId,
-                            c.Class.SubjectName,
-                            c.Class.SubjectId,
-                            c.Class.Teacher.Email,
-                            c.Class.TeacherId,
-                            c.Class.ClassGroup,
-                            c.Class.MOTD
-                        })
-                        .ToListAsync();
-
-                    foreach (var studentClass in currentClasses)
-                    {
-                        classListAPIDTO.StudentClasses.Add(studentClass);
-                    }
-
-                    ClassList.crumbs = new List<List<string>>()
-                    {
-                        new List<string>() { "/Student", "Home" }
-                    };
-
-                    // Kiểm tra nếu người dùng chưa cập nhật email
-                    if (string.IsNullOrEmpty(tempuser.Email))
-                    {
-                        _logger.LogInformation("APIStudent logged in.");
-                        return new { status = 200, message = "Account's email havn't verified"};
-                    }
-
-                    return new { status = 200, message = "Class list fetched", Data = classListAPIDTO.StudentClasses };
+                    classListAPIDTO.StudentClasses.Add(studentClass);
                 }
+
+                // Kiểm tra nếu người dùng chưa cập nhật email
+                if (string.IsNullOrEmpty(currentStudent.Email))
+                {
+                    _logger.LogInformation("APIStudent logged in.");
+                    return new { status = 200, message = "Account's email havn't verified", Data = classListAPIDTO.StudentClasses };
+                }             
 
                 return new { status = 200, message = "Class list empty", Data = classListAPIDTO.StudentClasses };
                 }
 
             return new { status = 404, message = "User not found" };
         }
+
+        //// GET api/<StudentController>/5
+        //[HttpGet("{userid}")]
+        //public async Task<ActionResult<object>> GetAsync(string userid)
+        //{
+        //    _logger.LogInformation("Userid: {userid}", userid);
+        //    //var settings = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve };
+
+        //    // Lấy thông tin người dùng đăng nhập
+        //    Student? currentStudent = await _context.Student
+        //            .Include(t => t.ClassList)
+        //                .ThenInclude(t => t.Class)
+        //                    .ThenInclude(t => t.Teacher)
+        //            .FirstOrDefaultAsync(t => t.Id == userid);
+
+        //    // Kiểm tra xem người dùng có tồn tại không
+        //    if (currentStudent != null)
+        //    {
+        //        // Kiểm tra nếu người dùng chưa cập nhật email
+        //        if (string.IsNullOrEmpty(currentStudent.Email))
+        //        {
+        //            _logger.LogInformation("APIStudent logged in.");
+        //            return new { status = 200, message = "Account's email havn't verified", Data = classListAPIDTO.StudentClasses };
+        //        }
+
+        //        return new { status = 200, message = "Class list empty", Data = classListAPIDTO.StudentClasses };
+        //    }
+
+        //    return new { status = 404, message = "User not found" };
+        //}
+
 
         // POST api/<StudentController>
         [HttpPost]
