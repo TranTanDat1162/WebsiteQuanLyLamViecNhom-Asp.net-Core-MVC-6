@@ -148,6 +148,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             return NotFound();
         }
 
+        //public async Task<IActionResult> BrowseGroups()
+        //{
+
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateProfile(CreateClassDTO.StudentDTO studentDTO)

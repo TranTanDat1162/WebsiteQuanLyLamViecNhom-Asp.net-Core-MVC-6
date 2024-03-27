@@ -121,7 +121,16 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                             .ThenInclude(sc => sc.Student)
                         .FirstOrDefaultAsync();
 
-            if (group == null)
+            Class currentClass = await _context.Class
+                        .Where(t => t.Code == ClassCode)
+                        .FirstOrDefaultAsync();
+
+            if (group == null && currentClass.RoleGroup == RoleGroup.AssignByStudent)
+            {
+                // Tạo thêm trang tìm kiếm group
+
+            }
+            else
             {
                 // Nếu group là null, chuyển hướng đến trang lỗi hoặc trang thông báo
                 return RedirectToAction("Error", "Student");
