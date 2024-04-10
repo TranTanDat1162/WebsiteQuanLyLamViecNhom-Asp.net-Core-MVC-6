@@ -60,12 +60,24 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                                         .ThenInclude(c => c.Class)
                                     .Include(s => s.Students)
                                         .ThenInclude(sc => sc.Student)
+                                    .Include(s => s.Students)
+                                        .ThenInclude(t => t.Tasks)
                                     .FirstOrDefaultAsync();
 
 
                 GroupDTO groupDTO = new();
                 StudentClass? leader = group.Students.Where(l => l.Student.StudentCode == group.LeaderID)
                                             .FirstOrDefault();
+
+                List<AssigneeReportViewModel> assigneeReports = new List<AssigneeReportViewModel>();
+                group.Students.ToList().ForEach(s =>
+                {
+                    assigneeReports.Add(new AssigneeReportViewModel
+                    {
+                        Name = s.Student.LastName + " " + s.Student.FirstName,
+                        Quantity = s.Tasks.Count(),
+                    });
+                });
 
                 var currentGroup = new GroupDTO.GroupVM
                 {
@@ -79,6 +91,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     CurrentUser = viewModelTeacher.Id,
                     ProjectAttachmentsJSON = group.Project.fileIDJSON,
                     GroupID = group.Id,
+                    NumOfTaskPerMember = assigneeReports,
                 };
 
                 var taskList = await _context.Task
@@ -125,16 +138,17 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                         .Where(t => t.Code == ClassCode)
                         .FirstOrDefaultAsync();
 
-            if (group == null && currentClass.RoleGroup == RoleGroup.AssignByStudent)
+            if (group == null /*&& currentClass.RoleGroup == RoleGroup.AssignByStudent*/)
             {
                 // Tạo thêm trang tìm kiếm group
+                return RedirectToAction("Error", "Student");
 
             }
-            else
+/*            else
             {
                 // Nếu group là null, chuyển hướng đến trang lỗi hoặc trang thông báo
                 return RedirectToAction("Error", "Student");
-            }
+            }*/
 
             GroupDTO groupDTO = new();
             StudentClass? leader = group?.Students.Where(l => l.Student.StudentCode == group.LeaderID)

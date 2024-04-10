@@ -15,16 +15,23 @@
                             <div data-toggle-extra="tab"
                                  data-target-extra="#grid"
                                  >
-                                <div class="grid-icon mr-3" data-toggle="tooltip" data-placement="bottom" data-original-title="Danh sách đồ án">
+                                <div class="grid-icon mr-2" data-toggle="tooltip" data-placement="bottom" data-original-title="Danh sách đồ án">
                                    <i class="ri-file-list-3-line"></i>
                                 </div>
                             </div>
                             <div data-toggle-extra="tab" 
                                  data-target-extra="#list"
                                  class="active">
-                                <div class="grid-icon" data-toggle="tooltip" data-placement="bottom" data-original-title="Danh sách nhóm">
+                                <div class="grid-icon mr-2" data-toggle="tooltip" data-placement="bottom" data-original-title="Danh sách nhóm">
                                    <i class="ri-group-line"></i>                                
-                                   </div>
+                                </div>
+                            </div>
+                            <div data-toggle-extra="tab"
+                                 data-target-extra="#report"
+                                 >
+                                <div class="grid-icon" data-toggle="tooltip" data-placement="bottom" data-original-title="Thống kê dữ liệu">
+                                    <i class="ri-file-chart-line"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="pl-3 pr-3 border-left btn-new">
@@ -118,34 +125,34 @@
      class="item-content animate__animated animate__fadeIn active"
      data-toggle-extra="tab-content">
     <div class="row">
-        @foreach (var item in Model.CurrentGroups)
+        @foreach (var item in Model.GroupsInClass)
         {
             <div class="col-lg-6">
                 <div class="card class-hover">
                     <div class="card-body">
-                        <a href="/Teacher/Project/@item.Project.Class.Code/@item.Id">
+                        <a href="/Teacher/Project/@item.Group.Project.Class.Code/@item.Group.Id">
                             <span class="link-spanner"></span>
                         </a>
                         <div class="row">
                             <div class="col-sm-8">
                                 <div class="d-flex align-items-center">
-                                    <div id="circle-progress-@item.LeaderID"
+                                    <div id="circle-progress-@item.Group.LeaderID"
                                          class="circle-progress-02 circle-progress circle-progress-primary"
                                          data-min-value="0"
                                          data-max-value="100"
-                                         data-value="25"
+                                         data-value="@item.percentageTaskDone"
                                          data-type="percent"></div>
                                     <div class="ml-3">
-                                        <h5 class="mb-1">@($"{item.Project.Name} - {item.LeaderID}")</h5>
+                                        <h5 class="mb-1">@($"{item.Group.Project.Name} - {item.Group.LeaderID}")</h5>
                                         <p class="mb-0">
-                                            @item.MOTD
+                                            @item.Group.MOTD
                                         </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4 text-sm-right mt-3 mt-sm-0">
                                 <div class="iq-media-group">
-                                    @foreach (var member in item.Students)
+                                    @foreach (var member in item.Group.Students)
                                     {
                                         <a href="#" class="iq-media">
                                             @if (member.Student.StudentImgId != null)
@@ -169,6 +176,196 @@
     </div>
 </div>
 <!-- Group list end -->
+
+<!-- Report tab start -->
+<div id="report"
+     class="item-content animate__animated animate__fadeIn"
+     data-toggle-extra="tab-content">
+    <div class="row">
+        <!-- I forgot to include class's End date so now this is useless-->
+@*         <div class="col-lg-12">
+            <div class="iq-progress-bar bg-primary-light mt-2">
+                <span id="class-progress-bar" class="bg-primary iq-progress progress-1" data-percent="0" 
+                style="transition: width 2s ease 0s; width: 0%;"
+                onload="generateProgressBar(@Model.CurrentClass.OpenDate, @Model.CurrentClass.)"></span>
+            </div>
+        </div> *@
+        <div class="col-6 col-lg-4">
+            <div class="card card-block card-stretch">
+                <div class="card-body">
+                    <div class="top-block d-flex align-items-center justify-content-between">
+                        <h5>Số lượng sinh viên</h5>
+                    </div>
+                    <h3>
+                        <span class="counter" style="visibility: visible;">
+                            @(Model.StudentList?.Count())
+                        </span> sinh viên
+                    </h3>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                        <p class="mb-0">Số lượng sinh viên chưa có nhóm</p>
+                        <span class="text-primary">
+                            @(Model.StudentList?.Where(student => student.GroupID == null).Count() ?? 0)
+                        </span>
+                    </div>
+                    <div class="iq-progress-bar bg-primary-light mt-2">
+                        <span class="bg-primary iq-progress progress-1"
+                                data-percent="@(Math.Ceiling
+(((double)(Model.StudentList.Where(student => student.GroupID == null).Count()) / (double)(Model.StudentList.Count()) * 100)))"
+                                style="transition: width 2s ease 0s; width: auto">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-4">
+            <div class="card card-block card-stretch">
+                <div class="card-body">
+                    <div class="top-block d-flex align-items-center justify-content-between">
+                        <h5>Số nhóm trong lớp</h5>
+                    </div>
+                    <h3>
+                        <span class="counter" style="visibility: visible;">
+                            @(Model.GroupsInClass?.Count() ?? 0)
+                        </span> nhóm
+                    </h3>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                        <p class="mb-0">Số nhóm chưa chấm điểm</p>
+                        <span class="text-primary">
+                            @((Model.GroupsInClass?.Where(group => group.Group.Students.FirstOrDefault()?.Score == null).Count() ?? 0)) nhóm
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-4">
+            <div class="card card-block card-stretch">
+                <div class="card-body">
+                    <div class="top-block d-flex align-items-center justify-content-between">
+                        <h5>Điểm trung bình của lớp</h5>
+                    </div>
+                    <h3>
+                        <span class="counter" style="visibility: visible;">
+                            @(Model.StudentList.Average(student => student.Score ?? 0).ToString("0.00"))
+                        </span> điểm
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Danh sách sinh viên</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped scrolldown">
+                        <thead class="bg-blue">
+                            <tr>
+                                <th scope="col" style="width: 5.4%;" >#</th>
+                                <th scope="col" style="width: 20%;">MSSV</th>
+                                <th scope="col" style="width: 18.5%;">Họ</th>
+                                <th scope="col" style="width: 19.5%;">Tên</th>
+                                <th scope="col" style="width: 18.5%;">Đề tài</th>
+                                <th scope="col">Điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                string currentGroupId = null;
+
+                                int i = 1;
+                                bool flipper = true;
+                                    @foreach (var student in Model.StudentList.OrderByDescending(s => s.Group?.Id).ToList())
+                                {
+                                    // Check if group has changed
+                                    var isNewGroup = currentGroupId != student.Group?.Id;
+
+                                    currentGroupId = student.Group?.Id;
+                                    
+                                    if (isNewGroup)
+                                    {
+                                        flipper = !flipper;
+                                    }
+                                    if (currentGroupId == null)
+                                    {
+                                            <tr>
+                                                <th scope="row">@i</th>
+                                                <td>@student.Student.StudentCode</td>
+                                                <td>@student.Student.LastName</td>
+                                                <td>@student.Student.FirstName</td>
+                                                <td>@student.Group?.Project.Name</td>
+                                                <td>@student.Score</td>
+                                            </tr>
+                                    }
+                                    else if (flipper)
+                                    {
+                                            <tr class="table-skyblue">
+                                                <th scope="row">@i</th>
+                                                <td>@student.Student.StudentCode</td>
+                                                <td>@student.Student.LastName</td>
+                                                <td>@student.Student.FirstName</td>
+                                                <td>@student.Group?.Project.Name</td>
+                                                <td>@student.Score</td>
+                                            </tr>
+                                    }
+                                    else
+                                    {
+                                            <tr class="table-info">
+                                                <th scope="row">@i</th>
+                                                <td>@student.Student.StudentCode</td>
+                                                <td>@student.Student.LastName</td>
+                                                <td>@student.Student.FirstName</td>
+                                                <td>@student.Group?.Project.Name</td>
+                                                <td>@student.Score</td>
+                                            </tr>
+                                    }
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>            
+        </div>
+        <div class="col-xl-4">
+            <div class="card card-block card-stretch">
+                <div class="card-body">
+                    <div class="top-block d-flex align-items-center justify-content-between">
+                        <h5>Tổng các công việc</h5>
+                        <span class="badge badge-primary">Tất cả các nhóm</span>
+                    </div>
+                    <h3>
+                        <span class="counter" style="visibility: visible;">
+                            @(Model.GroupsInClass?.Sum(group => group.totalTasks) ?? 0)
+                        </span> tasks
+                    </h3>
+                    <div class="d-flex align-items-center justify-content-between mt-1">
+                        <p class="mb-0">Tỉ lệ hoàn tất</p>
+                        <span class="text-primary">
+                            @(Model.GroupsInClass?.Sum(group => group.percentageTaskDone) ?? 0) %
+                        </span>
+                    </div>
+                    <div class="iq-progress-bar bg-primary-light mt-2">
+                        <span class="bg-primary iq-progress progress-1"
+                              data-percent="@{
+                                    @((Model.GroupsInClass?.Sum(group => group.percentageTaskDone) ?? 0))
+                            }"
+                              style="transition: width 2s ease 0s; width: auto">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card card-block card-stretch">
+                <div class="card-body">
+                    <canvas id="myChart" style="width:100%"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Report tab end -->
 
 <!-- Modal list start -->
 <div class="modal fade" role="dialog" aria-modal="true" id="new-project-modal">
@@ -383,36 +580,8 @@
         </div>
     </div>
 </div>
-
-@* <div class="modal fade" role="dialog" aria-modal="true" id="new-notification-modal">
-    <div class="modal-dialog  modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header d-block text-center pb-3 border-bttom">
-                <h3 class="modal-title" id="exampleModalCenterTitle01">New Notification</h3>
-            </div>
-            <div class="modal-body" style="width:600px;">
-                <div class="row">
-                    <div class="col-sm-12 col-lg-12 col-md-12">
-                        <div class="card-body" id="notificationCardBody">
-                            <div class="form-label-group">
-                                <textarea class="form-control" id="exampleFormControlTextarea2" rows="4" placeholder="Viết thông báo ở đây"></textarea>
-                                <label>Textarea</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
-                            <div class="btn btn-primary mr-3" data-dismiss="modal" onclick="saveNotification()">Save</div>
-                            <div class="btn btn-primary" data-dismiss="modal">Cancel</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
- *@
 <!-- Modal list end -->
+
 <script type="text/javascript" src="/assets/js/customizer.js"></script>
 <script>
     // Summary: Khi Teacher chọn ds thành viên của group thì 
@@ -546,6 +715,7 @@
 <!-- Script list -->
 <script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/assets/js/signalr-services.js"></script>
+
 <!-- Sử dụng CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -564,5 +734,32 @@
             title: 'Thành công!',
             text: 'Đã gửi thông báo thành công.',
         });
+    });
+</script>
+
+<!-- Graph Script-->
+<script>
+    var xValues = ["Đang làm", "Chờ duyệt", "Hoàn thành"];
+    var yValues = [ @Model.GroupsInClass?.Sum(g => g.totalTaskOnGoing) ?? 0,
+                    @Model.GroupsInClass?.Sum(g => g.totalTaskPending) ?? 0,
+                    @Model.GroupsInClass?.Sum(g => g.totalTaskDone) ?? 0];
+    var barColors = ["red", "yellow", "green"];
+
+    new Chart("myChart", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "Tổng các trạng thái công việc"
+            }
+        }
     });
 </script>

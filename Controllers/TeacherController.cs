@@ -252,11 +252,35 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             var currentClass = await _context.Class
                 .Where(s => s.Code == classCode).FirstAsync();
 
+            ICollection<CurrentGroup> currentGroups = groupList.Select(g =>
+            {
+                var tasks = _context.Task.Where(t => t.GroupId == g.Id).ToList();
+
+                return new CurrentGroup
+                {
+                    Group = g,
+                    totalTasks = tasks.Count,
+                    percentageTaskDone = tasks.Count == 0
+                          ? 0 
+                          : (int)Math.Ceiling((double)tasks.Count(t => t.Status == Models.TaskStatus.Complete) / tasks.Count * 100),
+                    totalTaskDone = tasks.Count == 0
+                          ? 0
+                          : tasks.Count(t => t.Status == Models.TaskStatus.Complete),
+                    totalTaskOnGoing = tasks.Count == 0
+                          ? 0
+                          : tasks.Count(t => t.Status == Models.TaskStatus.OnGoing),
+                    totalTaskPending = tasks.Count == 0
+                          ? 0
+                          : tasks.Count(t => t.Status == Models.TaskStatus.Pending),
+                };
+            }).Distinct().ToList();
+
+
             ProjectDTO ProjectDTO = new()
             {
                 TeacherName = viewModel.LastName + " " + viewModel.FirstName,
                 TeacherId = viewModel.Id,
-                CurrentGroups = groupList,
+                GroupsInClass = currentGroups,
                 CurrentProjects = projectList,
                 ClassID = currentClass.Id,
                 StudentList = studentList,

@@ -1,5 +1,7 @@
 ﻿@model WebsiteQuanLyLamViecNhom.HelperClasses.TempModels.GroupDTO
 @{ 
+    var XLabelsAssignee = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GroupViewModel.NumOfTaskPerMember.Select(s => s.Name).ToList());
+    var YValuesAssignee = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GroupViewModel.NumOfTaskPerMember.Select(s => s.Quantity).ToList());
     Layout = "~/Views/Shared/_ProjectTeacherLayout.cshtml";
 }
 
@@ -31,7 +33,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-12">
                         <div class="row align-items-center">
                             <div class="col-md-9">
                                 <div class="mt-3 mt-md-0">
@@ -49,6 +51,25 @@
                                     <p class="mb-0">@Model.GroupViewModel.MOTD</p>
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="d-flex flex-wrap align-items-center">
+                                    <div class="list-grid-toggle d-flex align-items-center ml-auto">
+                                        <div data-toggle-extra="tab"
+                                             data-target-extra="#tasks"
+                                             class="active">
+                                            <div class="grid-icon mr-2" data-toggle="tooltip" data-placement="bottom" data-original-title="Danh sách công việc">
+                                                <i class="ri-group-line"></i>
+                                            </div>
+                                        </div>
+                                        <div data-toggle-extra="tab"
+                                             data-target-extra="#report">
+                                            <div class="grid-icon" data-toggle="tooltip" data-placement="bottom" data-original-title="Thống kê dữ liệu">
+                                                <i class="ri-file-chart-line"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -56,7 +77,9 @@
         </div>
         <!--Task List starts-->
         @*Công việc của thành viên nào chưa để disabled*@
-        <div class="card">
+        <div id="tasks"
+             class="card item-content animate__animated animate__fadeIn active"
+             data-toggle-extra="tab-content">
             <div class="card-body">
                 <div class="row">
                     @{
@@ -229,15 +252,65 @@
                                 </div>
                             </div>
                             </div>
-                    }    
-                    @if (Model.GroupViewModel.Tasks.Count == 0)
-                    {
-                        
                     }
+
                 </div>
             </div>
         </div>
         <!--Task List ends-->
+
+        <!-- Report start-->
+        <div id="report"
+             class="card item-content animate__animated animate__fadeIn"
+             data-toggle-extra="tab-content">
+            <div class="row">
+                <div class="col-7">
+                    <div class="card card-block card-stretch">
+                        <div class="card-body">
+                            <canvas id="TaskAssignee" style="width:100%"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="card card-block card-stretch">
+                        <div class="card-body">
+                            <div class="top-block d-flex align-items-center justify-content-between">
+                                <h5>Tổng các công việc</h5>
+                            </div>
+                            <h3>
+                                <span class="counter" style="visibility: visible;">
+                                    @(Model.GroupViewModel.Tasks?.Count() ?? 0)
+                                </span> tasks
+                            </h3>
+                            <div class="d-flex align-items-center justify-content-between mt-1">
+                                <p class="mb-0">Tỉ lệ hoàn tất</p>
+                                <span class="text-primary">
+                                    @(((double)Model.GroupViewModel.Tasks.Where(g => g.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete).Count()
+                                        / (Model.GroupViewModel.Tasks.Count())* 100).ToString("0.00")) %
+                                </span>
+                            </div>
+                            <div class="iq-progress-bar bg-primary-light mt-2">
+                                <span class="bg-primary iq-progress progress-1"
+                                      data-percent="@{
+                                    @(((double)Model.GroupViewModel.Tasks.Where(g => g.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete).Count()
+                                        / (Model.GroupViewModel.Tasks.Count())* 100).ToString("0.00"))
+                                }"
+                                      style="transition: width 2s ease 0s; width: auto">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-block card-stretch">
+                        <div class="card-body">
+                            <canvas id="TaskStatuses" style="width:100%"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Report end-->
+
     </div>
     <!--Member List start-->
     <div class="col-lg-4">
@@ -275,7 +348,7 @@
                 </div>
             </div>
         </form>
-        <div id="list" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
+        <div id="list" class="item-content animate__animated animate__fadeIn active">
             <div class="table-responsive rounded bg-white mb-4">
                 <table class="table mb-0 table-borderless tbl-server-info">
                     <tbody>
@@ -457,4 +530,65 @@
         chatSetUp();
     });
     //# sourceURL=SignalRSetup.js
+</script>
+
+<script>
+    var xValues = ["Đang làm", "Chờ duyệt", "Hoàn thành"];
+    var yValues = [@Model.GroupViewModel.Tasks.Where(t => t.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.OnGoing).Count() ?? 0,
+    @Model.GroupViewModel.Tasks.Where(t => t.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Pending).Count() ?? 0,
+    @Model.GroupViewModel.Tasks.Where(t => t.Status == WebsiteQuanLyLamViecNhom.Models.TaskStatus.Complete).Count() ?? 0];
+    var barColors = ["red", "yellow", "green"];
+
+    new Chart("TaskStatuses", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "Tổng các trạng thái công việc"
+            },
+            plugins:{
+                legend:{
+                    display: false
+                }
+            }
+        }
+    });
+    
+    var barColorsAssignee = ["red", "green", "blue", "orange", "brown", "yellow", "black"];
+    new Chart("TaskAssignee", {
+      type: "bar",
+      data: {
+        labels: @Html.Raw(XLabelsAssignee),
+        datasets: [{
+          backgroundColor: barColorsAssignee,
+          data: @Html.Raw(YValuesAssignee)
+        }]
+      },
+      options: {
+        title: {
+            display: true,
+            text: "Lượng công việc từng thành viên đảm nhận"
+        },
+        scales: {
+            y: {
+                min: 1
+            }
+        },
+        plugins:{
+                legend:{
+                    display: false
+                }
+            }
+      }
+    });
+
+    //# sourceURL=GraphSetup.js
 </script>

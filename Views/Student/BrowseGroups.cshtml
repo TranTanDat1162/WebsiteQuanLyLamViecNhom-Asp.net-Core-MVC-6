@@ -109,39 +109,40 @@
     </div>
 </div>
 <!-- Project list end -->
+
 <!-- Group list start -->
 <div id="list"
      class="item-content animate__animated animate__fadeIn active"
      data-toggle-extra="tab-content">
     <div class="row">
-        @foreach (var item in Model.CurrentGroups)
+        @foreach (var item in Model.GroupsInClass)
         {
             <div class="col-lg-6">
                 <div class="card class-hover">
                     <div class="card-body">
-                        <a href="/Teacher/Project/@item.Project.Class.Code/@item.Id">
+                        <a href="/Teacher/Project/@item.Group.Project.Class.Code/@item.Group.Id">
                             <span class="link-spanner"></span>
                         </a>
                         <div class="row">
                             <div class="col-sm-8">
                                 <div class="d-flex align-items-center">
-                                    <div id="circle-progress-@item.LeaderID"
+                                    <div id="circle-progress-@item.Group.LeaderID"
                                          class="circle-progress-02 circle-progress circle-progress-primary"
                                          data-min-value="0"
                                          data-max-value="100"
                                          data-value="25"
                                          data-type="percent"></div>
                                     <div class="ml-3">
-                                        <h5 class="mb-1">@($"{item.Project.Name} - {item.LeaderID}")</h5>
+                                        <h5 class="mb-1">@($"{item.Group.Project.Name} - {item.Group.LeaderID}")</h5>
                                         <p class="mb-0">
-                                            @item.MOTD
+                                            @item.Group.MOTD
                                         </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4 text-sm-right mt-3 mt-sm-0">
                                 <div class="iq-media-group">
-                                    @foreach (var member in item.Students)
+                                    @foreach (var member in item.Group.Students)
                                     {
                                         <a href="#" class="iq-media">
                                             @if (member.Student.StudentImgId != null)

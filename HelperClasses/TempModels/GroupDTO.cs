@@ -15,6 +15,7 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string LeaderName { get; set; } = string.Empty;
             public Class CurrentClass { get; set; }
             public string CurrentUser {  get; set; }
+            public List<AssigneeReportViewModel> NumOfTaskPerMember { get; set; }
             public DateTime? Deadline { get; set; }
             public ICollection<StudentClass> memberList { get; set; }
             public ICollection<Models.Task>? Tasks { get; set; } = new List<Models.Task>();
@@ -40,6 +41,11 @@ namespace WebsiteQuanLyLamViecNhom.HelperClasses.TempModels
             public string? Description { get; set; }
             public float TeacherGrade { get; set; }
             public float LeaderAGVGrade { get; set; }
+        }
+        public class AssigneeReportViewModel
+        {
+            public string Name { get; set; }
+            public int Quantity { get; set; }
         }
         public GradeGroupDTO? gradeGroupDTO { get; set; }
         public UpdateTaskDTO? updateTaskDTO { get; set; }

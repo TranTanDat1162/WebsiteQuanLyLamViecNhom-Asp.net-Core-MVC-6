@@ -50,6 +50,35 @@ button.bg-dark2:focus {
 }
 
 
+table.scrolldown {
+    width: 100%;
+}
+
+    /* To display the block as level element */
+    table.scrolldown tbody,
+    table.scrolldown thead {
+        display: block;
+    }
+
+thead tr th {
+    height: 40px;
+    line-height: 40px;
+}
+
+table.scrolldown tbody {
+    /* Set the height of table body */
+    height: 300px;
+    /* Set vertical scroll */
+    overflow-y: auto;
+    /* Hide the horizontal scroll */
+    overflow-x: hidden;
+}
+
+    tbody td,
+    thead th {
+        width: 200px;
+    }
+
 
 
 

@@ -95,3 +95,13 @@ function generateBreadcrumbs(breadcrumbData) {
     breadcrumbContainer.appendChild(breadcrumbList);
     document.getElementById("breadcrumbs").appendChild(breadcrumbContainer);
 };
+function generateProgressBar(start, end) {
+    var today = new Date(),
+        p = Math.round(((today - start) / (end - start)) * 100);
+
+    const progressBar = document.getElementById("class-progress-bar");
+
+    progressBar.dataset.percent = p;
+
+    progressBar.style.width = `${progressBar.dataset.percent}%`;
+}
