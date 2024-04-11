@@ -43,7 +43,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.AllowedUserNameCharacters =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     // Fix this shit when we actually somehow pass the Scientific Research competion
-    options.User.RequireUniqueEmail = true;
+    options.User.RequireUniqueEmail = false;
 });
 
 builder.Services.ConfigureApplicationCookie(options =>

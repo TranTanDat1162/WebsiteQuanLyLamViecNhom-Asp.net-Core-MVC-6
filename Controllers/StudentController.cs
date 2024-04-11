@@ -170,11 +170,14 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                     // Kiểm tra xem người dùng có tồn tại không
                     if (loggedInStudent != null && isEmailUnique)
                     {
+                        bool isNewEmail = studentDTO.Email == null ? false : !string.Equals(loggedInStudent.NormalizedEmail, studentDTO.Email.ToUpperInvariant());
+
                         // Cập nhật email cho người dùng
                         loggedInStudent.Email = studentDTO.Email;
 
                         // Chuẩn hóa và cập nhật NormalizedEmail
                         loggedInStudent.NormalizedEmail = studentDTO.Email?.ToUpperInvariant();
+
 
                         // Nếu người dùng đã chọn ảnh mới
                         if (studentDTO.StudentImgPfp != null)
@@ -188,8 +191,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
                             loggedInStudent.StudentImgId = (string)(fileID?.GetType().GetProperty("FileId")?.GetValue(fileID));
                         }
 
-                        if(studentDTO.Email != null && !loggedInStudent.EmailConfirmed)
+                        if(isNewEmail)
                         {
+                            loggedInStudent.EmailConfirmed = false;
+
                             //Sử dụng các phương thức của microsoft:
                             //Generate cái token (code) và link để chứa cái token đó để gửi qua cha ng dùng
                             string returnUrl = null ?? Url.Content("~/");
