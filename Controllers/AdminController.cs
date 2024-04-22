@@ -15,10 +15,10 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<BaseApplicationUser> _userManager;
+        private readonly UserManager<Models.BaseApplicationUser> _userManager;
         private readonly ILogger<AdminController> _logger;
 
-        public AdminController(ApplicationDbContext context, UserManager<BaseApplicationUser> usermanager, ILogger<AdminController> logger)
+        public AdminController(ApplicationDbContext context, UserManager<Models.BaseApplicationUser> usermanager, ILogger<AdminController> logger)
         {
             _context = context;
             _userManager = usermanager;
@@ -40,8 +40,7 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             //                                .Where(x =>  User.IsInRole("Teacher"))
             //                                .CountAsync();
 
-            await _userManager.CreateAsync(new Admin { },"");
-
+           
             var Total = await _userManager.Users.ToListAsync();
             int numberOfStudentAccounts = 0, numberOfTeacherAccounts = 0;
             
