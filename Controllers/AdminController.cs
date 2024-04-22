@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using Google.Apis.Drive.v3.Data;
 using WebsiteQuanLyLamViecNhom.Models.ViewModel;
+using WebsiteQuanLyLamViecNhom.Data.Migrations;
 
 namespace WebsiteQuanLyLamViecNhom.Controllers
 {
@@ -39,8 +40,11 @@ namespace WebsiteQuanLyLamViecNhom.Controllers
             //                                .Where(x =>  User.IsInRole("Teacher"))
             //                                .CountAsync();
 
+            await _userManager.CreateAsync(new Admin { },"");
+
             var Total = await _userManager.Users.ToListAsync();
             int numberOfStudentAccounts = 0, numberOfTeacherAccounts = 0;
+            
             foreach(var acc in Total)
             {
                 var roles = await _userManager.GetRolesAsync(acc);
