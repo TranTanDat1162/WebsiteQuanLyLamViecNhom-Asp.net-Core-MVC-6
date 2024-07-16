@@ -1,5 +1,7 @@
 # Summary:
  Aim to optimized and simplified how teacher and their students (in groups) communicate with eachother when performing groupwork-based projects.
+# Demo:
+ [Link to demo site](http://nckh2324.somee.com/)
 # Accounts:
   | Account Type | Username | Password |
   |--|--|--|
